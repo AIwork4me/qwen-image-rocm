@@ -111,6 +111,14 @@ def main() -> None:
         torch.backends.cuda.enable_mem_efficient_sdp(False)
         print("note: math-only SDP forced (QIR_SDP=math)")
 
+    print("loading pipeline...", flush=True)
+    pipe = QwenImage21Pipeline.from_pretrained(str(WEIGHTS_DIR), torch_dtype=torch.bfloat16)
+    pipe.enable_model_cpu_offload()
+
+    if os.environ.get("QIR_ATTENTION"):
+        pipe.transformer.set_attention_backend(os.environ["QIR_ATTENTION"])
+        print(f"note: DiT attention backend set to {os.environ['QIR_ATTENTION']}", flush=True)
+
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--date", required=True, help="results dir name under bench/results/")
     ns = ap.parse_args(sys.argv[1:])
@@ -122,10 +130,6 @@ def main() -> None:
     prompt_text = {p["id"]: (p["prompt"], p["negative_prompt"]) for p in PROMPTS["prompts"]}
     seeds = PROMPTS["seeds"]
     specs = plan_runs(list(prompt_text), [(1024, 1024), (2048, 2048)], seeds)
-
-    print("loading pipeline...", flush=True)
-    pipe = QwenImage21Pipeline.from_pretrained(str(WEIGHTS_DIR), torch_dtype=torch.bfloat16)
-    pipe.enable_model_cpu_offload()
 
     for spec in specs:
         prompt, negative = prompt_text[spec["prompt_id"]]

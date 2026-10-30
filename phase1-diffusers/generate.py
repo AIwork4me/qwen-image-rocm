@@ -93,6 +93,14 @@ def main() -> None:
     )
     pipe.enable_model_cpu_offload()
 
+    # Workaround (attempt D) for the OOM side of the SDPA issue: math SDPA
+    # materializes the full attention matrix (32GB at 1024^2 with long
+    # prompts). FlexAttention avoids that. Text encoder keeps math (short
+    # sequences) via the global flags above.
+    if os.environ.get("QIR_ATTENTION"):
+        pipe.transformer.set_attention_backend(os.environ["QIR_ATTENTION"])
+        print(f"note: DiT attention backend set to {os.environ['QIR_ATTENTION']}")
+
     step_times: list[float] = []
     t_last = {"t": None}
 
