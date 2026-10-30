@@ -1,0 +1,9 @@
+# Phase 1 non-torch dependencies.
+# torch/torchvision/torchaudio are installed ONLY via the mandated AMD ROCm
+# command (see README); do not add them here.
+transformers>=5.17
+diffusers>=0.36
+accelerate
+modelscope
+sentencepiece
+protobuf
