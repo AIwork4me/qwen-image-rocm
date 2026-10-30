@@ -121,7 +121,13 @@ def main() -> None:
 
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--date", required=True, help="results dir name under bench/results/")
+    ap.add_argument(
+        "--resolutions",
+        default="1024,2048",
+        help="comma-separated square resolutions, e.g. '1024' or '1024,2048'",
+    )
     ns = ap.parse_args(sys.argv[1:])
+    resolutions = [(int(r), int(r)) for r in ns.resolutions.split(",")]
 
     results_dir = REPO / "bench" / "results" / ns.date
     results_dir.mkdir(parents=True, exist_ok=True)
@@ -129,7 +135,7 @@ def main() -> None:
 
     prompt_text = {p["id"]: (p["prompt"], p["negative_prompt"]) for p in PROMPTS["prompts"]}
     seeds = PROMPTS["seeds"]
-    specs = plan_runs(list(prompt_text), [(1024, 1024), (2048, 2048)], seeds)
+    specs = plan_runs(list(prompt_text), resolutions, seeds)
 
     for spec in specs:
         prompt, negative = prompt_text[spec["prompt_id"]]

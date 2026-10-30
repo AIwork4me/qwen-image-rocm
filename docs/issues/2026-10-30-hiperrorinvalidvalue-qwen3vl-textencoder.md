@@ -72,22 +72,34 @@ decoder_layer -> residual + hidden_states`.
 Both accelerated SDPA backends (flash, mem-efficient) launch kernels that
 fail with hipErrorInvalidValue under torch 2.12.0+rocm7.14.1 Windows
 gfx1100 wheels, on the attention shapes used by Qwen3-VL (text encoder)
-and the Qwen-Image-2.1 DiT. The math backend is functionally correct but
-quadratic-memory: a single 32.1 GB attention allocation at 1024² with a
-long English prompt OOMs a 24 GB card (diffusers `attention_dispatch.py`
-`_native_attention`), and 2048² is unreachable. cuDNN backend: "No
-available kernel". FlexAttention works everywhere but runs its no-Triton
-fallback (~6× slower; see the triton issue doc).
+and the Qwen-Image-2.1 DiT.
+
+Memory side: math SDPA — and flex's no-Triton fallback, which routes
+through `flex_attention.py: sdpa_dense -> math_attention` — materialize
+the dense L×L scores. At 2048² (L≈16k tokens) that is a single 32.1 GB
+allocation: impossible on 24 GB regardless of allocator settings.
+At 1024² every prompt fits (zh/en/poster all completed).
+
+CORRECTION (2026-10-31): the first OOM was initially attributed to the
+"long English prompt"; it was actually the 2048² resolution of the FIRST
+prompt (plan_runs loops prompts outer, resolutions inner). English at
+1024² passes on every working backend. Evidence in both tracebacks shows
+the identical 32.1 GiB request, consistent with L(2048²).
 
 Backend matrix measured on this stack:
 
-| backend          | text encoder            | DiT                          |
-|------------------|-------------------------|------------------------------|
-| flash            | ❌ hipErrorInvalidValue  | ❌ hipErrorInvalidValue      |
-| mem-efficient    | ❌ (fails in DiT path)  | ❌ hipErrorInvalidValue      |
-| math             | ✅ (short seqs)         | ⚠️ 3.66 s/step, OOM ≥ ~4.2k tokens |
-| flex (no triton) | —                       | ✅ complete, ~20–24 s/step   |
-| cudnn            | ❌ no kernel            | ❌ no kernel                 |
+| backend          | text encoder            | DiT @1024²                   | DiT @2048²      |
+|------------------|-------------------------|------------------------------|-----------------|
+| flash            | ❌ hipErrorInvalidValue  | ❌ hipErrorInvalidValue      | ❌              |
+| mem-efficient    | ❌ (fails in DiT path)  | ❌ hipErrorInvalidValue      | ❌              |
+| math             | ✅                      | ✅ 3.66 s/step               | ❌ OOM 32.1GB   |
+| flex (no triton) | —                       | ✅ ~20–24 s/step             | ❌ OOM 32.1GB (dense fallback) |
+| cudnn            | ❌ no kernel            | ❌ no kernel                 | ❌ no kernel    |
+
+Net effect: **2048² generation (Qwen-Image-2.1's native resolution) is
+impossible on any backend of the stock Windows ROCm stack on a 24 GB
+RDNA3 card today** — the only memory-efficient backends (flash,
+mem-efficient, real flex) are exactly the broken/unavailable ones.
 
 Phase 4 should: bisect backend selection, capture the exact failing kernel
 (per-backend microbench on the specific head-dims/masks), and check
@@ -97,11 +109,12 @@ existing reports.
 ## Additional attempts (same session, after first protocol run died)
 
 - [x] D: DiT backend `flex` via `pipe.transformer.set_attention_backend("flex")`
-  + math for text encoder — works on the OOM-prone English prompt
-  (exit 0, VRAM peak 20.9 GB) but ~6× slower per step without Triton.
+  + math for text encoder — works at 1024² (en prompt, exit 0, VRAM peak
+  20.9 GB) but ~6× slower per step without Triton. At 2048² its dense
+  fallback OOMs identically to math.
 - [x] E: `_native_cudnn` backend — `RuntimeError: No available kernel`.
 
-Workaround adopted for the Phase 1 full protocol: `QIR_SDP=math` +
-`QIR_ATTENTION=flex` (gated in `phase1-diffusers/generate.py` and
-`bench/run_bench.py`). math partial data (p1-zh-scene 1024² complete set)
-kept in `bench/results/2026-10-31/` as supplementary evidence.
+Workaround adopted for the Phase 1 baseline: **protocol executed at
+1024² only**; 2048² blocked by this issue (evidence: two full OOM
+tracebacks in bench runs of 2026-10-31 / 2026-10-31-flex). Both math and
+flex variants run at 1024² for backend comparison.
