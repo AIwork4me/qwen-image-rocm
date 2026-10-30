@@ -1,0 +1,11 @@
+weights/
+**/.venv/
+__pycache__/
+*.pyc
+phase2-comfyui/ComfyUI/
+results/raw/
+.pytest_cache/
+.ruff_cache/
+modelscope_cache/
+.superpowers/
+.venv-repro/
