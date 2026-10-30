@@ -1,0 +1,241 @@
+﻿python.exe : C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\utils\deprecation_utils.py:
+23: FutureWarning: `torch_dtype` is deprecated and will be removed in version 1.0.0. Please use `dtype` instead.
+所在位置 行:1 字符: 76
++ ... top\image'; & 'phase1-diffusers\.venv\Scripts\python.exe' -I 'phase1- ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\Rocm\D...dtype` instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  deprecate("torch_dtype", "1.0.0", _TORCH_DTYPE_DEPRECATION_MESSAGE)
+
+Loading pipeline components...:   0%|          | 0/5 [00:00<?, ?it/s]
+Loading pipeline components...:  40%|████      | 2/5 [00:00<00:00,  4.24it/s]
+
+Loading weights:   0%|          | 0/750 [00:00<?, ?it/s][A
+
+Loading weights:   1%|          | 4/750 [00:00<00:40, 18.25it/s][A
+
+Loading weights:   2%|▏         | 13/750 [00:00<00:22, 32.31it/s][A
+
+Loading weights:   2%|▏         | 17/750 [00:00<00:46, 15.81it/s][A
+
+Loading weights:   3%|▎         | 20/750 [00:01<00:58, 12.49it/s][A
+
+Loading weights:   3%|▎         | 24/750 [00:01<00:51, 14.10it/s][A
+
+Loading weights:   3%|▎         | 26/750 [00:01<00:58, 12.45it/s][A
+
+Loading weights:   4%|▎         | 28/750 [00:01<00:57, 12.52it/s][A
+
+Loading weights:   5%|▍         | 34/750 [00:02<00:50, 14.08it/s][A
+
+Loading weights:   5%|▍         | 37/750 [00:02<00:52, 13.63it/s][A
+
+Loading weights:   5%|▌         | 39/750 [00:02<00:49, 14.34it/s][A
+
+Loading weights:   6%|▌         | 42/750 [00:02<00:52, 13.58it/s][A
+
+Loading weights:   6%|▌         | 46/750 [00:03<00:41, 16.86it/s][A
+
+Loading weights:   6%|▋         | 48/750 [00:03<00:52, 13.32it/s][A
+
+Loading weights:   7%|▋         | 50/750 [00:03<00:55, 12.68it/s][A
+
+Loading weights:   7%|▋         | 52/750 [00:03<01:05, 10.66it/s][A
+
+Loading weights:   7%|▋         | 55/750 [00:04<01:07, 10.27it/s][A
+
+Loading weights:   8%|▊         | 59/750 [00:04<00:52, 13.28it/s][A
+
+Loading weights:   8%|▊         | 61/750 [00:04<00:57, 12.04it/s][A
+
+Loading weights:   8%|▊         | 63/750 [00:04<01:08, 10.05it/s][A
+
+Loading weights:   9%|▉         | 67/750 [00:05<00:52, 12.96it/s][A
+
+Loading weights:   9%|▉         | 69/750 [00:05<01:04, 10.58it/s][A
+
+Loading weights:   9%|▉         | 71/750 [00:05<01:25,  7.94it/s][A
+
+Loading weights:  10%|▉         | 74/750 [00:05<01:05, 10.28it/s][A
+
+Loading weights:  10%|█         | 76/750 [00:06<01:11,  9.46it/s][A
+
+Loading weights:  10%|█         | 78/750 [00:06<01:20,  8.34it/s][A
+
+Loading weights:  11%|█         | 80/750 [00:06<01:26,  7.77it/s][A
+
+Loading weights:  12%|█▏        | 89/750 [00:06<00:42, 15.71it/s][A
+
+Loading weights:  12%|█▏        | 91/750 [00:07<00:41, 16.04it/s][A
+
+Loading weights:  12%|█▏        | 93/750 [00:07<00:53, 12.18it/s][A
+
+Loading weights:  13%|█▎        | 95/750 [00:07<01:05, 10.02it/s][A
+
+Loading weights:  13%|█▎        | 98/750 [00:08<01:06,  9.82it/s][A
+
+Loading weights:  13%|█▎        | 100/750 [00:08<01:24,  7.70it/s][A
+
+Loading weights:  13%|█▎        | 101/750 [00:08<01:38,  6.60it/s][A
+
+Loading weights:  14%|█▎        | 102/750 [00:08<01:43,  6.26it/s][A
+
+Loading weights:  14%|█▍        | 104/750 [00:09<01:22,  7.80it/s][A
+
+Loading weights:  14%|█▍        | 105/750 [00:09<01:31,  7.03it/s][A
+
+Loading weights:  14%|█▍        | 106/750 [00:09<01:51,  5.78it/s][A
+
+Loading weights:  14%|█▍        | 107/750 [00:09<02:19,  4.61it/s][A
+
+Loading weights:  15%|█▍        | 112/750 [00:10<01:11,  8.93it/s][A
+
+Loading weights:  15%|█▌        | 114/750 [00:10<01:04,  9.83it/s][A
+
+Loading weights:  15%|█▌        | 116/750 [00:10<01:11,  8.87it/s][A
+
+Loading weights:  16%|█▌        | 117/750 [00:11<01:34,  6.72it/s][A
+
+Loading weights:  16%|█▌        | 119/750 [00:11<01:27,  7.17it/s][A
+
+Loading weights:  16%|█▌        | 120/750 [00:11<01:30,  6.97it/s][A
+
+Loading weights:  16%|█▌        | 121/750 [00:11<01:56,  5.41it/s][A
+
+Loading weights:  17%|█▋        | 124/750 [00:12<01:52,  5.54it/s][A
+
+Loading weights:  20%|█▉        | 148/750 [00:12<00:19, 31.37it/s][A
+
+Loading weights:  22%|██▏       | 163/750 [00:12<00:12, 47.46it/s][A
+
+Loading weights:  25%|██▌       | 189/750 [00:12<00:07, 78.98it/s][A
+
+Loading weights:  27%|██▋       | 206/750 [00:12<00:05, 95.57it/s][A
+
+Loading weights:  31%|███▏      | 236/750 [00:12<00:03, 135.38it/s][A
+
+Loading weights:  35%|███▌      | 263/750 [00:12<00:02, 163.28it/s][A
+
+Loading weights:  38%|███▊      | 284/750 [00:13<00:03, 121.90it/s][A
+Loading weights: 100%|██████████| 750/750 [00:13<00:00, 56.94it/s] 
+
+Loading pipeline components...:  60%|██████    | 3/5 [00:16<00:13,  6.65s/it]
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s][A
+
+Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  6.88it/s][A
+
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  8.26it/s][A
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  8.02it/s]
+
+Loading pipeline components...:  80%|████████  | 4/5 [00:16<00:04,  4.27s/it]
+Loading pipeline components...: 100%|██████████| 5/5 [00:16<00:00,  2.90s/it]
+Loading pipeline components...: 100%|██████████| 5/5 [00:16<00:00,  3.34s/it]
+C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\transformers\models\qwen3_vl\modeling_qwen3_vl.py:
+587: UserWarning: Ignoring invalid value for boolean flag AMD_SERIALIZE_KERNEL: 3valid values are 0 or 1. (Triggered in
+ternally at B:\src\pytorch\c10\util\env.cpp:94.)
+  hidden_states = residual + hidden_states
+Traceback (most recent call last):
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\generate.py", line 148, in <module>
+    main()
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\generate.py", line 97, in main
+    image = pipe(
+            ^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\utils\_contextlib.py", line 124, in 
+decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\pipelines\qwenimage21\pipeline_q
+wenimage21.py", line 689, in __call__
+    prompt_embeds, prompt_embeds_mask, image_pad_mask = self.encode_prompt(
+                                                        ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\pipelines\qwenimage21\pipeline_q
+wenimage21.py", line 368, in encode_prompt
+    prompt_embeds, prompt_embeds_mask, image_pad_mask = self._get_qwen_prompt_embeds(prompt, image, device)
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\pipelines\qwenimage21\pipeline_q
+wenimage21.py", line 313, in _get_qwen_prompt_embeds
+    outputs = self.text_encoder(**forward_kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in
+ _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in
+ _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\accelerate\hooks.py", line 192, in new_for
+ward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\transformers\utils\generic.py", line 943, 
+in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\transformers\models\qwen3_vl\modeling_qwen
+3_vl.py", line 1364, in forward
+    outputs = self.model(
+              ^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in
+ _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in
+ _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\transformers\utils\generic.py", line 943, 
+in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\transformers\models\qwen3_vl\modeling_qwen
+3_vl.py", line 1239, in forward
+    outputs = self.language_model(
+              ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in
+ _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in
+ _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\transformers\utils\generic.py", line 1081,
+ in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\transformers\utils\output_capturing.py", l
+ine 287, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\transformers\models\qwen3_vl\modeling_qwen
+3_vl.py", line 822, in forward
+    layer_outputs = decoder_layer(
+                    ^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\transformers\modeling_layers.py", line 111
+, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in
+ _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1884, in
+ _call_impl
+    return inner()
+           ^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1832, in
+ inner
+    result = forward_call(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\transformers\models\qwen3_vl\modeling_qwen
+3_vl.py", line 587, in forward
+    hidden_states = residual + hidden_states
+                    ~~~~~~~~~^~~~~~~~~~~~~~~
+torch.AcceleratorError: CUDA error: invalid argument
+Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information.
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing AMD_SERIALIZE_KERNEL=3
+Device-side assertion tracking was not enabled by user.

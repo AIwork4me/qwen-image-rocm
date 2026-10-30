@@ -1,0 +1,142 @@
+﻿python.exe : C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\utils\deprecation_utils.py:
+23: FutureWarning: `torch_dtype` is deprecated and will be removed in version 1.0.0. Please use `dtype` instead.
+所在位置 行:1 字符: 66
++ ... top\image'; & 'phase1-diffusers\.venv\Scripts\python.exe' -I 'phase1- ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\Rocm\D...dtype` instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  deprecate("torch_dtype", "1.0.0", _TORCH_DTYPE_DEPRECATION_MESSAGE)
+note: math-only SDP forced (QIR_SDP=math)
+
+Loading pipeline components...:   0%|          | 0/5 [00:00<?, ?it/s]
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s][A
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00, 85.97it/s]
+
+Loading pipeline components...:  40%|████      | 2/5 [00:00<00:00,  3.83it/s]
+Loading pipeline components...:  60%|██████    | 3/5 [00:00<00:00,  3.51it/s]
+
+Loading weights:   0%|          | 0/750 [00:00<?, ?it/s][A
+
+Loading weights:   0%|          | 2/750 [00:00<01:27,  8.51it/s][A
+
+Loading weights:   1%|          | 6/750 [00:00<00:41, 17.85it/s][A
+
+Loading weights:   1%|          | 9/750 [00:00<00:42, 17.43it/s][A
+
+Loading weights:   2%|▏         | 14/750 [00:00<00:43, 16.74it/s][A
+
+Loading weights:   2%|▏         | 16/750 [00:01<00:47, 15.61it/s][A
+
+Loading weights:   2%|▏         | 18/750 [00:01<01:10, 10.35it/s][A
+
+Loading weights:   3%|▎         | 20/750 [00:01<01:20,  9.07it/s][A
+
+Loading weights:   3%|▎         | 22/750 [00:01<01:20,  8.99it/s][A
+
+Loading weights:   3%|▎         | 26/750 [00:02<00:57, 12.51it/s][A
+
+Loading weights:   4%|▎         | 28/750 [00:02<01:02, 11.49it/s][A
+
+Loading weights:   4%|▍         | 31/750 [00:02<00:54, 13.25it/s][A
+
+Loading weights:   4%|▍         | 33/750 [00:02<01:00, 11.95it/s][A
+
+Loading weights:   5%|▍         | 35/750 [00:02<01:06, 10.76it/s][A
+
+Loading weights:   5%|▍         | 37/750 [00:03<01:21,  8.72it/s][A
+
+Loading weights:   5%|▌         | 38/750 [00:03<01:34,  7.54it/s][A
+
+Loading weights:   6%|▌         | 42/750 [00:03<01:00, 11.72it/s][A
+
+Loading weights:   6%|▌         | 44/750 [00:03<01:07, 10.45it/s][A
+
+Loading weights:   6%|▌         | 46/750 [00:04<01:14,  9.41it/s][A
+
+Loading weights:   7%|▋         | 49/750 [00:04<01:15,  9.26it/s][A
+
+Loading weights:   7%|▋         | 54/750 [00:04<01:01, 11.37it/s][A
+
+Loading weights:   8%|▊         | 59/750 [00:05<01:00, 11.45it/s][A
+
+Loading weights:   8%|▊         | 61/750 [00:05<01:18,  8.75it/s][A
+
+Loading weights:   8%|▊         | 63/750 [00:06<01:13,  9.37it/s][A
+
+Loading weights:   9%|▊         | 65/750 [00:06<01:14,  9.19it/s][A
+
+Loading weights:   9%|▉         | 66/750 [00:06<01:35,  7.19it/s][A
+
+Loading weights:   9%|▉         | 69/750 [00:06<01:27,  7.74it/s][A
+
+Loading weights:   9%|▉         | 71/750 [00:07<01:17,  8.72it/s][A
+
+Loading weights:  10%|▉         | 72/750 [00:07<01:28,  7.65it/s][A
+
+Loading weights:  10%|█         | 75/750 [00:07<01:12,  9.35it/s][A
+
+Loading weights:  10%|█         | 76/750 [00:07<01:14,  9.02it/s][A
+
+Loading weights:  10%|█         | 77/750 [00:07<01:38,  6.81it/s][A
+
+Loading weights:  10%|█         | 78/750 [00:08<02:15,  4.95it/s][A
+
+Loading weights:  11%|█         | 79/750 [00:08<02:40,  4.19it/s][A
+
+Loading weights:  11%|█         | 80/750 [00:09<02:33,  4.36it/s][A
+
+Loading weights:  11%|█         | 81/750 [00:09<03:42,  3.00it/s][A
+
+Loading weights:  12%|█▏        | 89/750 [00:09<01:05, 10.15it/s][A
+
+Loading weights:  12%|█▏        | 91/750 [00:10<01:14,  8.84it/s][A
+
+Loading weights:  12%|█▏        | 93/750 [00:10<01:15,  8.68it/s][A
+
+Loading weights:  13%|█▎        | 95/750 [00:10<01:17,  8.49it/s][A
+
+Loading weights:  13%|█▎        | 97/750 [00:10<01:06,  9.89it/s][A
+
+Loading weights:  13%|█▎        | 99/750 [00:10<01:00, 10.73it/s][A
+
+Loading weights:  13%|█▎        | 101/750 [00:10<01:06,  9.76it/s][A
+
+Loading weights:  14%|█▎        | 103/750 [00:11<01:13,  8.83it/s][A
+
+Loading weights:  14%|█▍        | 106/750 [00:11<01:03, 10.09it/s][A
+
+Loading weights:  14%|█▍        | 108/750 [00:11<00:57, 11.10it/s][A
+
+Loading weights:  15%|█▍        | 110/750 [00:12<01:22,  7.72it/s][A
+
+Loading weights:  15%|█▍        | 112/750 [00:12<01:34,  6.74it/s][A
+
+Loading weights:  15%|█▌        | 114/750 [00:12<01:16,  8.29it/s][A
+
+Loading weights:  19%|█▉        | 141/750 [00:12<00:13, 45.98it/s][A
+
+Loading weights:  21%|██▏       | 161/750 [00:12<00:08, 71.76it/s][A
+
+Loading weights:  24%|██▍       | 181/750 [00:12<00:05, 96.68it/s][A
+
+Loading weights:  27%|██▋       | 206/750 [00:12<00:04, 129.55it/s][A
+
+Loading weights:  32%|███▏      | 242/750 [00:12<00:02, 182.14it/s][A
+
+Loading weights:  35%|███▌      | 265/750 [00:13<00:03, 151.78it/s][A
+
+Loading weights:  38%|███▊      | 284/750 [00:13<00:03, 145.77it/s][A
+Loading weights: 100%|██████████| 750/750 [00:13<00:00, 56.16it/s] 
+
+Loading pipeline components...: 100%|██████████| 5/5 [00:16<00:00,  4.39s/it]
+Loading pipeline components...: 100%|██████████| 5/5 [00:16<00:00,  3.30s/it]
+
+  0%|          | 0/4 [00:00<?, ?it/s]
+ 25%|██▌       | 1/4 [00:18<00:55, 18.61s/it]
+ 50%|█████     | 2/4 [00:22<00:19,  9.79s/it]
+ 75%|███████▌  | 3/4 [00:25<00:06,  6.97s/it]
+100%|██████████| 4/4 [00:29<00:00,  5.66s/it]
+100%|██████████| 4/4 [00:29<00:00,  7.37s/it]
+{"experiment": "p1-bf16-1024x1024", "phase": 1, "framework": "diffusers", "precision": "bf16", "width": 1024, "height": 1024, "steps": 4, "seed": 42, "prompt_id": "p1-zh-scene", "protocol_version": "v1", "runs": [{"kind": "cold", "total_s": 77.328, "text_encode_s": null, "denoise_s": 10.868, "vae_decode_s": null, "step_times_s": [3.611, 3.625, 3.633]}], "vram_peak_mb": 18832.1, "env_ref": "snapshot-20261030-212234.json", "created_at": "2026-10-30T22:04:03+08:00", "output_image": "results\\raw\\smoke\\p1-bf16-1024x1024\\42-1793369042.png"}

@@ -1,0 +1,156 @@
+﻿python.exe : C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\utils\deprecation_utils.py:
+23: FutureWarning: `torch_dtype` is deprecated and will be removed in version 1.0.0. Please use `dtype` instead.
+所在位置 行:1 字符: 93
++ ... top\image'; & 'phase1-diffusers\.venv\Scripts\python.exe' -I 'phase1- ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\Rocm\D...dtype` instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  deprecate("torch_dtype", "1.0.0", _TORCH_DTYPE_DEPRECATION_MESSAGE)
+note: math-only SDP forced (QIR_SDP=math)
+
+Loading pipeline components...:   0%|          | 0/5 [00:00<?, ?it/s]
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s][A
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00, 41.06it/s]
+
+
+Loading weights:   0%|          | 0/750 [00:00<?, ?it/s][A
+
+Loading weights:   0%|          | 2/750 [00:00<00:48, 15.50it/s][A
+
+Loading weights:   1%|          | 6/750 [00:00<00:35, 21.04it/s][A
+
+Loading weights:   1%|          | 9/750 [00:01<01:46,  6.98it/s][A
+
+Loading weights:   2%|▏         | 12/750 [00:01<01:17,  9.51it/s][A
+
+Loading weights:   2%|▏         | 14/750 [00:01<01:18,  9.34it/s][A
+
+Loading weights:   2%|▏         | 16/750 [00:01<01:24,  8.65it/s][A
+
+Loading weights:   3%|▎         | 22/750 [00:02<00:51, 14.07it/s][A
+
+Loading weights:   3%|▎         | 24/750 [00:02<00:55, 13.15it/s][A
+
+Loading weights:   3%|▎         | 26/750 [00:02<00:56, 12.85it/s][A
+
+Loading weights:   6%|▌         | 43/750 [00:02<00:18, 38.98it/s][A
+
+Loading weights:   7%|▋         | 49/750 [00:02<00:23, 29.87it/s][A
+
+Loading weights:   7%|▋         | 54/750 [00:03<00:36, 19.25it/s][A
+
+Loading weights:   8%|▊         | 58/750 [00:03<00:39, 17.73it/s][A
+
+Loading weights:   8%|▊         | 63/750 [00:03<00:34, 19.94it/s][A
+
+Loading weights:   9%|▉         | 67/750 [00:03<00:31, 21.68it/s][A
+
+Loading weights:   9%|▉         | 70/750 [00:04<00:31, 21.28it/s][A
+
+Loading weights:  10%|▉         | 73/750 [00:04<00:31, 21.51it/s][A
+
+Loading weights:  10%|█         | 76/750 [00:04<00:40, 16.85it/s][A
+
+Loading weights:  11%|█         | 79/750 [00:04<00:47, 14.11it/s][A
+
+Loading weights:  11%|█         | 82/750 [00:05<00:52, 12.61it/s][A
+
+Loading weights:  11%|█         | 84/750 [00:05<00:52, 12.60it/s][A
+
+Loading weights:  11%|█▏        | 86/750 [00:05<00:58, 11.44it/s][A
+
+Loading weights:  12%|█▏        | 88/750 [00:05<01:08,  9.67it/s][A
+
+Loading weights:  13%|█▎        | 95/750 [00:06<00:45, 14.33it/s][A
+
+Loading weights:  13%|█▎        | 99/750 [00:06<00:46, 13.97it/s][A
+
+Loading weights:  14%|█▍        | 105/750 [00:06<00:40, 15.81it/s][A
+
+Loading weights:  14%|█▍        | 108/750 [00:06<00:42, 15.26it/s][A
+
+Loading weights:  15%|█▍        | 112/750 [00:07<00:35, 18.15it/s][A
+
+Loading weights:  15%|█▌        | 115/750 [00:07<00:36, 17.63it/s][A
+
+Loading weights:  16%|█▌        | 117/750 [00:07<00:37, 16.67it/s][A
+
+Loading weights:  16%|█▌        | 119/750 [00:07<00:50, 12.48it/s][A
+
+Loading weights:  16%|█▌        | 121/750 [00:08<01:08,  9.15it/s][A
+
+Loading weights:  17%|█▋        | 127/750 [00:08<00:52, 11.85it/s][A
+
+Loading weights:  17%|█▋        | 129/750 [00:08<01:03,  9.82it/s][A
+
+Loading weights:  17%|█▋        | 131/750 [00:09<01:12,  8.59it/s][A
+
+Loading weights:  18%|█▊        | 134/750 [00:09<01:06,  9.28it/s][A
+
+Loading weights:  18%|█▊        | 137/750 [00:09<00:53, 11.48it/s][A
+
+Loading weights:  19%|█▊        | 139/750 [00:09<01:05,  9.37it/s][A
+
+Loading weights:  19%|█▉        | 141/750 [00:10<00:57, 10.50it/s][A
+
+Loading weights:  19%|█▉        | 143/750 [00:10<00:57, 10.57it/s][A
+
+Loading weights:  19%|█▉        | 146/750 [00:10<00:53, 11.25it/s][A
+
+Loading weights:  20%|█▉        | 148/750 [00:10<00:48, 12.47it/s][A
+
+Loading weights:  20%|██        | 150/750 [00:10<00:46, 12.82it/s][A
+
+Loading weights:  20%|██        | 152/750 [00:10<00:54, 10.99it/s][A
+
+Loading weights:  21%|██        | 155/750 [00:11<00:50, 11.85it/s][A
+
+Loading weights:  21%|██        | 157/750 [00:11<00:56, 10.53it/s][A
+
+Loading weights:  21%|██▏       | 160/750 [00:11<00:42, 13.73it/s][A
+
+Loading weights:  24%|██▍       | 183/750 [00:11<00:10, 54.59it/s][A
+
+Loading weights:  27%|██▋       | 205/750 [00:11<00:06, 88.76it/s][A
+
+Loading weights:  30%|███       | 225/750 [00:11<00:04, 114.27it/s][A
+
+Loading weights:  33%|███▎      | 245/750 [00:11<00:03, 134.86it/s][A
+
+Loading weights:  37%|███▋      | 277/750 [00:11<00:02, 179.65it/s][A
+
+Loading weights:  41%|████      | 308/750 [00:12<00:02, 199.65it/s][A
+
+Loading weights:  44%|████▍     | 330/750 [00:12<00:02, 149.53it/s][A
+Loading weights: 100%|██████████| 750/750 [00:12<00:00, 60.72it/s] 
+
+Loading pipeline components...:  60%|██████    | 3/5 [00:15<00:10,  5.02s/it]
+Loading pipeline components...:  80%|████████  | 4/5 [00:15<00:03,  3.51s/it]
+Loading pipeline components...: 100%|██████████| 5/5 [00:15<00:00,  2.55s/it]
+Loading pipeline components...: 100%|██████████| 5/5 [00:15<00:00,  3.17s/it]
+Attention backends are an experimental feature and the API may be subject to change.
+note: DiT attention backend set to flex (QIR_ATTENTION=flex)
+
+  0%|          | 0/4 [00:00<?, ?it/s]C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\atte
+ntion\flex_attention.py:2055: UserWarning: flex_attention called without torch.compile() - this will use an unfused imp
+lementation that materializes the full scores matrix instead of generating a fused kernel.
+
+SOLUTION: Use torch.compile(flex_attention)(...)
+
+If you want to debug your score_mod/mask_mod, you can set:
+torch.nn.attention.flex_attention._FLEX_ATTENTION_DISABLE_COMPILE_DEBUG = True
+
+This will allow you to use print statements or breakpoints. Note: This doesn't work with the backwards pass and may pro
+duce incorrect results.
+  _warn_once(
+W1030 22:52:50.176000 21600 Lib\site-packages\torch\utils\flop_counter.py:29] triton not found; flop counting will not 
+work for triton kernels
+
+ 25%|██▌       | 1/4 [00:40<02:02, 40.90s/it]
+ 50%|█████     | 2/4 [01:05<01:02, 31.09s/it]
+ 75%|███████▌  | 3/4 [01:24<00:25, 25.81s/it]
+100%|██████████| 4/4 [01:48<00:00, 25.03s/it]
+100%|██████████| 4/4 [01:48<00:00, 27.12s/it]
+{"experiment": "p1-bf16-1024x1024", "phase": 1, "framework": "diffusers", "precision": "bf16", "width": 1024, "height": 1024, "steps": 4, "seed": 42, "prompt_id": "p2-en-scene", "protocol_version": "v1", "runs": [{"kind": "cold", "total_s": 136.426, "text_encode_s": null, "denoise_s": 114.067, "vae_decode_s": null, "step_times_s": [46.497, 24.222, 19.52, 23.829]}], "vram_peak_mb": 20874.5, "env_ref": "snapshot-20261030-212234.json", "created_at": "2026-10-30T22:54:44+08:00", "output_image": "results\\raw\\smoke-flex\\p1-bf16-1024x1024\\42-1793372084.png"}

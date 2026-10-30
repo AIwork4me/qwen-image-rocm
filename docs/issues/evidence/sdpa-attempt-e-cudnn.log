@@ -1,0 +1,235 @@
+﻿python.exe : C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\utils\deprecation_utils.py:
+23: FutureWarning: `torch_dtype` is deprecated and will be removed in version 1.0.0. Please use `dtype` instead.
+所在位置 行:1 字符: 102
++ ... top\image'; & 'phase1-diffusers\.venv\Scripts\python.exe' -I 'phase1- ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\Rocm\D...dtype` instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  deprecate("torch_dtype", "1.0.0", _TORCH_DTYPE_DEPRECATION_MESSAGE)
+note: math-only SDP forced (QIR_SDP=math)
+
+Loading pipeline components...:   0%|          | 0/5 [00:00<?, ?it/s]
+Loading pipeline components...:  20%|██        | 1/5 [00:00<00:01,  3.06it/s]
+Loading pipeline components...:  40%|████      | 2/5 [00:00<00:01,  2.42it/s]
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s][A
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00, 44.97it/s]
+
+
+Loading weights:   0%|          | 0/750 [00:00<?, ?it/s][A
+
+Loading weights:   1%|          | 4/750 [00:00<00:29, 25.41it/s][A
+
+Loading weights:   1%|▏         | 11/750 [00:00<00:18, 39.32it/s][A
+
+Loading weights:   2%|▏         | 16/750 [00:00<00:27, 26.45it/s][A
+
+Loading weights:   3%|▎         | 20/750 [00:01<01:09, 10.53it/s][A
+
+Loading weights:   3%|▎         | 24/750 [00:01<01:05, 11.12it/s][A
+
+Loading weights:   4%|▎         | 28/750 [00:02<00:58, 12.26it/s][A
+
+Loading weights:   4%|▍         | 30/750 [00:02<01:04, 11.13it/s][A
+
+Loading weights:   4%|▍         | 32/750 [00:02<01:24,  8.45it/s][A
+
+Loading weights:   5%|▍         | 34/750 [00:02<01:23,  8.57it/s][A
+
+Loading weights:   5%|▌         | 38/750 [00:03<00:58, 12.16it/s][A
+
+Loading weights:   5%|▌         | 41/750 [00:03<00:54, 13.10it/s][A
+
+Loading weights:   6%|▌         | 43/750 [00:03<00:51, 13.76it/s][A
+
+Loading weights:   7%|▋         | 49/750 [00:03<00:36, 19.45it/s][A
+
+Loading weights:   7%|▋         | 52/750 [00:03<00:33, 20.70it/s][A
+
+Loading weights:   7%|▋         | 56/750 [00:03<00:32, 21.37it/s][A
+
+Loading weights:   8%|▊         | 59/750 [00:04<00:32, 21.31it/s][A
+
+Loading weights:   8%|▊         | 62/750 [00:04<00:40, 17.17it/s][A
+
+Loading weights:   9%|▊         | 64/750 [00:04<00:38, 17.67it/s][A
+
+Loading weights:   9%|▉         | 66/750 [00:04<00:41, 16.33it/s][A
+
+Loading weights:   9%|▉         | 70/750 [00:04<00:44, 15.17it/s][A
+
+Loading weights:  10%|█         | 75/750 [00:05<00:41, 16.34it/s][A
+
+Loading weights:  10%|█         | 77/750 [00:05<00:45, 14.79it/s][A
+
+Loading weights:  11%|█         | 79/750 [00:05<00:59, 11.33it/s][A
+
+Loading weights:  11%|█▏        | 85/750 [00:05<00:37, 17.67it/s][A
+
+Loading weights:  12%|█▏        | 88/750 [00:05<00:37, 17.82it/s][A
+
+Loading weights:  12%|█▏        | 91/750 [00:06<00:39, 16.71it/s][A
+
+Loading weights:  12%|█▏        | 93/750 [00:06<00:39, 16.65it/s][A
+
+Loading weights:  13%|█▎        | 95/750 [00:06<00:49, 13.11it/s][A
+
+Loading weights:  13%|█▎        | 97/750 [00:06<01:01, 10.69it/s][A
+
+Loading weights:  14%|█▍        | 104/750 [00:07<00:42, 15.17it/s][A
+
+Loading weights:  14%|█▍        | 108/750 [00:07<00:36, 17.74it/s][A
+
+Loading weights:  15%|█▍        | 110/750 [00:07<00:42, 14.99it/s][A
+
+Loading weights:  15%|█▍        | 112/750 [00:07<00:49, 12.82it/s][A
+
+Loading weights:  15%|█▌        | 116/750 [00:08<00:38, 16.59it/s][A
+
+Loading weights:  16%|█▌        | 118/750 [00:08<00:50, 12.58it/s][A
+
+Loading weights:  17%|█▋        | 124/750 [00:08<00:40, 15.43it/s][A
+
+Loading weights:  17%|█▋        | 126/750 [00:08<00:52, 11.85it/s][A
+
+Loading weights:  17%|█▋        | 128/750 [00:08<00:54, 11.39it/s][A
+
+Loading weights:  17%|█▋        | 130/750 [00:09<00:52, 11.87it/s][A
+
+Loading weights:  18%|█▊        | 132/750 [00:09<00:56, 10.85it/s][A
+
+Loading weights:  18%|█▊        | 134/750 [00:09<01:09,  8.81it/s][A
+
+Loading weights:  19%|█▊        | 140/750 [00:09<00:46, 13.11it/s][A
+
+Loading weights:  19%|█▉        | 143/750 [00:10<00:40, 15.09it/s][A
+
+Loading weights:  20%|█▉        | 147/750 [00:10<00:42, 14.19it/s][A
+
+Loading weights:  20%|█▉        | 149/750 [00:10<00:48, 12.45it/s][A
+
+Loading weights:  20%|██        | 151/750 [00:10<00:53, 11.16it/s][A
+
+Loading weights:  20%|██        | 153/750 [00:11<00:56, 10.62it/s][A
+
+Loading weights:  21%|██        | 155/750 [00:11<01:01,  9.72it/s][A
+
+Loading weights:  21%|██        | 157/750 [00:12<01:39,  5.94it/s][A
+
+Loading weights:  23%|██▎       | 176/750 [00:12<00:23, 24.52it/s][A
+
+Loading weights:  27%|██▋       | 206/750 [00:12<00:09, 58.78it/s][A
+
+Loading weights:  31%|███       | 233/750 [00:12<00:05, 90.30it/s][A
+
+Loading weights:  33%|███▎      | 250/750 [00:12<00:05, 99.76it/s][A
+
+Loading weights:  37%|███▋      | 278/750 [00:12<00:03, 132.11it/s][A
+
+Loading weights:  40%|███▉      | 298/750 [00:12<00:03, 139.73it/s][A
+
+Loading weights:  42%|████▏     | 316/750 [00:12<00:03, 110.88it/s][A
+Loading weights: 100%|██████████| 750/750 [00:12<00:00, 58.01it/s] 
+
+Loading pipeline components...:  80%|████████  | 4/5 [00:16<00:04,  4.96s/it]
+Loading pipeline components...: 100%|██████████| 5/5 [00:16<00:00,  3.23s/it]
+Attention backends are an experimental feature and the API may be subject to change.
+note: DiT attention backend set to _native_cudnn
+
+  0%|          | 0/4 [00:00<?, ?it/s]C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\mod
+els\attention_dispatch.py:3811: UserWarning: Memory efficient kernel not used because: (Triggered internally at B:\src\
+pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:1042.)
+  out = torch.nn.functional.scaled_dot_product_attention(
+C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\attention_dispatch.py:3811: UserW
+arning: Memory Efficient attention has been runtime disabled. (Triggered internally at B:\src\pytorch\aten\src\ATen/nat
+ive/transformers/sdp_utils_cpp.h:552.)
+  out = torch.nn.functional.scaled_dot_product_attention(
+C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\attention_dispatch.py:3811: UserW
+arning: Flash attention kernel not used because: (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transform
+ers\hip\sdp_utils.cpp:1044.)
+  out = torch.nn.functional.scaled_dot_product_attention(
+C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\attention_dispatch.py:3811: UserW
+arning: Flash attention has been runtime disabled. (Triggered internally at B:\src\pytorch\aten\src\ATen/native/transfo
+rmers/sdp_utils_cpp.h:540.)
+  out = torch.nn.functional.scaled_dot_product_attention(
+C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\attention_dispatch.py:3811: UserW
+arning: cuDNN attention kernel not used because: (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transform
+ers\hip\sdp_utils.cpp:1046.)
+  out = torch.nn.functional.scaled_dot_product_attention(
+C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\attention_dispatch.py:3811: UserW
+arning: Torch was not compiled with cuDNN attention. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\trans
+formers\hip\sdp_utils.cpp:792.)
+  out = torch.nn.functional.scaled_dot_product_attention(
+
+  0%|          | 0/4 [00:15<?, ?it/s]
+Traceback (most recent call last):
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\generate.py", line 168, in <module>
+    main()
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\generate.py", line 117, in main
+    image = pipe(
+            ^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\utils\_contextlib.py", line 124, in 
+decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\pipelines\qwenimage21\pipeline_q
+wenimage21.py", line 784, in __call__
+    noise_pred = self.transformer(
+                 ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in
+ _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in
+ _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\accelerate\hooks.py", line 192, in new_for
+ward
+    output = module._old_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\utils\peft_utils.py", line 323, 
+in wrapper
+    result = forward_fn(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\transformers\transformer_
+qwenimage21.py", line 1015, in forward
+    joint_hidden_states = block(
+                          ^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in
+ _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in
+ _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\transformers\transformer_
+qwenimage21.py", line 634, in forward
+    attn_output = self.attn(
+                  ^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in
+ _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in
+ _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\transformers\transformer_
+qwenimage21.py", line 583, in forward
+    return self.processor(self, hidden_states, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\transformers\transformer_
+qwenimage21.py", line 525, in __call__
+    dispatch_attention_fn(
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\attention_dispatch.py", l
+ine 450, in dispatch_attention_fn
+    return backend_fn(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\.venv\Lib\site-packages\diffusers\models\attention_dispatch.py", l
+ine 3811, in _native_cudnn_attention
+    out = torch.nn.functional.scaled_dot_product_attention(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: No available kernel. Aborting execution.
