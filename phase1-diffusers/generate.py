@@ -14,6 +14,7 @@ Run (inside the phase1 venv):
 
 import argparse
 import json
+import os
 import sys
 import time
 from datetime import datetime
@@ -77,6 +78,16 @@ def main() -> None:
         prompt_id = "literal"
     _check_device(torch)
 
+    # Workaround attempts B/C for docs/issues/2026-10-30-hiperrorinvalidvalue-
+    # qwen3vl-textencoder.md: hipErrorInvalidValue in text-encoder forward.
+    if os.environ.get("QIR_DISABLE_FLASH_SDP") == "1":
+        torch.backends.cuda.enable_flash_sdp(False)
+        print("note: flash SDP disabled (QIR_DISABLE_FLASH_SDP=1)")
+    if os.environ.get("QIR_SDP") == "math":
+        torch.backends.cuda.enable_flash_sdp(False)
+        torch.backends.cuda.enable_mem_efficient_sdp(False)
+        print("note: math-only SDP forced (QIR_SDP=math)")
+
     pipe = QwenImage21Pipeline.from_pretrained(
         str(WEIGHTS_DIR), torch_dtype=torch.bfloat16
     )
@@ -93,6 +104,7 @@ def main() -> None:
         return kwargs
 
     generator = torch.Generator(device="cuda").manual_seed(ns.seed)
+    t_last["t"] = time.perf_counter()  # so step 1 gets a duration too
     t0 = time.perf_counter()
     image = pipe(
         prompt=prompt,

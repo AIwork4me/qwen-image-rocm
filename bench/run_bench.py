@@ -75,6 +75,7 @@ def _run_once(pipe, torch, spec, prompt, negative):
 
     generator = torch.Generator(device="cuda").manual_seed(spec["seed"])
     torch.cuda.reset_peak_memory_stats()
+    t_last["t"] = time.perf_counter()  # so step 1 gets a duration too
     t0 = time.perf_counter()
     image = pipe(
         prompt=prompt,
@@ -97,8 +98,18 @@ def _run_once(pipe, torch, spec, prompt, negative):
 
 
 def main() -> None:
+    import os
+
     import torch
     from diffusers import QwenImage21Pipeline
+
+    # Workaround for docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-
+    # textencoder.md: accelerated SDPA backends hit hipErrorInvalidValue on
+    # this stack; math backend validated working (attempt C).
+    if os.environ.get("QIR_SDP") == "math":
+        torch.backends.cuda.enable_flash_sdp(False)
+        torch.backends.cuda.enable_mem_efficient_sdp(False)
+        print("note: math-only SDP forced (QIR_SDP=math)")
 
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--date", required=True, help="results dir name under bench/results/")
