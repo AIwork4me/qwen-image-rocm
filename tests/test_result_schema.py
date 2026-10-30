@@ -55,3 +55,12 @@ def test_schema_rejects_missing_seed():
     del bad["seed"]
     with pytest.raises(ValidationError):
         validate(bad, load_schema())
+
+
+def test_schema_run_kind_enum():
+    schema = load_schema()
+    good = dict(GOOD_SAMPLE, run_kind="measure")
+    validate(good, schema)
+    bad = dict(GOOD_SAMPLE, run_kind="measures")
+    with pytest.raises(ValidationError):
+        validate(bad, schema)

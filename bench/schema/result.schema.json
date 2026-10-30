@@ -54,6 +54,8 @@
     },
     "vram_peak_mb": { "type": "number" },
     "env_ref": { "type": "string" },
-    "created_at": { "type": "string" }
+    "created_at": { "type": "string" },
+    "run_kind": { "enum": ["cold", "warmup", "measure"] },
+    "attention_backend": { "type": "string" }
   }
 }

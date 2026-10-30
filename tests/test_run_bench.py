@@ -42,43 +42,21 @@ def test_make_report_smoke(tmp_path):
         "precision": "bf16",
         "width": 1024,
         "height": 1024,
-        "steps": 40,
+        "steps": 4,
         "seed": 42,
         "prompt_id": "p1-zh-scene",
         "protocol_version": "v1",
         "runs": [
             {
-                "kind": "cold",
-                "total_s": 120.5,
-                "text_encode_s": None,
-                "denoise_s": 100.2,
-                "vae_decode_s": None,
-                "step_times_s": [2.5] * 40,
-            },
-            {
                 "kind": "warm",
                 "total_s": 60.0,
                 "text_encode_s": None,
-                "denoise_s": 50.0,
+                "denoise_s": 43.0,
                 "vae_decode_s": None,
-                "step_times_s": [1.25] * 40,
-            },
-            {
-                "kind": "warm",
-                "total_s": 62.0,
-                "text_encode_s": None,
-                "denoise_s": 51.0,
-                "vae_decode_s": None,
-                "step_times_s": [1.28] * 40,
-            },
-            {
-                "kind": "warm",
-                "total_s": 64.0,
-                "text_encode_s": None,
-                "denoise_s": 52.0,
-                "vae_decode_s": None,
-                "step_times_s": [1.3] * 40,
-            },
+                # step 1 carries text-encode + offload restore (12.0s);
+                # steady steps are 1.0s each
+                "step_times_s": [12.0, 1.0, 1.0, 1.0],
+            }
         ],
         "vram_peak_mb": 21000.0,
         "env_ref": "snapshot-test.json",
@@ -96,3 +74,15 @@ def test_make_report_smoke(tmp_path):
     assert "p1-bf16-1024x1024" in report
     assert "median" in report.lower()
     assert "limitations" in report.lower()
+    # steady-state s/step excludes step 1 (text-encode + offload tax):
+    # median of [1.0, 1.0, 1.0] = 1.00, NOT denoise_s/steps = 10.75
+    assert "| 1.00 |" in report
+    # step-1 semantics must be disclosed, not claimed pure
+    assert "step_times_s[0]" in report
+
+
+def test_steady_step_rate_ignores_first_step():
+    from bench.make_report import steady_step_rate
+
+    assert steady_step_rate([12.0, 1.0, 1.0, 1.0]) == 1.0
+    assert steady_step_rate([5.0]) is None  # single step: no steady state

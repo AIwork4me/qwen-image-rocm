@@ -133,6 +133,9 @@ def main() -> None:
     png_path = out_dir / f"{stem}.png"
     image.save(png_path)
 
+    attention = os.environ.get("QIR_ATTENTION") or (
+        "math-sdp" if os.environ.get("QIR_SDP") == "math" else "auto"
+    )
     result = {
         "experiment": experiment,
         "phase": 1,
@@ -158,7 +161,17 @@ def main() -> None:
         "env_ref": _env_ref(),
         "created_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "output_image": str(png_path),
+        "run_kind": "cold",
+        "attention_backend": attention,
     }
+    from jsonschema import validate as schema_validate
+
+    schema = json.loads(
+        (Path(__file__).resolve().parents[1] / "bench" / "schema" / "result.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    schema_validate(result, schema)
     sidecar = out_dir / f"{stem}.json"
     sidecar.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print(json.dumps(result))

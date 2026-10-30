@@ -36,9 +36,13 @@ ModelScope 下载权重（约 30GB，仅一次），然后执行。
    ```
    python -m pip install --index-url https://repo.amd.com/rocm/whl-multi-arch/ "torch[device-gfx1100]==2.12.0+rocm7.14.1" "torchvision[device-gfx1100]==0.27.0+rocm7.14.1" "torchaudio==2.11.0+rocm7.14.1"
    ```
-3. `python -m pip install -r phase1-diffusers/requirements.txt`
+3. `python -m pip install -r phase1-diffusers/requirements.txt`，随后断言
+   `torch.__version__.endswith("rocm7.14.1")`（防止被换成 PyPI 版）
 4. `modelscope download --model Qwen/Qwen-Image-2.1 --local_dir weights/diffusers-format`
 5. `python -I phase1-diffusers/smoke_hip.py`（必须输出 `gcn_arch=gfx1100`）
+6. 设置 `QIR_SDP=math`（本栈必需——见下方发现 1），然后出图：
+   `python -I phase1-diffusers/generate.py --prompt-id p2-en-scene
+   --width 1024 --height 1024 --steps 40 --seed 42 --out results/raw/repro`
 
 每份结果的环境证据在 `bench/results/env/`（由 `tools/snapshot_env.py`
 生成）。精确冻结的依赖清单见 `phase1-diffusers/requirements.lock.txt`
@@ -59,10 +63,13 @@ seeds `[42, 1337, 20261030]`。**仅在 1024² 执行**——在 24GB RDNA3 卡 
 [math](bench/results/2026-10-31-math-1024/report.md) ·
 [flex](bench/results/2026-10-31-flex-1024/report.md)
 
-| DiT 注意力后端 | s/step（中位） | 总耗时（中位） | 显存 |
+| DiT 注意力后端 | s/step（稳态中位） | 总耗时（中位） | 显存 |
 |---|---|---|---|
-| math SDPA      | 5.7 – 5.9 | 239 – 254 | 18.8 GB |
-| flex（无 Triton） | 18.6 – 21.6 | 756 – 875 | 20.8 GB |
+| math SDPA      | 3.60 – 3.70 | 239 – 254 | 18.8 GB |
+| flex（无 Triton） | 16.1 – 18.9 | 756 – 875 | 20.8 GB |
+
+s/step = 第 2..40 步的中位数（稳态）；`step_times_s[0]` 含文本编码 +
+cpu-offload 权重恢复，被排除（协议 v1.1——见各报告的 Limitations 节）。
 
 环境证据：`bench/results/env/snapshot-20261030-212234.json`。
 

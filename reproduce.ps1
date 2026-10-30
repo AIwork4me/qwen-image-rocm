@@ -42,9 +42,13 @@ if (-not (Test-Path $py)) {
     Write-Host "[2/4] installing AMD ROCm torch stack (mandated command)..."
     & $py -m pip install --index-url https://repo.amd.com/rocm/whl-multi-arch/ "torch[device-gfx1100]==2.12.0+rocm7.14.1" "torchvision[device-gfx1100]==0.27.0+rocm7.14.1" "torchaudio==2.11.0+rocm7.14.1"
     if ($LASTEXITCODE -ne 0) { exit 1 }
+    & $py -c "import torch; assert torch.__version__.endswith('rocm7.14.1'), torch.__version__; print('torch OK', torch.__version__)"
+    if ($LASTEXITCODE -ne 0) { Write-Host "torch build check failed"; exit 1 }
 
     & $py -m pip install -r (Join-Path $repo "phase1-diffusers\requirements.txt")
     if ($LASTEXITCODE -ne 0) { exit 1 }
+    & $py -c "import torch; assert torch.__version__.endswith('rocm7.14.1'), torch.__version__; print('torch still OK', torch.__version__)"
+    if ($LASTEXITCODE -ne 0) { Write-Host "pip swapped the ROCm torch for a PyPI build"; exit 1 }
 } else {
     Write-Host "[1-2/4] reusing existing .venv-repro"
 }
@@ -66,6 +70,11 @@ if (-not (Test-Path $modelIndex)) {
 }
 
 # --- run -------------------------------------------------------------------
+# Required on this stack (torch 2.12.0+rocm7.14.1 Windows gfx1100): the flash
+# and mem-efficient SDPA backends fail with hipErrorInvalidValue — see
+# docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md
+$env:QIR_SDP = "math"
+
 if ($Quick) {
     $t = Get-Date
     & $py -I (Join-Path $repo "phase1-diffusers\generate.py") `
@@ -75,7 +84,9 @@ if ($Quick) {
     Write-Host ("Quick reproduction finished in {0:N1} minutes (incl. model load). Compare wall time with results/raw/repro/... JSON." -f ((Get-Date) - $t).TotalMinutes)
 } else {
     $date = Get-Date -Format "yyyy-MM-dd"
-    & $py -I (Join-Path $repo "bench\run_bench.py") --date $date
+    # 2048 is blocked on every working backend (32.1 GB dense attention
+    # allocation > 24 GB VRAM) — see the SDPA issue doc above.
+    & $py -I (Join-Path $repo "bench\run_bench.py") --date $date --resolutions 1024
     if ($LASTEXITCODE -ne 0) { exit 1 }
     & $py -I (Join-Path $repo "bench\make_report.py") (Join-Path $repo "bench\results\$date")
     Write-Host "Full protocol done. Report: bench\results\$date\report.md"

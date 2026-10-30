@@ -111,6 +111,15 @@ def main() -> None:
         torch.backends.cuda.enable_mem_efficient_sdp(False)
         print("note: math-only SDP forced (QIR_SDP=math)")
 
+    from jsonschema import validate as schema_validate
+
+    schema = json.loads(
+        (REPO / "bench" / "schema" / "result.schema.json").read_text(encoding="utf-8")
+    )
+    attention = os.environ.get("QIR_ATTENTION") or (
+        "math-sdp" if os.environ.get("QIR_SDP") == "math" else "auto"
+    )
+
     print("loading pipeline...", flush=True)
     pipe = QwenImage21Pipeline.from_pretrained(str(WEIGHTS_DIR), torch_dtype=torch.bfloat16)
     pipe.enable_model_cpu_offload()
@@ -157,7 +166,9 @@ def main() -> None:
             "env_ref": _env_ref(),
             "created_at": datetime.now().astimezone().isoformat(timespec="seconds"),
             "run_kind": spec["kind"],  # cold | warmup | measure (report filter)
+            "attention_backend": attention,
         }
+        schema_validate(record, schema)
         if spec["kind"] == "cold":
             out_json = results_dir / "cold.json"
             out_png = raw_dir / experiment / "cold.png"
