@@ -1,3 +1,34 @@
+# ComfyUI split-format weights (Phase 2)
+
+ModelScope check (2026-10-31): `Comfy-Org/Qwen-Image-2.1` exists on
+ModelScope but is an **empty shell** (0 files; download transfers nothing)
+→ engaged the pre-approved HF fallback. Direct huggingface.co is unreachable
+from this network, so the endpoint mirror was used:
+
+```
+$env:HF_ENDPOINT = "https://hf-mirror.com"
+hf download Comfy-Org/Qwen-Image-2.1 `
+  --include diffusion_models/qwen_image_2.1_bf16.safetensors `
+            text_encoders/qwen3vl_8b_bf16.safetensors `
+            vae/qwen_image_2.1_vae_bf16.safetensors `
+  --local-dir weights/comfyui-split
+```
+
+bf16 baseline files (~30 GB total):
+
+```
+weights/comfyui-split/
+├── diffusion_models/qwen_image_2.1_bf16.safetensors   (7B DiT, bf16)
+├── text_encoders/qwen3vl_8b_bf16.safetensors           (8B text encoder)
+└── vae/qwen_image_2.1_vae_bf16.safetensors
+```
+
+Mapped into ComfyUI via `phase2-comfyui/extra_model_paths.yaml`. Quantized
+variants (int8_convrot, w4a8) and the Turbo checkpoint are NOT downloaded
+in Phase 2 — they are Phase 3 material.
+
+---
+
 # Weights (Phase 1, diffusers format)
 
 Downloaded from ModelScope (weights are NOT committed to this repo):
