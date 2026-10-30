@@ -12,7 +12,10 @@ param(
     [switch]$Full
 )
 
-$ErrorActionPreference = "Stop"
+# NOTE: no $ErrorActionPreference = "Stop" here — under Windows PowerShell 5.1
+# that turns native stderr progress output (uv/pip/modelscope write progress
+# to stderr) into terminating errors. Explicit $LASTEXITCODE checks below
+# cover failure handling instead.
 $repo = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $repo
 
@@ -31,11 +34,20 @@ if (-not $uv) {
     }
 } else { $uv = $uv.Source }
 
-# --- venv (skip if it exists) ---------------------------------------------
+# --- venv + torch (skip only when torch already imports) ------------------
 $venvDir = Join-Path $repo ".venv-repro"
 $py = Join-Path $venvDir "Scripts\python.exe"
-if (-not (Test-Path $py)) {
+$haveTorch = $false
+if (Test-Path $py) {
+    & $py -c "import torch" 2>$null
+    if ($LASTEXITCODE -eq 0) { $haveTorch = $true }
+}
+if (-not $haveTorch) {
     Write-Host "[1/4] creating venv (.venv-repro, Python 3.12)..."
+    if (Test-Path $venvDir) {
+        # a partial venv (created but never provisioned) breaks `uv venv`
+        Remove-Item -Recurse -Force $venvDir
+    }
     & $uv venv $venvDir --python 3.12 --seed
     if ($LASTEXITCODE -ne 0) { exit 1 }
 
@@ -50,7 +62,7 @@ if (-not (Test-Path $py)) {
     & $py -c "import torch; assert torch.__version__.endswith('rocm7.14.1'), torch.__version__; print('torch still OK', torch.__version__)"
     if ($LASTEXITCODE -ne 0) { Write-Host "pip swapped the ROCm torch for a PyPI build"; exit 1 }
 } else {
-    Write-Host "[1-2/4] reusing existing .venv-repro"
+    Write-Host "[1-2/4] reusing existing .venv-repro (torch imports)"
 }
 
 # --- HIP smoke ------------------------------------------------------------
