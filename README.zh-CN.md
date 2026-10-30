@@ -47,10 +47,37 @@ ModelScope 下载权重（约 30GB，仅一次），然后执行。
 ## 基准协议
 
 冻结于 [`bench/prompts.json`](bench/prompts.json)：3 条 prompt
-（中文场景 / 英文场景 / 文字渲染海报）× 2 个分辨率（1024²、2048²）×
-40 步 × seeds `[42, 1337, 20261030]`。结果为 JSON
-（schema：`bench/schema/result.schema.json`）+ Markdown 报告
-（含中位数、离散度、局限性声明）。
+（中文场景 / 英文场景 / 文字渲染海报）× 40 步 ×
+seeds `[42, 1337, 20261030]`。**仅在 1024² 执行**——在 24GB RDNA3 卡 +
+当前 Windows ROCm 栈的任何可用注意力后端上，2048² 目前无法完成
+（见下方发现）。结果为 JSON（schema：`bench/schema/result.schema.json`）
++ Markdown 报告（含中位数、离散度、局限性声明）。
+
+## Phase 1 结果（diffusers 基线，1024²，bf16，40 步）
+
+每配置 3 次测量取中位；完整报告：
+[math](bench/results/2026-10-31-math-1024/report.md) ·
+[flex](bench/results/2026-10-31-flex-1024/report.md)
+
+| DiT 注意力后端 | s/step（中位） | 总耗时（中位） | 显存 |
+|---|---|---|---|
+| math SDPA      | 5.7 – 5.9 | 239 – 254 | 18.8 GB |
+| flex（无 Triton） | 18.6 – 21.6 | 756 – 875 | 20.8 GB |
+
+环境证据：`bench/results/env/snapshot-20261030-212234.json`。
+
+## ROCm Windows 生态发现（Phase 1）
+
+1. **flash 与 mem-efficient SDPA 后端报 `hipErrorInvalidValue`**
+   （Qwen3-VL 与 Qwen-Image-2.1 DiT 形状）——
+   [issue](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)
+2. **2048²（原生分辨率）不可达**：所有内存高效后端损坏或缺失；
+   math 与 flex 无 Triton 回退都需要单次 32.1GB 稠密注意力分配。
+3. **AMD 轮子源无 Windows Triton** → FlexAttention/torch.compile 走慢速
+   回退——[issue](docs/issues/2026-10-30-no-triton-windows-rocm.md)
+4. **cpu_offload 首轮 warmup 页文件抖动**（6× 步长减速，可自恢复）
+   （32GB 内存主机）——
+   [issue](docs/issues/2026-10-30-warmup-pagefile-thrash-cpu-offload.md)
 
 ## 许可
 

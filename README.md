@@ -51,10 +51,40 @@ on PyPI, so the lock is AMD-wheel-index specific).
 ## Benchmark protocol
 
 Frozen in [`bench/prompts.json`](bench/prompts.json): 3 prompts
-(Chinese scene / English scene / text-rendering poster) × 2 resolutions
-(1024², 2048²) × 40 steps × seeds `[42, 1337, 20261030]`. Results are
-JSON (schema: `bench/schema/result.schema.json`) + a Markdown report with
-medians, spread, and limitations.
+(Chinese scene / English scene / text-rendering poster) × 40 steps ×
+seeds `[42, 1337, 20261030]`. **Executed at 1024² only** — 2048² is
+currently impossible on any working attention backend of the stock
+Windows ROCm stack on a 24 GB RDNA3 card (see findings below). Results
+are JSON (schema: `bench/schema/result.schema.json`) + Markdown reports
+with medians, spread, and limitations.
+
+## Phase 1 results (diffusers baseline, 1024², bf16, 40 steps)
+
+Median of 3 measured runs per config; full reports:
+[math](bench/results/2026-10-31-math-1024/report.md) ·
+[flex](bench/results/2026-10-31-flex-1024/report.md)
+
+| DiT attention | s/step (median) | total s (median) | VRAM |
+|---|---|---|---|
+| math SDPA      | 5.7 – 5.9 | 239 – 254 | 18.8 GB |
+| flex (no Triton) | 18.6 – 21.6 | 756 – 875 | 20.8 GB |
+
+Environment evidence: `bench/results/env/snapshot-20261030-212234.json`.
+
+## ROCm-on-Windows findings (Phase 1)
+
+1. **flash & mem-efficient SDPA backends fail** with
+   `hipErrorInvalidValue` on Qwen3-VL and Qwen-Image-2.1 DiT shapes —
+   [issue](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)
+2. **2048² (native resolution) unreachable**: every memory-efficient
+   backend is broken/unavailable; math and flex's no-Triton fallback both
+   need a single 32.1 GB dense attention allocation.
+3. **No Triton wheels for Windows ROCm** in AMD's wheel index →
+   FlexAttention/torch.compile run slow fallbacks —
+   [issue](docs/issues/2026-10-30-no-triton-windows-rocm.md)
+4. **cpu_offload first-warmup pagefile thrash** (6× step time, recovers)
+   on 32 GB RAM hosts —
+   [issue](docs/issues/2026-10-30-warmup-pagefile-thrash-cpu-offload.md)
 
 ## License
 
