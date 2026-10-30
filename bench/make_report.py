@@ -33,16 +33,7 @@ def _load_runs(results_dir: str):
     return records
 
 
-def steady_step_rate(step_times: list[float]) -> float | None:
-    """Median per-step wall time over steady steps (index 1+).
-
-    step_times_s[0] includes text-encode + cpu-offload weight restore on top
-    of step 1's compute, so it is excluded (protocol v1.1 semantics).
-    """
-    steady = step_times[1:]
-    if not steady:
-        return None
-    return statistics.median(steady)
+from bench.core import steady_step_rate  # noqa: E402,F401  (re-export; shared v1.1 semantics)
 
 
 def make_report(results_dir: str) -> None:

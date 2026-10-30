@@ -15,43 +15,12 @@ import json
 import sys
 import time
 from datetime import datetime
-from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[1]
-PROMPTS = json.loads((REPO / "bench" / "prompts.json").read_text(encoding="utf-8"))
+from bench.core import PROMPTS_PATH, REPO, plan_runs  # re-exported for callers
+
+PROMPTS = json.loads(PROMPTS_PATH.read_text(encoding="utf-8"))
 WEIGHTS_DIR = REPO / "weights" / "diffusers-format"
 ENV_DIR = REPO / "bench" / "results" / "env"
-
-
-def plan_runs(
-    prompt_ids: list[str],
-    resolutions: list[tuple[int, int]],
-    seeds: list[int],
-    warmup: int = 1,
-    measured: int = 3,
-) -> list[dict]:
-    """Return ordered run specs: one cold first, then per config warmup+measures."""
-    specs: list[dict] = []
-    first = True
-    for prompt_id in prompt_ids:
-        for (w, h) in resolutions:
-            if first:
-                specs.append(
-                    {"kind": "cold", "prompt_id": prompt_id, "width": w,
-                     "height": h, "seed": seeds[0], "run_idx": 0}
-                )
-                first = False
-            for _ in range(warmup):
-                specs.append(
-                    {"kind": "warmup", "prompt_id": prompt_id, "width": w,
-                     "height": h, "seed": seeds[0], "run_idx": 0}
-                )
-            for i in range(measured):
-                specs.append(
-                    {"kind": "measure", "prompt_id": prompt_id, "width": w,
-                     "height": h, "seed": seeds[i % len(seeds)], "run_idx": i}
-                )
-    return specs
 
 
 def _env_ref() -> str:
