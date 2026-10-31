@@ -27,6 +27,17 @@ Mapped into ComfyUI via `phase2-comfyui/extra_model_paths.yaml`. Quantized
 variants (int8_convrot, w4a8) and the Turbo checkpoint are NOT downloaded
 in Phase 2 — they are Phase 3 material.
 
+**Notes for mainland-China networks** (measured 2026-10-31):
+
+1. `hf download` via hf-mirror with the default **hf-xet** protocol hangs
+   at 0 bytes — the xet CAS endpoints are not proxied by hf-mirror.
+   Fix: `HF_HUB_DISABLE_XET=1` (plain HTTPS via the mirror; observed
+   40 MB/s bursts).
+2. Even on plain HTTPS the mirror connection dies mid-transfer every few
+   GB **without exiting** — wrap the download in a watchdog that kills
+   and restarts it on 5-minute stalls (`hf download` resumes
+   `.incomplete` files, so restarts are cheap).
+
 ---
 
 # Weights (Phase 1, diffusers format)
