@@ -1,0 +1,4 @@
+﻿server.err.log:28: [32m[INFO][0m Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention
+server.err.log:57: [32m[INFO][0m Using split attention in VAE
+server.err.log:58: [32m[INFO][0m Using split attention in VAE
+server.err.log:68: [32m[INFO][0m Native ops: asym_w4a8_int8, w6a8_int8, convrot_w4a4, int8_tensorwise , emulated ops: float8_e4m3fn, mxfp8, float8_e5m2, nvfp4
