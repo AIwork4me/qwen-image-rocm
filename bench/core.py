@@ -21,7 +21,13 @@ def plan_runs(
     warmup: int = 1,
     measured: int = 3,
 ) -> list[dict]:
-    """Return ordered run specs: one cold first, then per config warmup+measures."""
+    """Return ordered run specs: one cold first, then per config warmup+measures.
+
+    cold/warmup use seeds[0] + 1_000_000 (protocol v1.2): ComfyUI caches
+    executions by input hash, so a warmup sharing a measured seed would
+    return a cached 1-second "result" for the measured run.
+    """
+    _non_measure_seed = seeds[0] + 1_000_000
     specs: list[dict] = []
     first = True
     for prompt_id in prompt_ids:
@@ -29,13 +35,13 @@ def plan_runs(
             if first:
                 specs.append(
                     {"kind": "cold", "prompt_id": prompt_id, "width": w,
-                     "height": h, "seed": seeds[0], "run_idx": 0}
+                     "height": h, "seed": _non_measure_seed, "run_idx": 0}
                 )
                 first = False
             for _ in range(warmup):
                 specs.append(
                     {"kind": "warmup", "prompt_id": prompt_id, "width": w,
-                     "height": h, "seed": seeds[0], "run_idx": 0}
+                     "height": h, "seed": _non_measure_seed, "run_idx": 0}
                 )
             for i in range(measured):
                 specs.append(
