@@ -1,7 +1,7 @@
 {
   "name": "p3-int8-dit-te-1024x1024",
   "phase": 3,
-  "description": "E2: DiT + TE both native int8_convrot; VRAM-headroom + 2048-square probe candidate",
+  "description": "E2: DiT + TE both native int8_convrot; VRAM-headroom + 2048-square probe candidate. TE-compute fresh arm measured in e2-int8-te (1.1-1.2s); DiT quant does not affect TE",
   "framework": "comfyui",
   "precision": "int8-convrot-dit-te",
   "resolution": 1024,
@@ -16,7 +16,7 @@
   "tiled_vae": false,
   "attention_backend": "comfyui-default",
   "measured": 3,
-  "fresh_prompt_arm": true,
+  "fresh_prompt_arm": false,
   "sdp_mode": "math",
   "server_flags": [],
   "env_vars": {},
