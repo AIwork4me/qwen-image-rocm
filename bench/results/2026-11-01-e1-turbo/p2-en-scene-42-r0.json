@@ -1,0 +1,62 @@
+{
+  "experiment": "p3-turbo-8step-1024x1024",
+  "phase": 3,
+  "framework": "comfyui",
+  "precision": "bf16",
+  "width": 1024,
+  "height": 1024,
+  "steps": 8,
+  "seed": 42,
+  "prompt_id": "p2-en-scene",
+  "protocol_version": "v1.3",
+  "runs": [
+    {
+      "kind": "warm",
+      "total_s": 11.082,
+      "text_encode_s": 0,
+      "denoise_s": 10.588,
+      "vae_decode_s": 0.855,
+      "step_times_s": [
+        0.196,
+        1.455,
+        1.078,
+        1.083,
+        1.085,
+        1.085,
+        1.449,
+        1.083
+      ]
+    }
+  ],
+  "vram_peak_mb": 17016.3,
+  "env_ref": "snapshot-20261030-212234.json",
+  "created_at": "2026-11-01T01:57:43+08:00",
+  "run_kind": "measure",
+  "attention_backend": "comfyui-default",
+  "execution_time_s": 10.588,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "cfg": 1.0,
+  "ksampler_s": 9.649,
+  "node_timings_s": {
+    "KSampler#ks_2dad7342": 9.649,
+    "VAEDecode#dec_9cc1c321": 0.855,
+    "SaveImage#save_cb6aef56": 0.083
+  },
+  "cached_nodes": [
+    "UNETLoader#unet_b83a654b",
+    "CLIPLoader#clip_7015a8fe",
+    "VAELoader#vae_eadf0f46",
+    "CLIPTextEncode#pos_010414dd",
+    "CLIPTextEncode#neg_fbd13884",
+    "EmptyLatentImage#latent_879cd077"
+  ],
+  "vram_residency_mb": 16337.1,
+  "unet": "qwen_image_2.1_turbo_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "session_id": "e1",
+  "restart_idx": 4
+}
