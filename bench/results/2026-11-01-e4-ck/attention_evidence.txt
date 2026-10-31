@@ -1,0 +1,5 @@
+﻿server.log:1: launching: QIR_SDP=math python C:\Users\Rocm\Desktop\image\phase2-comfyui\launch_wrapper.py --listen 127.0.0.1 --port 8188 --extra-model-paths-config C:\Users\Rocm\Desktop\image\phase2-comfyui\extra_model_paths.yaml --use-ck-attention
+server.err.log:28: [32m[INFO][0m Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention
+server.err.log:29: [32m[INFO][0m Using Comfy Kitchen attention
+server.err.log:58: [32m[INFO][0m Using split attention in VAE
+server.err.log:59: [32m[INFO][0m Using split attention in VAE

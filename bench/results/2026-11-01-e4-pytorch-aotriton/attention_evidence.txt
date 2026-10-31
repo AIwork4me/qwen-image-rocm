@@ -1,0 +1,5 @@
+﻿server.log:1: launching: QIR_SDP=math-hard python C:\Users\Rocm\Desktop\image\phase2-comfyui\launch_wrapper.py --listen 127.0.0.1 --port 8188 --extra-model-paths-config C:\Users\Rocm\Desktop\image\phase2-comfyui\extra_model_paths.yaml --use-pytorch-cross-attention
+server.err.log:28: [32m[INFO][0m Using pytorch attention
+server.err.log:57: [32m[INFO][0m Using split attention in VAE
+server.err.log:58: [32m[INFO][0m Using split attention in VAE
+server.err.log:110:     outputs = self.transformer(None, attention_mask_model, embeds=embeds, num_tokens=num_tokens, intermediate_output=intermediate_output, final_layer_norm_intermediate=self.layer_norm_hidden_state, dtype=torch.float32, embeds_info=embeds_info)
