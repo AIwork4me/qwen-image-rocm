@@ -10,3 +10,5 @@ modelscope_cache/
 .superpowers/
 .venv-repro/
 uv.lock 
+phase3-quality/.venv/
+.zcode/

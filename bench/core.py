@@ -23,11 +23,15 @@ def plan_runs(
 ) -> list[dict]:
     """Return ordered run specs: one cold first, then per config warmup+measures.
 
-    cold/warmup use seeds[0] + 1_000_000 (protocol v1.2): ComfyUI caches
-    executions by input hash, so a warmup sharing a measured seed would
-    return a cached 1-second "result" for the measured run.
+    Protocol v1.3 seed discipline (input-hash cache defeat):
+    - cold uses seeds[0] + 1_000_000
+    - warmup uses seeds[0] + 2_000_000 — v1.2 reused the cold seed, which made
+      the warmup an input-identical no-op (graph-cache hit) instead of an
+      executing warmup run
+    - measured runs cycle the frozen seeds
     """
-    _non_measure_seed = seeds[0] + 1_000_000
+    cold_seed = seeds[0] + 1_000_000
+    warmup_seed = seeds[0] + 2_000_000
     specs: list[dict] = []
     first = True
     for prompt_id in prompt_ids:
@@ -35,13 +39,13 @@ def plan_runs(
             if first:
                 specs.append(
                     {"kind": "cold", "prompt_id": prompt_id, "width": w,
-                     "height": h, "seed": _non_measure_seed, "run_idx": 0}
+                     "height": h, "seed": cold_seed, "run_idx": 0}
                 )
                 first = False
             for _ in range(warmup):
                 specs.append(
                     {"kind": "warmup", "prompt_id": prompt_id, "width": w,
-                     "height": h, "seed": _non_measure_seed, "run_idx": 0}
+                     "height": h, "seed": warmup_seed, "run_idx": 0}
                 )
             for i in range(measured):
                 specs.append(

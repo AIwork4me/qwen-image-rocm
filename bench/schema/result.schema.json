@@ -43,7 +43,7 @@
           "step_times_s"
         ],
         "properties": {
-          "kind": { "enum": ["cold", "warm"] },
+          "kind": { "enum": ["cold", "warm", "fresh"] },
           "total_s": { "type": "number" },
           "text_encode_s": { "type": ["number", "null"] },
           "denoise_s": { "type": "number" },
@@ -55,7 +55,18 @@
     "vram_peak_mb": { "type": "number" },
     "env_ref": { "type": "string" },
     "created_at": { "type": "string" },
-    "run_kind": { "enum": ["cold", "warmup", "measure"] },
-    "attention_backend": { "type": "string" }
+    "run_kind": { "enum": ["cold", "warmup", "measure", "fresh_prompt"] },
+    "attention_backend": { "type": "string" },
+    "cfg": { "type": "number" },
+    "unet": { "type": "string" },
+    "clip": { "type": "string" },
+    "vae": { "type": "string" },
+    "weight_dtype": { "type": "string" },
+    "tiled_vae": { "type": "boolean" },
+    "ksampler_s": { "type": "number" },
+    "vram_residency_mb": { "type": ["number", "null"] },
+    "session_id": { "type": "string" },
+    "restart_idx": { "type": "integer" },
+    "monitor_error": { "type": "string" }
   }
 }

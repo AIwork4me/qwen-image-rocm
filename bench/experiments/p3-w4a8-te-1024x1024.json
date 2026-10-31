@@ -1,0 +1,20 @@
+{
+  "name": "p3-w4a8-te-1024x1024",
+  "phase": 3,
+  "description": "E2: TE native w4a8 (17.5->6.3GB), DiT/VAE bf16",
+  "framework": "comfyui",
+  "precision": "bf16-dit-w4a8-te",
+  "resolution": 1024,
+  "steps": 40,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_bf16.safetensors",
+  "clip": "qwen3vl_8b_w4a8.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "comfyui-default",
+  "measured": 3,
+  "fresh_prompt_arm": true
+}

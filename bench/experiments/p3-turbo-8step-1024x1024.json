@@ -1,0 +1,20 @@
+{
+  "name": "p3-turbo-8step-1024x1024",
+  "phase": 3,
+  "description": "E1: Turbo distilled DiT, 8 steps CFG1 (official template); fresh-prompt arm on to expose TE cost",
+  "framework": "comfyui",
+  "precision": "bf16",
+  "resolution": 1024,
+  "steps": 8,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_turbo_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "comfyui-default",
+  "measured": 3,
+  "fresh_prompt_arm": true
+}

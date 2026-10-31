@@ -1,0 +1,26 @@
+{
+  "name": "p3-attn-pytorch-aotriton-1024x1024",
+  "phase": 3,
+  "description": "E4: pytorch SDPA + aotriton experimental env (availability probe first)",
+  "framework": "comfyui",
+  "precision": "bf16",
+  "resolution": 1024,
+  "steps": 40,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "pytorch-sdpa-aotriton",
+  "measured": 3,
+  "server_flags": [
+    "--use-pytorch-cross-attention"
+  ],
+  "sdp_mode": "math-hard",
+  "env_vars": {
+    "TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL": "1"
+  }
+}

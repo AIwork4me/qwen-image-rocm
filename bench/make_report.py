@@ -114,6 +114,16 @@ def make_report(
     lines += ["", "- Protocol v1.2 (2026-10-31): cold/warmup seeds are seeds[0]+1e6",
               "  so ComfyUI's execution cache can never serve a cached result to a",
               "  measured run (v1.0/v1.1 warmups shared the measured seed).",
+              "- Protocol v1.3 (Phase 3, 2026-10-31): warmup seed is now seeds[0]+2e6",
+              "  (v1.2 warmups were input-identical to the cold run — graph-cache",
+              "  no-ops instead of executing warmups); ComfyUI records carry /ws",
+              "  node/step timing (text_encode_s, vae_decode_s, ksampler_s,",
+              "  step_times_s) and a true VRAM peak (0.5 s /system_stats sampling;",
+              "  vram_residency_mb keeps the old post-run metric).",
+              "- ComfyUI TE-cache caveat (corrected 2026-10-31): measured runs change",
+              "  only the seed, so CLIPTextEncode is a node-cache hit — text encode",
+              "  is NOT inside measured denoise_s/total_s. Real TE cost: cold runs,",
+              "  fresh_prompt runs (prompt+' .' busts the cache), or text_encode_s.",
               ""]
     (rdir / "report.md").write_text("\n".join(lines), encoding="utf-8")
 

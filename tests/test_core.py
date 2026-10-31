@@ -9,11 +9,10 @@ def test_core_exports():
     kinds = [s["kind"] for s in specs]
     # one config: cold (process-first) + 1 warmup + 3 measured runs
     assert kinds == ["cold", "warmup", "measure", "measure", "measure"]
-    # cold/warmup use a bumped seed so ComfyUI's execution cache can never
-    # serve a cached result to a measured run (warm seed collision found in
-    # phase 2; protocol v1.2)
+    # cache-defeat seeds: cold +1e6 (v1.2); warmup +2e6 (v1.3 — v1.2 reused the
+    # cold seed, making the warmup an input-identical graph-cache no-op)
     assert specs[0]["seed"] == 1_000_042
-    assert specs[1]["seed"] == 1_000_042
+    assert specs[1]["seed"] == 2_000_042
     assert [s["seed"] for s in specs[2:]] == [42, 42, 42]
     assert core.steady_step_rate([12.0, 1.0, 1.0]) == 1.0
     assert isinstance(core.load_schema(), dict)

@@ -1,0 +1,23 @@
+{
+  "name": "p3-vram-cache-none-1024x1024",
+  "phase": 3,
+  "description": "E7: --cache-none (no node-output cache; fresh-prompt-equivalent TE cost every run)",
+  "framework": "comfyui",
+  "precision": "bf16",
+  "resolution": 1024,
+  "steps": 40,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "comfyui-default",
+  "measured": 5,
+  "server_flags": [
+    "--cache-none"
+  ],
+  "fresh_prompt_arm": true
+}
