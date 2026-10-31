@@ -20,7 +20,6 @@ BASE = "http://127.0.0.1:8188"
 
 
 def main() -> None:
-    import requests
 
     from bench.comfyui_client import build_workflow, check_server, post_prompt, wait_for_result
 
