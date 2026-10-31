@@ -18,9 +18,12 @@ import json
 import sys
 import time
 from datetime import datetime
+from pathlib import Path
 
-from bench import comfyui_client
-from bench.core import PROMPTS_PATH, REPO, plan_runs, validate_record
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # allow -I runs
+
+from bench import comfyui_client  # noqa: E402
+from bench.core import PROMPTS_PATH, REPO, plan_runs, validate_record  # noqa: E402
 
 SAMPLER = "euler"
 SCHEDULER = "simple"
