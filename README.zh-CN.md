@@ -105,9 +105,10 @@ cpu_offload 权重搬运（31GB 过 PCIe）+ 3.66s/step 去噪；ComfyUI 让 DiT
 4. **cpu_offload 首轮 warmup 页文件抖动**（6× 步长减速，可自恢复）
    （32GB 内存主机）——
    [issue](docs/issues/2026-10-30-warmup-pagefile-thrash-cpu-offload.md)
-5. **ComfyUI 默认注意力不受 SDPA 后端 bug 影响**（输出与 math 强制
-   逐字节一致）——故障仅限 diffusers/transformers 的 SDPA 自动后端
-   选择路径；RCA 范围已收窄，见
+5. **ComfyUI 通过启动探测在 SDPA 后端 bug 下幸存**：它同样撞上 flash
+   注意力的 `invalid argument` 失败，但自动禁用并回退到次二次核——
+   而 diffusers/transformers 会整体失败。同样的坏 kernel，不同的消费者
+   韧性；证据（日志行 + 两张输出图的 SHA256）见
    [issue 1](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)。
 
 ## 许可

@@ -100,11 +100,38 @@ def check_server(base_url: str) -> None:
         )
 
 
+def preflight_workflow(base_url: str, workflow: dict) -> None:
+    """Verify every node class exists and model names are in server enums.
+
+    Catches workflow drift (renamed files/classes) BEFORE submitting, with
+    the offending node named in the error.
+    """
+    for node_id, node in workflow.items():
+        cls = node["class_type"]
+        info = _get(f"{base_url}/object_info/{cls}", timeout=15)
+        if info.status_code != 200:
+            raise RuntimeError(f"node class '{cls}' (id {node_id}) not on server")
+        spec = info.json().get(cls, {})
+        required = spec.get("input", {}).get("required", {})
+        for field, spec_values in required.items():
+            if isinstance(spec_values, list) and spec_values and isinstance(spec_values[0], list):
+                allowed = spec_values[0]
+                value = node["inputs"].get(field)
+                if value is not None and value not in allowed:
+                    raise RuntimeError(
+                        f"node {node_id} ({cls}): '{field}' value '{value}' not in "
+                        f"server enum {allowed[:5]}..."
+                    )
+
+
 def post_prompt(base_url: str, workflow: dict) -> str:
     import requests
 
     r = requests.post(f"{base_url}/prompt", json={"prompt": workflow}, timeout=30)
-    r.raise_for_status()
+    if r.status_code != 200:
+        raise RuntimeError(
+            f"comfyui rejected workflow (HTTP {r.status_code}): {r.text[:500]}"
+        )
     body = r.json()
     if "error" in body:
         raise RuntimeError(f"comfyui rejected workflow: {body['error']}")

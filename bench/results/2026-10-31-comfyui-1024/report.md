@@ -1,4 +1,4 @@
-# Phase 1 diffusers baseline report
+# Phase 2 ComfyUI baseline report
 
 - Protocol: `v1`
 - Runs per config: median of 3
@@ -25,4 +25,11 @@ Cold run (first load, p2-comfyui-1024x1024, p1-zh-scene): 680.289s total, denois
   it (e.g. math backend at 1024²: ~5.9 reported vs ~3.7 true).
 - Median of 3 measured runs per config; variance between runs is reported
   as min–max, not confidence intervals.
-- No cross-framework claim: diffusers-only in this report.
+
+- ComfyUI: denoise_s is the server execution time (execution_start to execution_success) — includes text encode + VAE decode; the API does not expose per-step times (step_times_s empty, s/step n/a).
+- ComfyUI: vram_peak_mb is post-run VRAM residency sampled from /system_stats, NOT an allocator peak; diffusers rows record torch.cuda.max_memory_allocated — the two are not directly comparable.
+- Sampler euler / scheduler simple / cfg 1.0 per the official Qwen-Image-2.1 ComfyUI template.
+
+- Protocol v1.2 (2026-10-31): cold/warmup seeds are seeds[0]+1e6
+  so ComfyUI's execution cache can never serve a cached result to a
+  measured run (v1.0/v1.1 warmups shared the measured seed).

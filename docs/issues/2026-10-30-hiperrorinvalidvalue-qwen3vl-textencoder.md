@@ -101,22 +101,40 @@ impossible on any backend of the stock Windows ROCm stack on a 24 GB
 RDNA3 card today** — the only memory-efficient backends (flash,
 mem-efficient, real flex) are exactly the broken/unavailable ones.
 
-## Phase 2 refinement (2026-10-31): ComfyUI default attention WORKS
+## Phase 2 refinement (2026-10-31): ComfyUI hits the SAME bug, survives via startup probe
 
-ComfyUI 0.43.0 (commit b5a4321) on the same torch stack, same GPU,
-Qwen-Image-2.1 1024² generation via its DEFAULT attention selection
-("cuda:0 AMD Radeon RX 7900 XTX : native") succeeds out of the box —
-no workaround needed. The output PNG is byte-identical
-(2,085,658 bytes) to the run forced through math-only SDPA, suggesting
-ComfyUI's pytorch-native path already avoids the broken SDPA backend
-auto-selection (or falls to math deterministically).
+ComfyUI 0.43.0 (commit b5a4321), same torch stack, same GPU:
+Qwen-Image-2.1 1024² generation with DEFAULT attention succeeds —
+because ComfyUI **probes at startup, hits the same kernel failure, and
+auto-disables flash**:
 
-RCA implication: the failure is specific to how diffusers/transformers
-let PyTorch SDPA auto-select backends (flash/mem-efficient get picked
-and fail). A consumer that pins/falls back to math (like ComfyUI's
-native ops on this build) is unaffected. Upstream fix target stays the
-broken flash/mem-efficient kernels on Windows gfx1100, but the
-dispatch-avoidance angle narrows where to look.
+```
+[WARNING] Could not run flash attention, disabling it: CUDA error: invalid argument
+[INFO] Using sub quadratic optimization for attention, ...
+```
+
+(comfyui-nomath.log; same `invalid argument` root as the
+diffusers-side hipErrorInvalidValue.)
+
+Output comparison, math-forced vs default (same prompt/size/steps/seed):
+
+- qir_bench_00001_.png (math-forced):
+  SHA256 DFA3982E8C52C5054D898A89D7E67D13B3B149957C552EE890977E6F4337457E
+- qir_bench_00002_.png (default attention):
+  SHA256 D4BEA6AEC203424033D98EEDB6DEE09658920D72739C0C6F1B635FA9295FA066
+
+Same size (2,085,658 B), **different hashes** — an earlier revision of
+this note claimed "byte-identical" from size equality alone; that was
+wrong (caught in review). The two paths are numerically different
+implementations (sub-quadratic vs math).
+
+RCA implication (corrected): the broken flash/mem-efficient kernels on
+Windows gfx1100 affect ALL consumers; the difference is failure
+handling — ComfyUI probes and falls back to a sub-quadratic kernel
+automatically, diffusers/transformers let PyTorch SDPA auto-selection
+fail the whole call. Phase 4 targets remain the kernels themselves;
+the consumer-resilience contrast (probe-and-fallback vs hard failure)
+is a useful upstream discussion point.
 
 Phase 4 should: bisect backend selection, capture the exact failing kernel
 (per-backend microbench on the specific head-dims/masks), and check

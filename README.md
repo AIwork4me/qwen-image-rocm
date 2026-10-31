@@ -115,9 +115,11 @@ not exposed by the ComfyUI API; totals are server execution times.
 4. **cpu_offload first-warmup pagefile thrash** (6× step time, recovers)
    on 32 GB RAM hosts —
    [issue](docs/issues/2026-10-30-warmup-pagefile-thrash-cpu-offload.md)
-5. **ComfyUI default attention is unaffected** by the SDPA backend bug
-   (byte-identical output to math-forced runs) — the failure is specific
-   to diffusers/transformers' SDPA auto-selection; RCA scope narrowed in
+5. **ComfyUI survives the SDPA backend bug via startup probe**: it hits
+   the same flash-attention `invalid argument` failure, auto-disables it,
+   and falls back to a sub-quadratic kernel — while diffusers/transformers
+   fail the whole call. Same broken kernels, different consumer
+   resilience; evidence (log line + both output SHA256s) in
    [issue 1](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md).
 
 ## License

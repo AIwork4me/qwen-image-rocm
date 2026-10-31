@@ -57,7 +57,7 @@ def build_record(
         "steps": 40,
         "seed": spec["seed"],
         "prompt_id": spec["prompt_id"],
-        "protocol_version": "v1",
+        "protocol_version": "v1.2",  # v1.2: non-measure seeds +1e6 (cache defeat)
         "runs": [
             {
                 "kind": "cold" if spec["kind"] == "cold" else "warm",
@@ -108,6 +108,18 @@ def main() -> None:
     prompts = json.loads(PROMPTS_PATH.read_text(encoding="utf-8"))
     prompt_text = {p["id"]: (p["prompt"], p["negative_prompt"]) for p in prompts["prompts"]}
     specs = order_specs(plan_runs(list(prompt_text), resolutions, prompts["seeds"]))
+
+    # one preflight on a representative workflow: node classes + model names
+    first_prompt = next(iter(prompt_text.values()))
+    comfyui_client.preflight_workflow(
+        ns.base_url,
+        comfyui_client.build_workflow(
+            unet=UNET, clip=CLIP, vae=VAE,
+            prompt=first_prompt[0], negative=first_prompt[1],
+            width=resolutions[0][0], height=resolutions[0][1],
+            steps=40, seed=0, sampler=SAMPLER, scheduler=SCHEDULER,
+        ),
+    )
 
     results_dir = REPO / "bench" / "results" / ns.date
     results_dir.mkdir(parents=True, exist_ok=True)

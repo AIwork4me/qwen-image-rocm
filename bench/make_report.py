@@ -38,11 +38,15 @@ def _load_runs(results_dir: str):
 from bench.core import steady_step_rate  # noqa: E402,F401  (re-export; shared v1.1 semantics)
 
 
-def make_report(results_dir: str) -> None:
+def make_report(
+    results_dir: str,
+    title: str = "Phase 1 diffusers baseline report",
+    extra_limitations: list[str] | None = None,
+) -> None:
     rdir = Path(results_dir)
     records = _load_runs(results_dir)
     # measured runs are tagged "run_kind": "measure" by run_bench (schema allows
-    # extra properties); warmup runs share seed[0] and must not enter medians.
+    # extra properties); warmup runs must not enter medians.
     measured = [r for r in records if r.get("run_kind") == "measure"]
 
     groups: dict[tuple, list] = {}
@@ -50,7 +54,7 @@ def make_report(results_dir: str) -> None:
         groups.setdefault((r["experiment"], r["prompt_id"]), []).append(r)
 
     lines = [
-        "# Phase 1 diffusers baseline report",
+        f"# {title}",
         "",
         f"- Protocol: `{records[0]['protocol_version'] if records else 'n/a'}`"
         if records else "# report",
@@ -103,9 +107,14 @@ def make_report(results_dir: str) -> None:
         "  it (e.g. math backend at 1024²: ~5.9 reported vs ~3.7 true).",
         "- Median of 3 measured runs per config; variance between runs is reported",
         "  as min–max, not confidence intervals.",
-        "- No cross-framework claim: diffusers-only in this report.",
         "",
     ]
+    if extra_limitations:
+        lines += [f"- {line}" for line in extra_limitations]
+    lines += ["", "- Protocol v1.2 (2026-10-31): cold/warmup seeds are seeds[0]+1e6",
+              "  so ComfyUI's execution cache can never serve a cached result to a",
+              "  measured run (v1.0/v1.1 warmups shared the measured seed).",
+              ""]
     (rdir / "report.md").write_text("\n".join(lines), encoding="utf-8")
 
     if rows:

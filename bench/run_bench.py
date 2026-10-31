@@ -129,7 +129,7 @@ def main() -> None:
             "steps": 40,
             "seed": spec["seed"],
             "prompt_id": spec["prompt_id"],
-            "protocol_version": PROMPTS["protocol_version"],
+            "protocol_version": "v1.2",  # v1.2: non-measure seeds +1e6 (cache defeat)
             "runs": [run],
             "vram_peak_mb": vram,
             "env_ref": _env_ref(),
