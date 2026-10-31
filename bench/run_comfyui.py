@@ -123,11 +123,15 @@ def main() -> None:
         prompt_id = comfyui_client.post_prompt(ns.base_url, wf)
         history = comfyui_client.wait_for_result(ns.base_url, prompt_id)
         total_s = time.perf_counter() - t0
-        exec_ms = 0.0
-        for msg in history.get("status", {}).get("messages", []):
-            if msg and msg[0] == "execution_time":
-                exec_ms = msg[1]
-        execution_time_s = exec_ms / 1000.0 if exec_ms else total_s
+        ts = {
+            msg[0]: msg[1]["timestamp"]
+            for msg in history.get("status", {}).get("messages", [])
+            if len(msg) == 2 and isinstance(msg[1], dict) and "timestamp" in msg[1]
+        }
+        if "execution_start" in ts and "execution_success" in ts:
+            execution_time_s = (ts["execution_success"] - ts["execution_start"]) / 1000.0
+        else:
+            execution_time_s = total_s
 
         png = comfyui_client.fetch_image(ns.base_url, history)
         tag = "cold" if spec["kind"] == "cold" else (
