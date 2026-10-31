@@ -79,7 +79,29 @@ Limitations section in each report).
 
 Environment evidence: `bench/results/env/snapshot-20261030-212234.json`.
 
-## ROCm-on-Windows findings (Phase 1)
+## Phase 2 results (ComfyUI baseline, 1024², bf16, 40 steps)
+
+ComfyUI 0.43.0 (pinned commit), own uv venv with the same mandated ROCm
+stack, euler/simple/cfg-1 per the official Qwen-Image-2.1 template, API-
+driven sequential queue, default attention (works out of the box — see
+finding 5). Report:
+[comfyui](bench/results/2026-10-31-comfyui-1024/report.md) ·
+cross-framework grid:
+[cross_framework.png](bench/results/2026-10-31-comfyui-1024/cross_framework.png)
+
+| Framework (1024², warm) | median total (s) | s/step | VRAM |
+|---|---|---|---|
+| diffusers + cpu_offload (math) | 239 – 254 | 3.60 – 3.70 steady | 18.8 GB |
+| **ComfyUI (default attn)** | **45 – 51** | ~1.1 (est. from exec time) | 16.6 GB |
+
+ComfyUI is ~5× faster end-to-end warm at the same numerics: diffusers pays
+~90 s/run of cpu_offload weight shuffling (31 GB over PCIe) plus a 3.66
+s/step denoise loop, while ComfyUI keeps the DiT resident and swaps models
+once per prompt (~350 s warmup per prompt switch, cached thereafter).
+Framework-gap data is now the Phase 3 baseline. Note: per-step times are
+not exposed by the ComfyUI API; totals are server execution times.
+
+## ROCm-on-Windows findings (Phase 1 + 2)
 
 1. **flash & mem-efficient SDPA backends fail** with
    `hipErrorInvalidValue` on Qwen3-VL and Qwen-Image-2.1 DiT shapes —
@@ -93,6 +115,10 @@ Environment evidence: `bench/results/env/snapshot-20261030-212234.json`.
 4. **cpu_offload first-warmup pagefile thrash** (6× step time, recovers)
    on 32 GB RAM hosts —
    [issue](docs/issues/2026-10-30-warmup-pagefile-thrash-cpu-offload.md)
+5. **ComfyUI default attention is unaffected** by the SDPA backend bug
+   (byte-identical output to math-forced runs) — the failure is specific
+   to diffusers/transformers' SDPA auto-selection; RCA scope narrowed in
+   [issue 1](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md).
 
 ## License
 

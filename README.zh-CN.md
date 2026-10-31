@@ -73,7 +73,27 @@ cpu-offload 权重恢复，被排除（协议 v1.1——见各报告的 Limitati
 
 环境证据：`bench/results/env/snapshot-20261030-212234.json`。
 
-## ROCm Windows 生态发现（Phase 1）
+## Phase 2 结果（ComfyUI 基线，1024²，bf16，40 步）
+
+ComfyUI 0.43.0（固定 commit）、独立 uv venv、同一指定 ROCm 栈、
+euler/simple/cfg-1（官方 Qwen-Image-2.1 模板默认）、API 顺序驱动、
+默认注意力（开箱即用——见发现 5）。报告：
+[comfyui](bench/results/2026-10-31-comfyui-1024/report.md) ·
+跨框架对比图：
+[cross_framework.png](bench/results/2026-10-31-comfyui-1024/cross_framework.png)
+
+| 框架（1024²，warm） | 总耗时中位 (s) | s/step | 显存 |
+|---|---|---|---|
+| diffusers + cpu_offload (math) | 239 – 254 | 稳态 3.60 – 3.70 | 18.8 GB |
+| **ComfyUI（默认注意力）** | **45 – 51** | ~1.1（按执行时间估算） | 16.6 GB |
+
+同等数值配置下 ComfyUI warm 端到端快约 5 倍：diffusers 每轮付 ~90s 的
+cpu_offload 权重搬运（31GB 过 PCIe）+ 3.66s/step 去噪；ComfyUI 让 DiT
+常驻显存、每换 prompt 一次性换模型（~350s warmup，其后缓存）。该框架
+差异数据即 Phase 3 的基线。注：ComfyUI API 不暴露逐步耗时，总耗时取
+服务器执行时间。
+
+## ROCm Windows 生态发现（Phase 1 + 2）
 
 1. **flash 与 mem-efficient SDPA 后端报 `hipErrorInvalidValue`**
    （Qwen3-VL 与 Qwen-Image-2.1 DiT 形状）——
@@ -85,6 +105,10 @@ cpu-offload 权重恢复，被排除（协议 v1.1——见各报告的 Limitati
 4. **cpu_offload 首轮 warmup 页文件抖动**（6× 步长减速，可自恢复）
    （32GB 内存主机）——
    [issue](docs/issues/2026-10-30-warmup-pagefile-thrash-cpu-offload.md)
+5. **ComfyUI 默认注意力不受 SDPA 后端 bug 影响**（输出与 math 强制
+   逐字节一致）——故障仅限 diffusers/transformers 的 SDPA 自动后端
+   选择路径；RCA 范围已收窄，见
+   [issue 1](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)。
 
 ## 许可
 

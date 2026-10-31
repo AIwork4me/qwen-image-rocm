@@ -8,10 +8,12 @@ Plots use the Agg backend (no display needed).
 
 import json
 import statistics
+import sys
 from pathlib import Path
 
 import matplotlib
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # allow -I runs
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 

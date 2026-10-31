@@ -1,0 +1,30 @@
+{
+  "experiment": "p2-comfyui-1024x1024",
+  "phase": 2,
+  "framework": "comfyui",
+  "precision": "bf16",
+  "width": 1024,
+  "height": 1024,
+  "steps": 40,
+  "seed": 42,
+  "prompt_id": "p2-en-scene",
+  "protocol_version": "v1",
+  "runs": [
+    {
+      "kind": "warm",
+      "total_s": 51.424,
+      "text_encode_s": null,
+      "denoise_s": 50.874,
+      "vae_decode_s": null,
+      "step_times_s": []
+    }
+  ],
+  "vram_peak_mb": 16561.1,
+  "env_ref": "snapshot-20261030-212234.json",
+  "created_at": "2026-10-31T12:29:03+08:00",
+  "run_kind": "measure",
+  "attention_backend": "comfyui-default",
+  "execution_time_s": 50.874,
+  "sampler": "euler",
+  "scheduler": "simple"
+}
