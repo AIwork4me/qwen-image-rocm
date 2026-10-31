@@ -19,5 +19,10 @@
   "server_flags": [
     "--cache-none"
   ],
-  "fresh_prompt_arm": true
+  "fresh_prompt_arm": true,
+  "sdp_mode": "math",
+  "env_vars": {},
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ]
 }

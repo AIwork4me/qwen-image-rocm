@@ -22,5 +22,9 @@
   "sdp_mode": "math-hard",
   "env_vars": {
     "TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL": "1"
-  }
+  },
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ],
+  "fresh_prompt_arm": false
 }

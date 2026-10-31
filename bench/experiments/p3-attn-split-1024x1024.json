@@ -18,5 +18,11 @@
   "measured": 3,
   "server_flags": [
     "--use-split-cross-attention"
-  ]
+  ],
+  "sdp_mode": "math",
+  "env_vars": {},
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ],
+  "fresh_prompt_arm": false
 }

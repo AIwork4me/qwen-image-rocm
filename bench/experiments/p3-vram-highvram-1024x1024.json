@@ -18,5 +18,11 @@
   "measured": 5,
   "server_flags": [
     "--highvram"
-  ]
+  ],
+  "sdp_mode": "math",
+  "env_vars": {},
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ],
+  "fresh_prompt_arm": false
 }

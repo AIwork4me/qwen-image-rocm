@@ -16,5 +16,11 @@
   "tiled_vae": false,
   "attention_backend": "comfyui-default-nomath",
   "measured": 3,
-  "sdp_mode": "none"
+  "sdp_mode": "none",
+  "server_flags": [],
+  "env_vars": {},
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ],
+  "fresh_prompt_arm": false
 }

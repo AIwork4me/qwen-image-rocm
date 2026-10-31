@@ -15,5 +15,12 @@
   "weight_dtype": "default",
   "tiled_vae": false,
   "attention_backend": "comfyui-default",
-  "measured": 3
+  "measured": 3,
+  "sdp_mode": "math",
+  "server_flags": [],
+  "env_vars": {},
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ],
+  "fresh_prompt_arm": false
 }

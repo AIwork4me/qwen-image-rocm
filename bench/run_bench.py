@@ -97,6 +97,13 @@ def main() -> None:
         pipe.transformer.set_attention_backend(os.environ["QIR_ATTENTION"])
         print(f"note: DiT attention backend set to {os.environ['QIR_ATTENTION']}", flush=True)
 
+    # Phase 3 / E5: torch.compile on the DiT. Expected to fail or degrade on
+    # this stack (no Triton wheels on Windows ROCm — docs/issues/
+    # 2026-10-30-no-triton-windows-rocm.md); the exact signature IS the data.
+    if os.environ.get("QIR_COMPILE") == "1":
+        print("note: torch.compile(transformer) enabled (QIR_COMPILE=1)", flush=True)
+        pipe.transformer = torch.compile(pipe.transformer)
+
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--date", required=True, help="results dir name under bench/results/")
     ap.add_argument(
@@ -104,6 +111,9 @@ def main() -> None:
         default="1024,2048",
         help="comma-separated square resolutions, e.g. '1024' or '1024,2048'",
     )
+    ap.add_argument("--experiment", default=None,
+                    help="override experiment name (default: p1-bf16-<W>x<H>)")
+    ap.add_argument("--precision", default="bf16")
     ns = ap.parse_args(sys.argv[1:])
     resolutions = [(int(r), int(r)) for r in ns.resolutions.split(",")]
 
@@ -118,18 +128,18 @@ def main() -> None:
     for spec in specs:
         prompt, negative = prompt_text[spec["prompt_id"]]
         image, run, vram = _run_once(pipe, torch, spec, prompt, negative)
-        experiment = f"p1-bf16-{spec['width']}x{spec['height']}"
+        experiment = ns.experiment or f"p1-bf16-{spec['width']}x{spec['height']}"
         record = {
             "experiment": experiment,
-            "phase": 1,
+            "phase": 3 if ns.experiment else 1,
             "framework": "diffusers",
-            "precision": "bf16",
+            "precision": ns.precision,
             "width": spec["width"],
             "height": spec["height"],
             "steps": 40,
             "seed": spec["seed"],
             "prompt_id": spec["prompt_id"],
-            "protocol_version": "v1.2",  # v1.2: non-measure seeds +1e6 (cache defeat)
+            "protocol_version": "v1.3",  # v1.3: warmup seed +2e6 (shared core)
             "runs": [run],
             "vram_peak_mb": vram,
             "env_ref": _env_ref(),

@@ -17,7 +17,9 @@ param(
     [int]$Resolution = 0,
     [string]$Session = "",
     [int]$RestartIdx = 0,
-    [int]$HealthTimeoutS = 600
+    [int]$HealthTimeoutS = 600,
+    [string]$OnlyPrompt = "",
+    [int]$Measured = 0
 )
 
 $ErrorActionPreference = "Continue"  # Phase-1 lesson: native stderr must not kill PS5.1
@@ -53,19 +55,28 @@ function Kill-Port([int]$p) {
 Kill-Port $Port
 
 # --- 2. start server with the variant's flags -------------------------------
-foreach ($prop in $m.env_vars.PSObject.Properties) {
-    Set-Item -Path "Env:$($prop.Name)" -Value $prop.Value
-    Write-Host "env: $($prop.Name)=$($prop.Value)"
+# manifest optional fields are also baked into the JSON; defaults here are
+# belt-and-braces so a hand-edited manifest cannot null-bind Start-Process
+$sdp = "$($m.sdp_mode)"; if (-not $sdp) { $sdp = "math" }
+$flags = @()
+if ($m.server_flags) { $flags = @($m.server_flags) }
+if ($m.env_vars) {
+    foreach ($prop in $m.env_vars.PSObject.Properties) {
+        Set-Item -Path ("Env:" + $prop.Name) -Value "$($prop.Value)"
+        Write-Host "env: $($prop.Name)=$($prop.Value)"
+    }
 }
-$launchArgs = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $launch,
-    "-Port", "$Port", "-SdpMode", "$($m.sdp_mode)")
-if ($m.server_flags) {
-    $launchArgs += @("-ComfyArgs", ($m.server_flags -join " "))
-}
-$server = Start-Process powershell -ArgumentList $launchArgs -PassThru `
+$flagStr = ($flags -join " ")
+$argStr = "-NoProfile -ExecutionPolicy Bypass -File `"$launch`" -Port $Port -SdpMode $sdp"
+if ($flagStr) { $argStr += " -ComfyArgs `"$flagStr`"" }
+$server = Start-Process -FilePath "powershell" -ArgumentList $argStr -PassThru `
     -RedirectStandardOutput $serverOut -RedirectStandardError $serverErr `
     -WindowStyle Hidden
-Write-Host "server PID $($server.Id) starting (sdp=$($m.sdp_mode) flags=$($m.server_flags -join ' '))"
+if (-not $server -or $server.Id -le 0) {
+    Write-Error "failed to start server process"
+    exit 4
+}
+Write-Host "server PID $($server.Id) starting (sdp=$sdp flags=$flagStr)"
 
 # --- 3. health gate: /system_stats must report the 7900 ----------------------
 $deadline = (Get-Date).AddSeconds($HealthTimeoutS)
@@ -97,6 +108,8 @@ $driverArgs = @("run", "--python", "3.12",
     "--restart-idx", "$RestartIdx")
 if ($Session) { $driverArgs += @("--session", $Session) }
 if ($Resolution -gt 0) { $driverArgs += @("--resolution", "$Resolution") }
+if ($OnlyPrompt) { $driverArgs += @("--only-prompt", $OnlyPrompt) }  # smoke only
+if ($Measured -gt 0) { $driverArgs += @("--measured", "$Measured") } # smoke only
 Write-Host "uv $($driverArgs -join ' ')"
 & $uv @driverArgs
 $driverCode = $LASTEXITCODE

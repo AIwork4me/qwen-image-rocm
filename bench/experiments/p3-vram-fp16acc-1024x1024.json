@@ -19,5 +19,11 @@
   "server_flags": [
     "--fast",
     "fp16_accumulation"
-  ]
+  ],
+  "sdp_mode": "math",
+  "env_vars": {},
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ],
+  "fresh_prompt_arm": false
 }

@@ -142,6 +142,12 @@ def main() -> None:
                     help="override manifest resolution (2048 probes; name gets a suffix)")
     ap.add_argument("--session", default=None, help="session id (default: --date value)")
     ap.add_argument("--restart-idx", type=int, default=0)
+    ap.add_argument("--only-prompt", default=None,
+                    help="SMOKE ONLY: restrict to one prompt id (results are not protocol-grade)")
+    ap.add_argument("--warmup", type=int, default=None,
+                    help="SMOKE ONLY: override warmup count")
+    ap.add_argument("--measured", type=int, default=None,
+                    help="SMOKE ONLY: override measured count")
     ns = ap.parse_args(sys.argv[1:])
 
     manifest = load_manifest(ns.experiment)
@@ -157,9 +163,12 @@ def main() -> None:
 
     prompts = json.loads(PROMPTS_PATH.read_text(encoding="utf-8"))
     prompt_text = {p["id"]: (p["prompt"], p["negative_prompt"]) for p in prompts["prompts"]}
+    if ns.only_prompt:
+        prompt_text = {ns.only_prompt: prompt_text[ns.only_prompt]}
     specs = order_specs(
         plan_runs(list(prompt_text), resolutions, prompts["seeds"],
-                  measured=manifest["measured"])
+                  warmup=ns.warmup if ns.warmup is not None else 1,
+                  measured=ns.measured if ns.measured is not None else manifest["measured"])
     )
 
     def wf_for(prompt_id: str, seed: int, text_override: str | None = None):

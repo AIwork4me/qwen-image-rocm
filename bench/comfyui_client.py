@@ -147,7 +147,12 @@ class RunMonitor:
         except ImportError:
             self.monitor_error = "websocket-client not installed"
             return
-        url = self.base_url.replace("http://", "ws://") + f"/ws?client_id={self.client_id}"
+        url = (
+            self.base_url.replace("http://", "ws://")
+            + f"/ws?clientId={self.client_id}"  # NB: camelCase — server routes
+            # prompt events ONLY to the socket registered under this id
+            # (send_sync(sid=...)); snake_case silently receives status only
+        )
         try:
             ws = websocket.create_connection(url, timeout=5)
         except Exception as exc:  # noqa: BLE001 - degrade gracefully, history still works

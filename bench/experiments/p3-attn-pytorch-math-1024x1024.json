@@ -19,5 +19,10 @@
   "server_flags": [
     "--use-pytorch-cross-attention"
   ],
-  "sdp_mode": "math-hard"
+  "sdp_mode": "math-hard",
+  "env_vars": {},
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ],
+  "fresh_prompt_arm": false
 }
