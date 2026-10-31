@@ -86,9 +86,15 @@ def build_workflow(
             },
         },
         dec_id: (
+            # required tile inputs in ComfyUI 0.43 (server defaults, from
+            # /object_info/VAEDecodeTiled; temporal_* unused by image VAEs)
             {
                 "class_type": "VAEDecodeTiled",
-                "inputs": {"samples": [ks_id, 0], "vae": [vae_id, 0]},
+                "inputs": {
+                    "samples": [ks_id, 0], "vae": [vae_id, 0],
+                    "tile_size": 512, "overlap": 64,
+                    "temporal_size": 64, "temporal_overlap": 8,
+                },
             }
             if tiled_vae
             else {

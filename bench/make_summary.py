@@ -59,6 +59,8 @@ def medians(date_dir: Path) -> dict:
 
 
 def main() -> None:
+    if hasattr(sys.stdout, "reconfigure"):  # GBK console cannot print '²'
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     control_dir = Path(sys.argv[1])
     out_md = Path(sys.argv[2])
     dirs = [Path(d) for d in sys.argv[3:]] or sorted(

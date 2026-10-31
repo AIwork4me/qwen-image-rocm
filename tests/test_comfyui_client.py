@@ -67,6 +67,7 @@ def test_build_workflow_variant_params():
     assert unet["inputs"]["weight_dtype"] == "fp8_e4m3fn"
     dec = [n for n in wf.values() if "VAEDecode" in n["class_type"]]
     assert [d["class_type"] for d in dec] == ["VAEDecodeTiled"]  # tiled switch
+    assert dec[0]["inputs"]["tile_size"] == 512  # required in 0.43 (server default)
 
 
 def _monitor_with_events(events, vram_peak=17000.0, residency=16000.0):
