@@ -1,0 +1,13 @@
+﻿server.err.log:28: [32m[INFO][0m Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention
+server.err.log:52: [32m[INFO][0m Using split attention in VAE
+server.err.log:53: [32m[INFO][0m Using split attention in VAE
+server.err.log:710: [32m[INFO][0m Using split attention in VAE
+server.err.log:711: [32m[INFO][0m Using split attention in VAE
+server.err.log:770: [32m[INFO][0m Using split attention in VAE
+server.err.log:771: [32m[INFO][0m Using split attention in VAE
+server.err.log:830: [32m[INFO][0m Using split attention in VAE
+server.err.log:831: [32m[INFO][0m Using split attention in VAE
+server.err.log:890: [32m[INFO][0m Using split attention in VAE
+server.err.log:891: [32m[INFO][0m Using split attention in VAE
+server.err.log:950: [32m[INFO][0m Using split attention in VAE
+server.err.log:951: [32m[INFO][0m Using split attention in VAE

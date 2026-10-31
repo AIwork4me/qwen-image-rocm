@@ -64,7 +64,8 @@ def main() -> None:
     control_dir = Path(sys.argv[1])
     out_md = Path(sys.argv[2])
     dirs = [Path(d) for d in sys.argv[3:]] or sorted(
-        (REPO / "bench" / "results").glob("2026-*e[1247]*"),
+        d for d in (REPO / "bench" / "results").glob("2026-*e[0-9]*")
+        if (d / "report.md").exists() or any(d.glob("*-r*.json"))
     )
     ctrl = medians(control_dir)
     ctrl_exps = list(ctrl)

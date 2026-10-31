@@ -1,0 +1,4 @@
+﻿server.err.log:25: [32m[INFO][0m Disabling smart memory management
+server.err.log:29: [32m[INFO][0m Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention
+server.err.log:58: [32m[INFO][0m Using split attention in VAE
+server.err.log:59: [32m[INFO][0m Using split attention in VAE
