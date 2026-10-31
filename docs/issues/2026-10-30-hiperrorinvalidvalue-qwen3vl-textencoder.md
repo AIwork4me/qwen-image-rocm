@@ -5,6 +5,22 @@
 - Suspected layer: PyTorch ROCm Windows kernel / SDPA backend (TBD — async error)
 - Phase 4 RCA required
 
+## UPDATE 2026-11-01: 2048-square UNBLOCKED by native int8 quantization (Phase 3 E2)
+
+The "2048² impossible on every working backend" conclusion held only for the
+bf16 stack (31.7GB weights + 32.1GB dense attention). With Comfy-Org native
+int8_convrot checkpoints (DiT 7.26GB + TE 9.35GB = 16.5GB full stack) and
+ComfyUI's sub-quadratic attention, 2048×2048×40 steps completes on the same
+24GB card:
+
+- cold 332s; steady 328s/image (~8.1 s/step, p1 prompt); no OOM
+- evidence: bench/results/2026-11-01-e2-int8-dit-te-2048-probe/
+  (experiment p3-int8-dit-te-1024x1024-2048x2048, protocol v1.3)
+
+The RCA question for Phase 4 sharpens to: why the accelerated SDPA backends
+fail (hipErrorInvalidValue) rather than why 2048² OOMs — the OOM was a
+memory-budget artifact of bf16 residency, not a hard limit.
+
 ## Environment
 
 See `bench/results/env/snapshot-20261030-212234.json`:

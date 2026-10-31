@@ -1,0 +1,102 @@
+[32m[INFO][0m setup plugin alembic.autogenerate.schemas
+[32m[INFO][0m setup plugin alembic.autogenerate.tables
+[32m[INFO][0m setup plugin alembic.autogenerate.types
+[32m[INFO][0m setup plugin alembic.autogenerate.constraints
+[32m[INFO][0m setup plugin alembic.autogenerate.defaults
+[32m[INFO][0m setup plugin alembic.autogenerate.comments
+[32m[INFO][0m setup plugin alembic.ext.checkconstraint_byname
+[1m[33m[WARNING][0m On windows we are currently forcing single GPU mode in ComfyUI due to a Nvidia related issue, if you want to disable this use: --cuda-device all
+[32m[INFO][0m Adding extra search path diffusion_models C:\Users\Rocm\Desktop\image\weights\comfyui-split\diffusion_models
+[32m[INFO][0m Adding extra search path text_encoders C:\Users\Rocm\Desktop\image\weights\comfyui-split\text_encoders
+[32m[INFO][0m Adding extra search path vae C:\Users\Rocm\Desktop\image\weights\comfyui-split\vae
+[1m[33m[WARNING][0m WARNING: Potential Error in code: Torch already imported, torch should never be imported before this point.
+[32m[INFO][0m Found comfy_kitchen backend hip: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'convrot_w4a4_linear', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_simple_dtype', 'dequantize_per_tensor_fp8', 'dequantize_w4a8_int8_weight', 'fp16_conv3d', 'fp16_conv3d_out', 'fp16_linear', 'gemv_awq_w4a16', 'group_norm_silu_pad3d', 'group_norm_silu_pad3d_out', 'group_norm_stats3d', 'int8_linear', 'int8_linear_modulated', 'int8_linear_rms_modulated', 'na3d', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'quantize_w4a8_int8_weight', 'rms_adaln', 'rms_gated_residual', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'scaled_mm_svdquant_w4a4', 'sol_attn', 'stochastic_rounding_fp8', 'w4a8_int8_linear']}
+[32m[INFO][0m Found comfy_kitchen backend cuda: {'available': True, 'disabled': True, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'closest_point_on_mesh', 'connected_components', 'convrot_w4a4_linear', 'delaunay3d', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_simple', 'dequantize_int8_simple_dtype', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'dequantize_w4a8_int8_weight', 'edge_collapse_checks', 'fp16_conv3d', 'fp16_conv3d_out', 'fp16_linear', 'gemv_awq_w4a16', 'group_norm_silu_pad3d', 'group_norm_silu_pad3d_out', 'group_norm_stats3d', 'mesh_bvh', 'min_cut', 'na3d', 'prepare_int4_weight_for_int8_linear', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'quantize_w4a8_int8_weight', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'rotate_int8_convrot_weight', 'scaled_mm_svdquant_w4a4', 'sol_attn', 'stochastic_rounding_fp8', 'w4a8_int8_linear', 'w4a8_packed_linear']}
+[32m[INFO][0m Found comfy_kitchen backend ascend: {'available': False, 'disabled': False, 'unavailable_reason': "torch-npu is not installed: No module named 'torch_npu'", 'capabilities': []}
+[32m[INFO][0m Found comfy_kitchen backend triton: {'available': False, 'disabled': True, 'unavailable_reason': "ImportError: No module named 'triton'", 'capabilities': []}
+[32m[INFO][0m Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'convrot_w4a4_linear', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_embedding', 'dequantize_int8_simple', 'dequantize_int8_simple_dtype', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'dequantize_w4a8_int8_weight', 'fp16_conv3d', 'fp16_conv3d_out', 'fp16_linear', 'gemv_awq_w4a16', 'group_norm_silu_pad3d', 'group_norm_silu_pad3d_out', 'group_norm_stats3d', 'int8_linear', 'int8_linear_modulated', 'int8_linear_rms_modulated', 'na3d', 'prepare_int4_weight_for_int8_linear', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'quantize_w4a8_int8_weight', 'rms_adaln', 'rms_gated_residual', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'rotate_int8_convrot_weight', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4', 'scaled_mm_svdquant_w4a4', 'sol_attn', 'stochastic_rounding_fp8', 'w4a8_int8_linear', 'w4a8_packed_linear']}
+[32m[INFO][0m Checkpoint files will always be loaded safely.
+[32m[INFO][0m Total VRAM 24560 MB, total RAM 32535 MB
+[32m[INFO][0m pytorch version: 2.12.0+rocm7.14.1
+[32m[INFO][0m Set: torch.backends.cudnn.enabled = False for better AMD performance.
+[32m[INFO][0m AMD arch: gfx1100
+[32m[INFO][0m ROCm version: (7, 14)
+[32m[INFO][0m Set vram state to: NORMAL_VRAM
+[32m[INFO][0m Device: cuda:0 AMD Radeon RX 7900 XTX : native
+[32m[INFO][0m Using async weight offloading with 2 streams
+[32m[INFO][0m Enabled pinned memory 13014.0
+[32m[INFO][0m Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention
+[32m[INFO][0m aimdo: src-win/cuda-detour.c:38:INFO:aimdo_setup_hooks: installing 6 hooks
+[32m[INFO][0m aimdo: src-win/shmem-detect.c:76:INFO:comfy-aimdo DXCore adapter match: AMD Radeon RX 7900 XTX runtime_luid=00000000:00012d29
+[32m[INFO][0m aimdo: src-win/shmem-detect.c:112:INFO:comfy-aimdo WDDM adapter match: AMD Radeon RX 7900 XTX runtime_luid=00000000:00012d29 dxgi_luid=00000000:00012d29
+[32m[INFO][0m aimdo: src/control.c:284:INFO:comfy-aimdo inited for GPU: AMD Radeon RX 7900 XTX (VRAM: 24560 MB)
+[32m[INFO][0m DynamicVRAM support detected and enabled
+[32m[INFO][0m Python version: 3.12.16 (main, Oct 26 2026, 14:10:56) [MSC v.1944 64 bit (AMD64)]
+[32m[INFO][0m ComfyUI version: 0.43.0
+[32m[INFO][0m comfy-aimdo version: 0.6.0
+[32m[INFO][0m comfy-kitchen version: 0.2.40
+[32m[INFO][0m comfyui-frontend-package version: 1.57.6
+[32m[INFO][0m comfyui-workflow-templates version: 0.11.100
+[32m[INFO][0m comfyui-embedded-docs version: 0.5.15
+[32m[INFO][0m comfy-aimdo version: 0.6.0
+[32m[INFO][0m comfy-kitchen version: 0.2.40
+[32m[INFO][0m [Prompt Server] web root: C:\Users\Rocm\Desktop\image\phase2-comfyui\.venv\Lib\site-packages\comfyui_frontend_package\static
+[32m[INFO][0m Asset seeder disabled
+[32m[INFO][0m No OpenGL_accelerate module loaded: No module named 'OpenGL_accelerate'
+[32m[INFO][0m 
+Import times for custom nodes:
+[32m[INFO][0m    0.0 seconds: C:\Users\Rocm\Desktop\image\phase2-comfyui\ComfyUI\custom_nodes\websocket_image_save.py
+[32m[INFO][0m 
+[32m[INFO][0m Using RAM pressure cache.
+[32m[INFO][0m ComfyUI is developed by Comfy Org. We also offer commercial products to deploy ComfyUI as scalable cloud endpoints. Visit platform.comfy.org/ascii for more information.
+[32m[INFO][0m Starting server
+
+[32m[INFO][0m To see the GUI go to: http://127.0.0.1:8188
+[32m[INFO][0m got prompt
+[32m[INFO][0m Model storage policy: fast_disk=True paths=['C:\\Users\\Rocm\\Desktop\\image\\weights\\comfyui-split\\vae\\qwen_image_2.1_vae_bf16.safetensors']
+[32m[INFO][0m Using split attention in VAE
+[32m[INFO][0m Using split attention in VAE
+[32m[INFO][0m VAE load device: cuda:0, offload device: cpu, dtype: torch.bfloat16
+[32m[INFO][0m Found quantization metadata version 1
+[32m[INFO][0m Using MixedPrecisionOps for text encoder
+[32m[INFO][0m Model storage policy: fast_disk=True paths=['C:\\Users\\Rocm\\Desktop\\image\\weights\\comfyui-split\\text_encoders\\qwen3vl_8b_int8_convrot.safetensors']
+[32m[INFO][0m CLIP/text encoder model load device: cuda:0, offload device: cpu, current: cpu, dtype: torch.float16
+[32m[INFO][0m Requested to load QwenImage21TEModel_
+[32m[INFO][0m Model QwenImage21TEModel_ prepared for dynamic VRAM loading. 8916MB Staged. 0 patches attached. Force pre-loaded 255 weights: 849 KB.
+[32m[INFO][0m Model QwenImage21TEModel_ prepared for dynamic VRAM loading. 8916MB Staged. 0 patches attached. Force pre-loaded 255 weights: 849 KB.
+[32m[INFO][0m Found quantization metadata version 1
+[32m[INFO][0m Detected mixed precision quantization
+[32m[INFO][0m Using mixed precision operations
+[32m[INFO][0m Native ops: asym_w4a8_int8, int8_tensorwise, w6a8_int8, convrot_w4a4 , emulated ops: float8_e5m2, float8_e4m3fn, mxfp8, nvfp4
+[32m[INFO][0m model weight dtype torch.bfloat16, manual cast: torch.bfloat16
+[32m[INFO][0m model_type FLUX
+[32m[INFO][0m Model storage policy: fast_disk=True paths=['C:\\Users\\Rocm\\Desktop\\image\\weights\\comfyui-split\\diffusion_models\\qwen_image_2.1_int8_convrot.safetensors']
+[32m[INFO][0m Requested to load QwenImage21
+[32m[INFO][0m Model QwenImage21 prepared for dynamic VRAM loading. 6920MB Staged. 0 patches attached. Force pre-loaded 65 weights: 63 KB.
+[32m[INFO][0m Requested to load KVCacheModel
+[32m[INFO][0m Model QwenImage21 prepared for dynamic VRAM loading. 6920MB Staged. 0 patches attached. Force pre-loaded 65 weights: 63 KB.
+[32m[INFO][0m Model KVCacheModel prepared for dynamic VRAM loading. 30MB Staged. 0 patches attached.
+  0%|          | 0/40 [00:00<?, ?it/s]  0%|          | 0/40 [00:00<?, ?it/s,   Model Initializing ...  ]  0%|          | 0/40 [00:08<?, ?it/s,  Model Initialization complete!  ]  2%|▎         | 1/40 [00:08<05:40,  8.72s/it,  Model Initialization complete!  ]  2%|▎         | 1/40 [00:00<05:40,  8.72s/it]                                     5%|▌         | 2/40 [00:00<00:11,  3.23it/s]  8%|▊         | 3/40 [00:08<04:53,  7.92s/it] 10%|█         | 4/40 [00:16<04:45,  7.94s/it] 12%|█▎        | 5/40 [00:24<04:38,  7.96s/it] 15%|█▌        | 6/40 [00:32<04:31,  7.99s/it] 18%|█▊        | 7/40 [00:40<04:24,  8.00s/it] 20%|██        | 8/40 [00:48<04:16,  8.01s/it] 22%|██▎       | 9/40 [00:56<04:08,  8.01s/it] 25%|██▌       | 10/40 [01:04<03:59,  8.00s/it] 28%|██▊       | 11/40 [01:12<03:52,  8.02s/it] 30%|███       | 12/40 [01:20<03:44,  8.01s/it] 32%|███▎      | 13/40 [01:28<03:36,  8.01s/it] 35%|███▌      | 14/40 [01:36<03:28,  8.01s/it] 38%|███▊      | 15/40 [01:44<03:20,  8.01s/it] 40%|████      | 16/40 [01:52<03:12,  8.02s/it] 42%|████▎     | 17/40 [02:00<03:04,  8.03s/it] 45%|████▌     | 18/40 [02:08<02:56,  8.02s/it] 48%|████▊     | 19/40 [02:16<02:48,  8.04s/it] 50%|█████     | 20/40 [02:24<02:40,  8.02s/it] 52%|█████▎    | 21/40 [02:32<02:32,  8.03s/it] 55%|█████▌    | 22/40 [02:40<02:24,  8.04s/it] 57%|█████▊    | 23/40 [02:48<02:16,  8.03s/it] 60%|██████    | 24/40 [02:56<02:08,  8.03s/it] 62%|██████▎   | 25/40 [03:04<02:00,  8.05s/it] 65%|██████▌   | 26/40 [03:12<01:52,  8.04s/it] 68%|██████▊   | 27/40 [03:20<01:44,  8.04s/it] 70%|███████   | 28/40 [03:28<01:36,  8.04s/it] 72%|███████▎  | 29/40 [03:37<01:28,  8.04s/it] 75%|███████▌  | 30/40 [03:45<01:20,  8.05s/it] 78%|███████▊  | 31/40 [03:53<01:12,  8.04s/it] 80%|████████  | 32/40 [04:01<01:04,  8.05s/it] 82%|████████▎ | 33/40 [04:09<00:56,  8.04s/it] 85%|████████▌ | 34/40 [04:17<00:48,  8.04s/it] 88%|████████▊ | 35/40 [04:25<00:40,  8.05s/it] 90%|█████████ | 36/40 [04:33<00:32,  8.04s/it] 92%|█████████▎| 37/40 [04:41<00:24,  8.05s/it] 95%|█████████▌| 38/40 [04:49<00:16,  8.04s/it] 98%|█████████▊| 39/40 [04:57<00:08,  8.04s/it]100%|██████████| 40/40 [05:05<00:00,  8.05s/it]100%|██████████| 40/40 [05:05<00:00,  7.64s/it]
+[32m[INFO][0m Comfy model compiler graph breaks: 0, rogues: 0
+[32m[INFO][0m Requested to load WanVAE
+[32m[INFO][0m Model WanVAE prepared for dynamic VRAM loading. 644MB Staged. 0 patches attached. Force pre-loaded 68 weights: 102 KB.
+[32m[INFO][0m [32mPrompt executed in 332.17 seconds[0m
+[32m[INFO][0m got prompt
+[32m[INFO][0m Model QwenImage21 prepared for dynamic VRAM loading. 6920MB Staged. 0 patches attached. Force pre-loaded 65 weights: 63 KB.
+[32m[INFO][0m Requested to load KVCacheModel
+[32m[INFO][0m Model QwenImage21 prepared for dynamic VRAM loading. 6920MB Staged. 0 patches attached. Force pre-loaded 65 weights: 63 KB.
+[32m[INFO][0m Model KVCacheModel prepared for dynamic VRAM loading. 30MB Staged. 0 patches attached.
+  0%|          | 0/40 [00:00<?, ?it/s]  0%|          | 0/40 [00:00<?, ?it/s,   Model Initializing ...  ]  0%|          | 0/40 [00:09<?, ?it/s,  Model Initialization complete!  ]  2%|▎         | 1/40 [00:09<06:12,  9.54s/it,  Model Initialization complete!  ]  2%|▎         | 1/40 [00:00<06:12,  9.54s/it]                                     5%|▌         | 2/40 [00:00<00:11,  3.21it/s]  8%|▊         | 3/40 [00:08<04:56,  8.01s/it] 10%|█         | 4/40 [00:16<04:49,  8.03s/it] 12%|█▎        | 5/40 [00:24<04:40,  8.03s/it] 15%|█▌        | 6/40 [00:32<04:33,  8.03s/it] 18%|█▊        | 7/40 [00:40<04:25,  8.04s/it] 20%|██        | 8/40 [00:48<04:17,  8.04s/it] 22%|██▎       | 9/40 [00:56<04:09,  8.04s/it] 25%|██▌       | 10/40 [01:04<04:01,  8.04s/it] 28%|██▊       | 11/40 [01:12<03:53,  8.04s/it] 30%|███       | 12/40 [01:20<03:44,  8.03s/it] 32%|███▎      | 13/40 [01:28<03:37,  8.06s/it] 35%|███▌      | 14/40 [01:37<03:29,  8.05s/it] 38%|███▊      | 15/40 [01:45<03:21,  8.05s/it] 40%|████      | 16/40 [01:53<03:13,  8.05s/it] 42%|████▎     | 17/40 [02:01<03:05,  8.05s/it] 45%|████▌     | 18/40 [02:09<02:56,  8.05s/it] 48%|████▊     | 19/40 [02:17<02:49,  8.06s/it] 50%|█████     | 20/40 [02:25<02:41,  8.06s/it] 52%|█████▎    | 21/40 [02:33<02:33,  8.06s/it] 55%|█████▌    | 22/40 [02:41<02:24,  8.05s/it] 57%|█████▊    | 23/40 [02:49<02:16,  8.05s/it] 60%|██████    | 24/40 [02:57<02:08,  8.05s/it] 62%|██████▎   | 25/40 [03:05<02:00,  8.06s/it] 65%|██████▌   | 26/40 [03:13<01:52,  8.05s/it] 68%|██████▊   | 27/40 [03:21<01:44,  8.06s/it] 70%|███████   | 28/40 [03:29<01:36,  8.06s/it] 72%|███████▎  | 29/40 [03:37<01:28,  8.05s/it] 75%|███████▌  | 30/40 [03:45<01:20,  8.06s/it] 78%|███████▊  | 31/40 [03:53<01:12,  8.06s/it] 80%|████████  | 32/40 [04:01<01:04,  8.04s/it] 82%|████████▎ | 33/40 [04:10<00:56,  8.07s/it] 85%|████████▌ | 34/40 [04:18<00:48,  8.05s/it] 88%|████████▊ | 35/40 [04:26<00:40,  8.06s/it] 90%|█████████ | 36/40 [04:34<00:32,  8.05s/it] 92%|█████████▎| 37/40 [04:42<00:24,  8.05s/it] 95%|█████████▌| 38/40 [04:50<00:16,  8.05s/it] 98%|█████████▊| 39/40 [04:58<00:08,  8.05s/it]100%|██████████| 40/40 [05:06<00:00,  8.05s/it]100%|██████████| 40/40 [05:06<00:00,  7.66s/it]
+[32m[INFO][0m Comfy model compiler graph breaks: 0, rogues: 0
+[32m[INFO][0m Model WanVAE prepared for dynamic VRAM loading. 644MB Staged. 0 patches attached. Force pre-loaded 68 weights: 102 KB.
+[32m[INFO][0m [32mPrompt executed in 329.08 seconds[0m
+[32m[INFO][0m got prompt
+[32m[INFO][0m Model QwenImage21 prepared for dynamic VRAM loading. 6920MB Staged. 0 patches attached. Force pre-loaded 65 weights: 63 KB.
+[32m[INFO][0m Requested to load KVCacheModel
+[32m[INFO][0m Model QwenImage21 prepared for dynamic VRAM loading. 6920MB Staged. 0 patches attached. Force pre-loaded 65 weights: 63 KB.
+[32m[INFO][0m Model KVCacheModel prepared for dynamic VRAM loading. 30MB Staged. 0 patches attached.
+  0%|          | 0/40 [00:00<?, ?it/s]  0%|          | 0/40 [00:00<?, ?it/s,   Model Initializing ...  ]  0%|          | 0/40 [00:08<?, ?it/s,  Model Initialization complete!  ]  2%|▎         | 1/40 [00:08<05:44,  8.83s/it,  Model Initialization complete!  ]  2%|▎         | 1/40 [00:00<05:44,  8.83s/it]                                     5%|▌         | 2/40 [00:00<00:11,  3.38it/s]  8%|▊         | 3/40 [00:08<04:57,  8.05s/it] 10%|█         | 4/40 [00:16<04:49,  8.04s/it] 12%|█▎        | 5/40 [00:24<04:41,  8.06s/it] 15%|█▌        | 6/40 [00:32<04:33,  8.05s/it] 18%|█▊        | 7/40 [00:40<04:25,  8.06s/it] 20%|██        | 8/40 [00:48<04:17,  8.05s/it] 22%|██▎       | 9/40 [00:56<04:09,  8.05s/it] 25%|██▌       | 10/40 [01:05<04:01,  8.06s/it] 28%|██▊       | 11/40 [01:13<03:53,  8.06s/it] 30%|███       | 12/40 [01:21<03:45,  8.06s/it] 32%|███▎      | 13/40 [01:29<03:37,  8.06s/it] 35%|███▌      | 14/40 [01:37<03:29,  8.07s/it] 38%|███▊      | 15/40 [01:45<03:21,  8.06s/it] 40%|████      | 16/40 [01:53<03:13,  8.06s/it] 42%|████▎     | 17/40 [02:01<03:05,  8.06s/it] 45%|████▌     | 18/40 [02:09<02:57,  8.06s/it] 48%|████▊     | 19/40 [02:17<02:49,  8.06s/it] 50%|█████     | 20/40 [02:25<02:41,  8.05s/it] 52%|█████▎    | 21/40 [02:33<02:33,  8.06s/it] 55%|█████▌    | 22/40 [02:41<02:25,  8.06s/it] 57%|█████▊    | 23/40 [02:49<02:16,  8.05s/it] 60%|██████    | 24/40 [02:57<02:08,  8.05s/it] 62%|██████▎   | 25/40 [03:05<02:00,  8.05s/it] 65%|██████▌   | 26/40 [03:13<01:52,  8.05s/it] 68%|██████▊   | 27/40 [03:21<01:44,  8.05s/it] 70%|███████   | 28/40 [03:30<01:36,  8.05s/it] 72%|███████▎  | 29/40 [03:38<01:28,  8.05s/it] 75%|███████▌  | 30/40 [03:46<01:20,  8.06s/it] 78%|███████▊  | 31/40 [03:54<01:12,  8.05s/it] 80%|████████  | 32/40 [04:02<01:04,  8.06s/it] 82%|████████▎ | 33/40 [04:10<00:56,  8.05s/it] 85%|████████▌ | 34/40 [04:18<00:48,  8.06s/it] 88%|████████▊ | 35/40 [04:26<00:40,  8.05s/it] 90%|█████████ | 36/40 [04:34<00:32,  8.05s/it] 92%|█████████▎| 37/40 [04:42<00:24,  8.05s/it] 95%|█████████▌| 38/40 [04:50<00:16,  8.05s/it] 98%|█████████▊| 39/40 [04:58<00:08,  8.05s/it]100%|██████████| 40/40 [05:06<00:00,  8.06s/it]100%|██████████| 40/40 [05:06<00:00,  7.67s/it]
+[32m[INFO][0m Comfy model compiler graph breaks: 0, rogues: 0
+[32m[INFO][0m Model WanVAE prepared for dynamic VRAM loading. 644MB Staged. 0 patches attached. Force pre-loaded 68 weights: 102 KB.
+[32m[INFO][0m [32mPrompt executed in 327.55 seconds[0m
+[32m[INFO][0m Using RAM pressure cache.
