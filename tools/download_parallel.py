@@ -15,6 +15,8 @@ Run with any python that has requests (e.g. the phase2 venv):
       <url> <out_path> [workers]
 """
 
+import os
+import struct
 import sys
 import threading
 import time
@@ -22,6 +24,34 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import requests
+
+
+def _verify_safetensors_header(path: Path) -> None:
+    """Cheap integrity gate: parse the safetensors header length prefix.
+
+    Catches torn/interleaved assemblies at download time instead of at
+    ComfyUI model-load time (2026-11-01 lesson: a size-correct but corrupt
+    file survived assembly and killed the E1 turbo bench).
+    """
+    with open(path, "rb") as f:
+        prefix = f.read(8)
+    if len(prefix) != 8:
+        raise RuntimeError(f"{path.name}: cannot read header prefix")
+    (header_len,) = struct.unpack("<Q", prefix)
+    if not (0 < header_len < 100_000_000) or 8 + header_len > path.stat().st_size:
+        raise RuntimeError(f"{path.name}: corrupt safetensors header "
+                           f"(len={header_len}, file={path.stat().st_size})")
+
+
+def _acquire_lock(parts_dir: Path) -> Path:
+    """Guard against concurrent instances on the same target (torn writes)."""
+    lock = parts_dir.parent / (parts_dir.name + ".lock")
+    if lock.exists():
+        age = time.time() - lock.stat().st_mtime
+        if age < 3600:
+            raise RuntimeError(f"another downloader holds {lock} (age {age:.0f}s)")
+    lock.write_text(str(os.getpid()))
+    return lock
 
 
 def head_size(url: str) -> int:
@@ -71,6 +101,7 @@ def main() -> None:
               for i in range(workers) if i * chunk < total]
     parts_dir = out.parent / (out.name + ".parts")
     parts_dir.mkdir(parents=True, exist_ok=True)
+    lock = _acquire_lock(parts_dir)
     stop = threading.Event()
     t0 = time.time()
 
@@ -101,10 +132,13 @@ def main() -> None:
                         break
                     w.write(b)
     assert out.stat().st_size == total, f"{out}: {out.stat().st_size} != {total}"
+    _verify_safetensors_header(out)
     for p in parts_dir.iterdir():
         p.unlink()
     parts_dir.rmdir()
-    print(f"DONE {out.name} {total} bytes in {(time.time()-t0)/60:.1f} min", flush=True)
+    lock.unlink(missing_ok=True)
+    print(f"DONE {out.name} {total} bytes in {(time.time()-t0)/60:.1f} min "
+          f"(header verified)", flush=True)
 
 
 if __name__ == "__main__":
