@@ -1,4 +1,4 @@
-# ComfyUI split-format weights (Phase 2)
+# ComfyUI split-format weights (Phase 2 + Phase 3)
 
 ModelScope check (2026-10-31): `Comfy-Org/Qwen-Image-2.1` exists on
 ModelScope but is an **empty shell** (0 files; download transfers nothing)
@@ -26,6 +26,46 @@ weights/comfyui-split/
 Mapped into ComfyUI via `phase2-comfyui/extra_model_paths.yaml`. Quantized
 variants (int8_convrot, w4a8) and the Turbo checkpoint are NOT downloaded
 in Phase 2 — they are Phase 3 material.
+
+## Phase 3 variants (2026-10-31)
+
+Repo tree (verified via hf-mirror API): **no fp8 DiT exists for
+Qwen-Image-2.1** — DiT = bf16 / int8_convrot / turbo_bf16 / turbo_int8_convrot;
+TE = bf16 / int8_convrot (9.4GB) / w4a8 (6.3GB); VAE = bf16 only.
+Native quantized checkpoints load via the plain UNETLoader/CLIPLoader with
+`weight_dtype: default` (`.comfy_quant` metadata auto-detected) — no custom
+nodes. Downloaded for E1/E2:
+
+```
+diffusion_models/qwen_image_2.1_turbo_bf16.safetensors       (14.23 GB, E1)
+diffusion_models/qwen_image_2.1_int8_convrot.safetensors     (7.26 GB, E2)
+text_encoders/qwen3vl_8b_int8_convrot.safetensors            (9.4 GB, E2)
+text_encoders/qwen3vl_8b_w4a8.safetensors                     (6.3 GB, E2)
+diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors (7.26 GB, E2)
+```
+
+### Download-tooling lesson (measured 2026-10-31, mainland network)
+
+1. `hf download` gets 40 MB/s via parallel chunks, but its `.incomplete`
+   part files **never resume after a forceful kill** — a stall-watchdog
+   that kills hf restarts a fresh part set every time (~38 GB of duplicate
+   partials for ~8 GB of progress before this was caught).
+2. Single `curl -C -` resumes byte-exact but the mirror throttles one
+   connection to ~150 KB/s at peak hours (40 h ETA for 13 GB).
+3. Working tool: `tools/download_parallel.py` — N concurrent ranged
+   requests (default 16), each chunk resuming byte-exact on its own part
+   file; kill/restart at any time. Measured 8–20+ MB/s aggregate:
+
+```
+phase2-comfyui/.venv/Scripts/python.exe -I tools/download_parallel.py `
+  https://hf-mirror.com/Comfy-Org/Qwen-Image-2.1/resolve/main/<path> `
+  weights/comfyui-split/<path> 16
+```
+
+`tools/download_weights.ps1` (curl `-C -` sequential) remains for small
+files; LPIPS reference weights are exempt from the ModelScope-first rule
+(design doc) and were fetched from jsdelivr/ghproxy mirrors because
+raw.githubusercontent.com is blocked on this network.
 
 **Notes for mainland-China networks** (measured 2026-10-31):
 

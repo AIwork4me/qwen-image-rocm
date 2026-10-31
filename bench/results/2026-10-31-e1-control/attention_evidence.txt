@@ -1,0 +1,3 @@
+﻿server.err.log:28: [32m[INFO][0m Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention
+server.err.log:57: [32m[INFO][0m Using split attention in VAE
+server.err.log:58: [32m[INFO][0m Using split attention in VAE
