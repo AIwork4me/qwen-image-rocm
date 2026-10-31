@@ -1,0 +1,4 @@
+﻿server.err.log:23: [1m[33m[WARNING][0m Could not run flash attention, disabling it: CUDA error: invalid argument
+server.err.log:32: [32m[INFO][0m Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention
+server.err.log:61: [32m[INFO][0m Using split attention in VAE
+server.err.log:62: [32m[INFO][0m Using split attention in VAE
