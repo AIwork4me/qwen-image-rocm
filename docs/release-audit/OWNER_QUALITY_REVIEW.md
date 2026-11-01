@@ -55,13 +55,26 @@ Context bands (phase 3, same instrument, noise floor 0.0000): int8-TE
 
 ## E. Direct review links (GitHub, this branch)
 
-- **Paired grid (all 9 pairs):**
+**Fastest path: the images are embedded directly in issue #5** (top
+comment) — open the issue and they render inline. The links below are the
+same evidence at full fidelity:
+
+- **Paired grid (all 9 pairs, 1.7 MB, renders inline):**
   [bench/results/2026-11-01-r1-triple/quality_grid.png](https://github.com/AIwork4me/qwen-image-rocm/blob/release/trending-ready-v0.1.0/bench/results/2026-11-01-r1-triple/quality_grid.png)
+- **Per-prompt row strips (zoom-friendly views of the same grid):**
+  [row1 p1](https://github.com/AIwork4me/qwen-image-rocm/blob/release/trending-ready-v0.1.0/docs/release-audit/review-assets/r1-grid-row1-p1-zh-scene.png) ·
+  [row2 p2](https://github.com/AIwork4me/qwen-image-rocm/blob/release/trending-ready-v0.1.0/docs/release-audit/review-assets/r1-grid-row2-p2-en-scene.png) ·
+  [row3 p3](https://github.com/AIwork4me/qwen-image-rocm/blob/release/trending-ready-v0.1.0/docs/release-audit/review-assets/r1-grid-row3-p3-poster-text.png)
 - **Native-resolution poster text crops (p3, the text-rendering case):**
   [bench/results/2026-11-01-r1-triple/quality_crops_poster.png](https://github.com/AIwork4me/qwen-image-rocm/blob/release/trending-ready-v0.1.0/bench/results/2026-11-01-r1-triple/quality_crops_poster.png)
-- **2048² typography sample (no bf16 baseline exists at 2048 — eyeball
-  only, supplementary):**
-  [docs/gallery/fast-2048-p3-poster-seed42.png](https://github.com/AIwork4me/qwen-image-rocm/blob/release/trending-ready-v0.1.0/docs/gallery/fast-2048-p3-poster-seed42.png)
+- **2048² typography sample** (5.3 MB — GitHub does not inline-render this
+  size in issues; use the half-size preview
+  [here](https://github.com/AIwork4me/qwen-image-rocm/blob/release/trending-ready-v0.1.0/docs/release-audit/review-assets/p3-poster-2048-preview-half.jpg)
+  or download the [original](https://github.com/AIwork4me/qwen-image-rocm/blob/release/trending-ready-v0.1.0/docs/gallery/fast-2048-p3-poster-seed42.png);
+  no bf16 baseline exists at 2048 — eyeball only, supplementary)
+
+Derived-view provenance:
+[review-assets/PROVENANCE.md](review-assets/PROVENANCE.md).
 
 Tip: download the grid locally and zoom — 256 px cells hide glyph-level
 detail; use the poster crops for text.
