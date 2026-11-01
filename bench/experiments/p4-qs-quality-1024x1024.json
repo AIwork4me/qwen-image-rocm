@@ -1,0 +1,28 @@
+{
+  "name": "p4-qs-quality-1024x1024",
+  "phase": 4,
+  "description": "Quickstart Quality profile: bf16-40 with --disable-smart-memory — bit-identical output to the phase-3 control (LPIPS 0.0000) with the measured memory-mode gain",
+  "framework": "comfyui",
+  "precision": "bf16",
+  "resolution": 1024,
+  "steps": 40,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "comfyui-default",
+  "measured": 2,
+  "fresh_prompt_arm": false,
+  "sdp_mode": "math",
+  "server_flags": [
+    "--disable-smart-memory"
+  ],
+  "env_vars": {},
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ]
+}

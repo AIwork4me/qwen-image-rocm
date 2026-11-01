@@ -1,0 +1,29 @@
+{
+  "name": "p4-qs-fast-1024x1024",
+  "phase": 4,
+  "description": "Quickstart Fast profile: the measured production triple (turbo int8 DiT + int8 TE + ck attention + --disable-smart-memory); identical config to p3-turbo-int8-ck-te-nosmart, smoke-sized defaults",
+  "framework": "comfyui",
+  "precision": "int8-convrot",
+  "resolution": 1024,
+  "steps": 8,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_turbo_int8_convrot.safetensors",
+  "clip": "qwen3vl_8b_int8_convrot.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "ck",
+  "measured": 2,
+  "fresh_prompt_arm": false,
+  "sdp_mode": "math",
+  "server_flags": [
+    "--use-ck-attention",
+    "--disable-smart-memory"
+  ],
+  "env_vars": {},
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ]
+}
