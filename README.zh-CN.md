@@ -6,7 +6,7 @@
 
 | 本栈实测 | 数值 | 含义（与边界） |
 |---|---|---|
-| **1024² 生成 · Fast 模式** | **~8–9 秒/张（热态）** | 同一 prompt、模型常驻、文本编码缓存命中。完整冷启动 20–46 s，改 prompt ≈ +1.2 s → [真实延迟](docs/benchmarks/REAL_WORLD_LATENCY.md) |
+| **1024² 生成 · Fast 模式** | **~9 秒/张（热态）** | 同一 prompt、模型常驻、文本编码缓存命中。完整冷启动 50.8 s（E8 默认档，实测），改 prompt ≈ +3–7 s（bf16 TE）→ [真实延迟](docs/benchmarks/REAL_WORLD_LATENCY.md) |
 | **相对 bf16-40 基线加速** | **5.2–5.5×（热态、同会话配对）** | 同会话实测配对；8 步 turbo 输出必然不同——画质经人工目检裁决，未宣称无损 |
 | **2048² 原生分辨率** | **40.2–40.4 秒/张** | 有界矩阵实测：3 prompt × 3 seed、离散 0.5%，含首次 2048² 排版海报运行；不宣称长时间稳定性 → [明细](docs/benchmarks/2048_VALIDATION.md) |
 | 测试硬件 / 系统 | RX 7900 XTX (gfx1100) · Windows 11 | 原生 Windows ROCm，不用 WSL2、不静默回退 CPU。其他 GPU 未测（默认拒绝执行） |
@@ -30,7 +30,7 @@
 ## 快速开始
 
 前置：Windows 11、Radeon RX 7900 XTX、较新 Adrenalin 驱动、
-[uv](https://docs.astral.sh/uv/)、git、Fast 模式权重约 18 GB 磁盘。
+[uv](https://docs.astral.sh/uv/)、git、Fast 模式权重约 26 GB 磁盘。
 
 ```powershell
 git clone https://github.com/AIwork4me/qwen-image-rocm.git
@@ -46,7 +46,7 @@ revision `aacf31a6` 的 SHA256，摘要内置于仓库，**每个文件**都强�
 续传）→ **要求 Radeon 设备**的服务健康门
 （不允许静默 CPU 回退）→ 用与基准测试相同的驱动执行生成 → 按统一口径打印
 `服务器启动 / 就绪到首图 / 完整冷启动 / 热态均值+中位数`。首次运行需下载权重；
-此后完整冷启动约 20 秒（缓存热）至 46 秒（全新安装）。
+此后完整冷启动约 51 秒（E8 默认档、bf16 文本编码器；实测）。
 
 Phase-1 diffusers 复现入口保留：`.\reproduce.ps1 -Quick`。
 
@@ -54,11 +54,11 @@ Phase-1 diffusers 复现入口保留：`.\reproduce.ps1 -Quick`。
 
 | | Fast | Quality |
 |---|---|---|
-| 配置 | Turbo 8 步 · int8 DiT + int8 TE · `--use-ck-attention` · `--disable-smart-memory` | bf16 40 步 · `--disable-smart-memory` |
+| 配置 | Turbo 8 步 · int8 DiT + **bf16 TE** · `--use-ck-attention`（E8，owner 已裁决） | bf16 40 步 · `--disable-smart-memory` |
 | 1024² 热态 | ~8–9 s | ~45–51 s |
 | 2048² | ✅ 40.2–40.4 s（有界矩阵，n=9） | ❌（bf16 VAE 解码在 24 GB 上 OOM） |
-| 输出 vs 基线 | 不同（8 步调度）。裁决状态：turbo-int8+ck 已在冻结网格上判"无感"（A1）；**完整三联组合仅通过 vs e8 的 LPIPS 门（0.058/0.012/0.014，p1/p2/p3），正式网格裁决待 owner 复核（[#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5)）**；int8 量化近无损（LPIPS 0.004–0.060） | **逐位一致**（LPIPS 0.0000） |
-| 磁盘权重 | ~18 GB | ~32 GB |
+| 输出 vs 基线 | 不同（8 步调度），**冻结网格上判"无感"（A1 + #5）**。int8-TE 变体（"生产三联"，略快）已被 owner 裁决**否决**——p1 略降、p3 排版海报不可接受（[#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5)）；LPIPS 未预测出 p3 问题——人工门禁为终审 | **逐位一致**（LPIPS 0.0000） |
+| 磁盘权重 | ~26 GB | ~32 GB |
 
 两个档位都是冻结的实验清单（[bench/quickstart_config.py](bench/quickstart_config.py)），
 quickstart 不可能偏离已测配置。画质评判方法见
@@ -76,18 +76,21 @@ quickstart 不可能偏离已测配置。画质评判方法见
 
 ## 真实延迟（Fast，1024²）
 
-统一口径——精确定义见 [REAL_WORLD_LATENCY.md](docs/benchmarks/REAL_WORLD_LATENCY.md)：
+统一口径——精确定义见 [REAL_WORLD_LATENCY.md](docs/benchmarks/REAL_WORLD_LATENCY.md)。Fast 出货配置为 E8（bf16 TE），冷路径含 17.5 GB 文本编码器载入 + ~7 s 冷编码：
 
-| 指标 | 缓存热的主机 | 全新安装 |
-|---|---|---|
-| 服务器启动 | 8.1 s | 28.3 s |
-| 就绪到首图 | 12.1 s | 17.2 s |
-| **完整冷启动**（启动 → 首图） | **20.2 s** | **45.5 s** |
-| 换 prompt（文本变化） | ~10 s | — |
-| 热态重复（换 seed）均值 | 8.1–8.6 s | — |
-| 2048² Fast（就绪到首图 / 热态） | 43.3 s / 40.3 s | 热态 = 3×3 有界矩阵 |
+| 指标 | Fast（E8，默认档，2026-11-01 实测） |
+|---|---|
+| 服务器启动 | 18.2 s |
+| 就绪到首图 | 32.6 s（含冷 TE 7.16 s） |
+| **完整冷启动**（启动 → 首图） | **50.8 s** |
+| 换 prompt（文本变化） | 热态 + 3–7 s（bf16 TE，phase-3 实测） |
+| 热态重复（换 seed） | 均值 9.18 s / 中位 9.07 s |
+| 2048² Fast 热态 | 42.2 s（turbo-int8 探测，同 bf16-TE 家族） |
 
-Quality（bf16-40）：完整冷启动 67.5 s、热态 ~46 s。重启后的冷启动
+参考：被否决的 int8-TE 三联变体冷启更快（完整冷启 20–46 s、热态
+8.0–9.2 s、换词 ~10 s），见
+[REAL_WORLD_LATENCY.md](docs/benchmarks/REAL_WORLD_LATENCY.md)。Quality
+（bf16-40）：完整冷启动 67.5 s、热态 ~46 s。重启后的冷启动
 **未测**；VRAM 数字为 0.5 s 采样值（下界）。
 
 ## 复现基准测试
@@ -111,7 +114,8 @@ powershell -File bench\run_variant.ps1 -Experiment p3-turbo-int8-ck-te-nosmart-1
 | 杠杆（1024²，热态） | 总耗时 | vs 同会话 bf16 对照 | 画质 |
 |---|---|---|---|
 | Turbo-int8 + ck（e8） | 9.1 | 5.2–5.5× | distance 0.21–0.36 → 用户裁决：无感 |
-| **完整生产组合（r1）** | **8.0–9.2** | 跨会话 ~5.5–6.0×* | vs e8 LPIPS：0.058/0.012/0.014（fidelity） |
+| **Fast = Turbo-int8 + ck（E8，出货默认）** | **9.1** | 5.2–5.5× | 判"无感"（A1 + #5） |
+| int8-TE"三联"变体（r1）——**已被 #5 否决为默认** | 8.0–9.2 | 跨会话 ~5.5–6.0×* | 裁决：p1 略降、p3 不可接受（vs e8 LPIPS 0.058/0.012/0.014 未预测出） |
 | 仅 ck 注意力（40 步） | 35–37 | 1.30–1.37× | 数值路径不同 → 网格裁决 |
 | int8 DiT / TE（40 步） | 45–50 | ~1.0× | 近无损 0.004–0.060 |
 | `--disable-smart-memory` | 42–46 | 1.06–1.14× | 逐位一致 |
@@ -173,7 +177,7 @@ powershell -File bench\run_variant.ps1 -Experiment p3-turbo-int8-ck-te-nosmart-1
 - [x] 2048² 有界矩阵（3 prompt × 3 seed）——**2026-11-01 完成**：中位数
       40.27/40.32/40.36 s、离散 0.5%，p3 排版海报首次 2048² 运行
      （[#4](https://github.com/AIwork4me/qwen-image-rocm/issues/4)）
-- [ ] 生产组合网格的正式三档裁决（owner 复核，[#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5)）
+- [x] 生产组合网格的正式三档裁决——**2026-11-01 已记录（[#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5)）：p1 略降、p2 无感、p3 不可接受 → 三联被否决为 Fast 默认；Fast 采用 E8 配置（判"无感"）**
 - [ ] 重启后冷启动测量（真实磁盘首启）
 - [ ] 切栈试用：上游修复进入稳定 tag 后，默认切 7.14.0 flash（注意力 3.4×）
 - [ ] 更广的画质套件（人像、产品、长英文 prompt）——独立、明确标注的新集

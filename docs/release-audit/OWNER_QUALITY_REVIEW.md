@@ -1,5 +1,16 @@
 # OWNER QUALITY REVIEW — production-triple grid (issue #5)
 
+> **OUTCOME — VERDICT RECORDED 2026-11-01**
+> ([#5 comment](https://github.com/AIwork4me/qwen-image-rocm/issues/5#issuecomment-6555955095),
+> verbatim): p1 Chinese scene **略降** · p2 English scene **无感** · p3
+> Typography poster **不可接受** → **the triple is REJECTED as the Fast
+> default** per the pre-published scale. Consequence applied in the same
+> revision: **Fast ships the E8 config** (turbo int8 DiT + bf16 TE + ck,
+> judged 无感 A1), re-verified on GPU (warm mean 9.18 s / full cold
+> 50.8 s). Notably LPIPS fidelity (p3 0.0137) did not predict the p3
+> verdict — the human gate proved binding. The guide below is retained
+> unchanged as the review record.
+
 **This is the human-decision pack for the formal quality verdict. Nothing
 here is a verdict yet.** The reviewer is the project owner; AI observations
 (section K) are explicitly non-binding. Recording the verdict closes

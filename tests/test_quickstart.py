@@ -20,19 +20,26 @@ def test_modes_resolve_to_frozen_manifests():
             assert len(qsc.WEIGHTS[rel][1]) == 64
 
 
-def test_fast_is_the_measured_production_triple():
+def test_fast_is_the_owner_approved_e8_config():
+    # #5 verdict (2026-11-01): triple (int8 TE) REJECTED as Fast default
+    # (p1 略降, p3 不可接受); Fast = E8 config (turbo int8 + BF16 TE + ck)
     cfg = qsc.config_for("fast")
     assert cfg["steps"] == 8
     assert cfg["unet"] == "qwen_image_2.1_turbo_int8_convrot.safetensors"
-    assert cfg["clip"] == "qwen3vl_8b_int8_convrot.safetensors"
-    assert "--use-ck-attention" in cfg["server_flags"]
-    assert "--disable-smart-memory" in cfg["server_flags"]
-    # identical to the experiment that measured the triple as a whole
-    with open("bench/experiments/p3-turbo-int8-ck-te-nosmart-1024x1024.json") as f:
-        triple = json.load(f)
+    assert cfg["clip"] == "qwen3vl_8b_bf16.safetensors"   # BF16 text encoder
+    assert cfg["server_flags"] == ["--use-ck-attention"]  # no nosmart in E8
+    # identical to the E8 experiment that was measured and judged 无感 (A1)
+    with open("bench/experiments/p3-turbo-int8-ck-1024x1024.json") as f:
+        e8 = json.load(f)
     for field in ("unet", "clip", "vae", "steps", "server_flags", "sdp_mode",
                   "sampler", "scheduler", "cfg"):
-        assert cfg[field] == triple[field], field
+        assert cfg[field] == e8[field], field
+
+
+def test_fast_weights_match_the_e8_config():
+    states = {s["rel"]: s for s in qsc.weights_state("fast")}
+    assert "text_encoders/qwen3vl_8b_bf16.safetensors" in states
+    assert "text_encoders/qwen3vl_8b_int8_convrot.safetensors" not in states
 
 
 def test_quality_is_bit_identical_baseline_plus_memory_mode():
@@ -72,7 +79,7 @@ def test_weights_state_reports_structure_without_disk():
     states = qsc.weights_state("fast")
     assert [s["rel"].split("/")[-1] for s in states] == [
         "qwen_image_2.1_turbo_int8_convrot.safetensors",
-        "qwen3vl_8b_int8_convrot.safetensors",
+        "qwen3vl_8b_bf16.safetensors",   # E8 config (owner verdict #5)
         "qwen_image_2.1_vae_bf16.safetensors",
     ]
     # states are computed from the real disk; on CI (no weights) all must be

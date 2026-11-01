@@ -78,15 +78,17 @@ WEIGHTS: dict[str, tuple[int, str]] = {
 }
 
 MODES = {
-    # The full recommended production combo, measured as a whole 2026-11-01
-    # (bench/results/2026-11-01-r1-triple/): Turbo 8-step int8 DiT + int8 TE
-    # + ck attention + --disable-smart-memory.
+    # Fast = E8 config (turbo int8 DiT + BF16 TE + ck), owner-approved
+    # (A1 无感; #5 verdict 2026-11-01). The int8-TE "production triple"
+    # variant measured in bench/results/2026-11-01-r1-triple/ was REJECTED
+    # as the Fast default by the same verdict: p1 略降, p3 typography
+    # 不可接受 (LPIPS 0.0137 did not predict it — human gate is binding).
     "fast": {
         "manifest": "p4-qs-fast-1024x1024",
         "resolutions": (1024, 2048),
         "weights": (
             "diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors",
-            "text_encoders/qwen3vl_8b_int8_convrot.safetensors",
+            "text_encoders/qwen3vl_8b_bf16.safetensors",
             "vae/qwen_image_2.1_vae_bf16.safetensors",
         ),
     },

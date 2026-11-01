@@ -12,10 +12,22 @@
 
 ## Verdict (user final — 三档终审)
 
-- [ ] 无感 (imperceptible)
-- [ ] 略降 (slightly degraded)
-- [ ] 不可接受 (unacceptable)
+OWNER VERDICT RECORDED 2026-11-01 ([#5 comment](https://github.com/AIwork4me/qwen-image-rocm/issues/5#issuecomment-6555955095) — verbatim):
 
-Notes: 
+- p1 Chinese scene: 略降
+- p2 English scene: 无感
+- p3 Typography poster: 不可接受
+
+Outcome: **REJECTED as the Fast default** (any 不可接受 tier fails the
+gate per the pre-published scale). Fast ships the E8 config (turbo int8
+DiT + bf16 TE + ck) instead. Note: LPIPS fidelity (p3 median 0.0137) did
+not predict the p3 verdict — the human gate is binding, exactly as
+QUALITY_METHODOLOGY.md prescribes.
+
+- [ ] 无感 (imperceptible) — p2
+- [x] 略降 (slightly degraded) — p1
+- [x] 不可接受 (unacceptable) — p3
+
+Notes: overall gate FAILED (single 不可接受 tier rejects the config).
 
 Grids: `quality_grid.png` (256px pairs), `quality_crops_poster.png` (native-res text crops, poster prompt).

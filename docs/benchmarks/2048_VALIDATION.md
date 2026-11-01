@@ -4,6 +4,12 @@ Native-resolution (2048×2048) generation on the 24 GB RX 7900 XTX is one of
 this repo's headline results. This page states exactly how much validation
 stands behind it — no more.
 
+**Config note (owner-verdict round):** the Fast default now ships the E8
+config (bf16 TE, see [#5]). For 2048² that means the *default-config*
+evidence is the turbo-int8 probe below (42.2 s — same bf16-TE family);
+the r2/r3 rows measured the int8-TE triple variant, which remains valid
+**variant** evidence (slightly faster, but rejected as the default).
+
 ## Why 2048² was ever "impossible"
 
 bf16 weights (31.8 GB) + dense attention allocations > 24 GB VRAM on the

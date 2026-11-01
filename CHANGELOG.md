@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-11-01 — Owner quality verdict applied (PR #7, verdict round)
+
+**Formal verdict recorded** ([#5 comment](https://github.com/AIwork4me/qwen-image-rocm/issues/5#issuecomment-6555955095), verbatim): p1 略降 · p2 无感 ·
+**p3 typography 不可接受 → the int8-TE "production triple" is REJECTED as
+the Fast default** (single 不可接受 tier fails the pre-published scale).
+Consequences applied end-to-end: **Fast profile reverted to the E8 config**
+(turbo int8 DiT + **bf16 TE** + ck — judged 无感 A1; manifest
+`p4-qs-fast-1024x1024` now mirrors e8 exactly, quickstart weights set
+updated, tests pin the equality); E8-default Fast **re-verified on GPU
+post-verdict** (boot 18.2 s / ready 32.6 s / full cold 50.8 s / warm mean
+9.18 s — inference config changed, so a real run was mandatory); verdict
+recorded verbatim in `2026-11-01-r1-triple/quality.md` (三档勾选) and the
+methodology ledger; READMEs (en/zh), claim matrix (C2 superseded, C7
+qualified), REAL_WORLD_LATENCY (E8-default section + triple re-labeled as
+variant evidence), rc1 (stable-tag blockers → NONE), OWNER_QUALITY_REVIEW
+(outcome header) all synchronized. Key methodology finding: **LPIPS
+fidelity (p3 0.0137) did not predict the owner's p3 不可接受** — concrete
+proof the human gate is binding and LPIPS is auxiliary-only. #5 closed
+with the outcome recorded. 102 tests, ruff clean.
+
 ## 2026-11-01 — Final release closure (PR #7, round 3)
 
 Last fidelity-semantics hardcode removed from the quality-gate generator:

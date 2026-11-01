@@ -61,13 +61,15 @@ it never retroactively redefines the frozen baseline.
   **rejected**. B1–B3 near-noise items 无感. AI second opinion: 5/5 match +
   3 first verdicts, 0 divergence ≥1 grade (`bench/results/AI_JUDGE_RESULTS.json`).
 - **This session (2026-11-01):** the full production triple
-  (`p3-turbo-int8-ck-te-nosmart`) has **objective evidence only** — LPIPS
-  fidelity vs the already-judged e8 config: 0.058 / 0.012 / 0.014 (median,
-  p1/p2/p3), max 0.075, inside the int8 near-lossless band. Grid +
-  native-res crops are committed at `bench/results/2026-11-01-r1-triple/`.
-  The **formal three-tier verdict on this exact grid is PENDING** (owner
-  review); until then public text says "LPIPS-gated, user verdict pending",
-  not 无感.
+  (`p3-turbo-int8-ck-te-nosmart`) received its formal owner verdict
+  ([#5 comment](https://github.com/AIwork4me/qwen-image-rocm/issues/5),
+  verbatim): **p1 略降 · p2 无感 · p3 typography 不可接受 → REJECTED as the
+  Fast default**; Fast ships the E8 config (judged 无感, A1). Recorded in
+  `bench/results/2026-11-01-r1-triple/quality.md`. Methodology note: LPIPS
+  fidelity (p3 median 0.0137) did **not** predict the p3 verdict — a
+  concrete case of why LPIPS is an auxiliary instrument and the human
+  three-tier gate is binding; also why int8 TE is not shipped in the
+  default Fast profile despite its speed.
 
 ## Rules for calling something PASS
 

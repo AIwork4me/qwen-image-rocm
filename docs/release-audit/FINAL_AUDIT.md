@@ -19,8 +19,11 @@
   [OWNER_QUALITY_REVIEW.md](OWNER_QUALITY_REVIEW.md). AI observations there
   are non-binding and clearly labeled.
 - **Release state:** PR #7 not merged; no tag; no GitHub release.
-- **Verdict: MERGE GATE READY · STABLE RELEASE GATE BLOCKED (owner quality
-  verdict pending).**
+- **Verdict (updated, owner-verdict round): #5 verdict RECORDED — p1 略降,
+  p2 无感, p3 typography 不可接受 → int8-TE triple REJECTED as the Fast
+  default. Fast = E8 config, re-verified on GPU post-verdict (warm 9.18 s
+  mean / full cold 50.8 s). MERGE GATE READY · STABLE RELEASE GATE READY
+  (owner actions: merge, social-preview upload, tag).**
 
 The sections below this line are retained as audit history:
 

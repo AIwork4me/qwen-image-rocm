@@ -19,7 +19,23 @@ Plus **Fresh prompt** = warm server, prompt *text* changed (text encoder
 recomputed; verified by `text_encode_s > 0` and `CLIPTextEncode` absent
 from `cached_nodes`).
 
-## Fast profile (`.\quickstart.ps1 -Mode Fast`, 1024², 8 steps)
+## Fast profile — SHIPPED DEFAULT (E8 config: turbo int8 DiT + **bf16 TE** + ck)
+
+The #5 owner verdict (2026-11-01) rejected the int8-TE triple as the Fast
+default (p1 略降, p3 typography 不可接受); Fast ships E8. Measured 2026-11-01
+(post-verdict regression run, `bench/results/quickstart/` local run,
+records gitignored by design; digests verified incl. the 17.5 GB bf16 TE):
+
+| Metric | Value |
+|---|---|
+| Server boot | 18.2 s (bf16 TE scan) |
+| Ready-to-first-image | 32.6 s (cold TE 7.16 s + 17.5 GB TE/DiT load) |
+| **Full cold start** | **50.8 s** |
+| Warm mean / median | 9.18 / 9.07 s (n=2; matches the e8 experiment's 9.1 s) |
+| Fresh prompt | warm + 3–7 s bf16 TE recompute (phase-3 measured band; no fresh arm re-run for E8 — labeled estimate, source cited) |
+| 2048² | e2 probe 42.2 s warm (turbo-int8 + bf16 TE family — same TE as the default; triple-config r3 matrix below is variant evidence) |
+
+## Fast profile — VARIANT (int8-TE "production triple"; owner-rejected as default, kept as evidence)
 
 | Metric | Warm-cache host | Fresh-install clone (clean-dir acceptance) | Source (records) |
 |---|---|---|---|
