@@ -40,19 +40,43 @@ New-Item -ItemType Directory -Force -Path $resultsDir | Out-Null
 $serverOut = Join-Path $resultsDir "server.log"
 $serverErr = Join-Path $resultsDir "server.err.log"
 
-function Kill-Port([int]$p) {
+function Test-PortBusy([int]$p) {
+    [bool](Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue)
+}
+
+# Kill ONLY processes this repo spawned. A leftover server from a previous
+# (crashed) run references phase2-comfyui in its command line; an unrelated
+# listener (user's own ComfyUI, any other service) does not and is NEVER
+# touched — the caller picks a spare port instead.
+function Kill-OwnOrphans([int]$p) {
     $conns = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue
     foreach ($c in $conns) {
-        if ($c.OwningProcess -gt 0) {
-            Write-Host "killing PID $($c.OwningProcess) on port $p"
+        if ($c.OwningProcess -le 0) { continue }
+        $proc = Get-CimInstance Win32_Process -Filter "ProcessId=$($c.OwningProcess)" -ErrorAction SilentlyContinue
+        $cmd = if ($proc) { "$($proc.CommandLine)" } else { "" }
+        if ($cmd -match "phase2-comfyui") {
+            Write-Host "killing orphaned server PID $($c.OwningProcess) on port $p (command line references this repo)"
             taskkill /PID $c.OwningProcess /T /F 2>$null | Out-Null
+        } else {
+            $pname = if ($proc) { $proc.Name } else { "unknown" }
+            Write-Warning "port $p is owned by unrelated process PID $($c.OwningProcess) ($pname); NOT killing it"
         }
     }
     Start-Sleep 2
 }
 
-# --- 1. clean slate ---------------------------------------------------------
-Kill-Port $Port
+# --- 1. clean slate (port-safe: never kill a process we did not start) ------
+Kill-OwnOrphans $Port
+$originalPort = $Port
+while (Test-PortBusy $Port) {
+    Write-Warning "port $Port still in use; trying next port"
+    $Port++
+    if ($Port -gt ($originalPort + 20)) {
+        Write-Error "no free port in $originalPort..$($originalPort + 20); aborting without killing anything"
+        exit 5
+    }
+}
+if ($Port -ne $originalPort) { Write-Host "using spare port $Port (requested $originalPort was busy)" }
 
 # --- 2. start server with the variant's flags -------------------------------
 # manifest optional fields are also baked into the JSON; defaults here are
@@ -94,7 +118,7 @@ if (-not $healthy) {
     Write-Error "server failed health gate in ${HealthTimeoutS}s; log tail:"
     if (Test-Path $serverOut) { Get-Content $serverOut -Tail 30 }
     if (Test-Path $serverErr) { Get-Content $serverErr -Tail 30 }
-    Kill-Port $Port
+    if (-not $server.HasExited) { taskkill /PID $server.Id /T /F 2>$null | Out-Null }
     exit 3
 }
 Write-Host "server healthy on port $Port"
@@ -134,9 +158,13 @@ foreach ($f in @($serverOut, $serverErr)) {
 if ($lines) { $lines | Set-Content -Encoding UTF8 $evidence; Write-Host "attention evidence -> $evidence" }
 else { Write-Warning "no attention/native-ops lines found in server log" }
 
-# --- 7. teardown + verify -----------------------------------------------------
+# --- 7. teardown + verify (own process tree only) -----------------------------
 if (-not $server.HasExited) { taskkill /PID $server.Id /T /F 2>$null | Out-Null }
-Kill-Port $Port
-$portFree = -not (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)
+Start-Sleep 2
+Kill-OwnOrphans $Port   # orphaned child of ours only; never an unrelated listener
+$portFree = -not (Test-PortBusy $Port)
+if (-not $portFree) {
+    Write-Warning "port $Port still busy after teardown; owner is not ours, leaving it alone"
+}
 Write-Host "teardown done; port free: $portFree; driver exit: $driverCode"
 exit $driverCode
