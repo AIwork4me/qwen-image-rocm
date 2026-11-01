@@ -117,6 +117,60 @@ impossible on any backend of the stock Windows ROCm stack on a 24 GB
 RDNA3 card today** — the only memory-efficient backends (flash,
 mem-efficient, real flex) are exactly the broken/unavailable ones.
 
+## Phase 4 W1 verification (2026-11-01): minimal repro matrix + wheel evidence
+
+Upstream research (2026-11-01) root-caused this family to an **AOTriton
+runtime/images version mismatch** in the torch 2.12.0+rocm7.14.1 Windows
+wheel lineage — TheRock#7315 (OPEN; fixes pytorch release/2.11 c9ab269,
+release/2.12 d1abf10; ROCm/pytorch#3569 merged) and TheRock#7992 (CLOSED;
+**2.12.0+rocm7.14.0 from the same index is fine**, 7.14.1 broken).
+
+Local verification with a weights-free repro
+([tools/repro/sdpa_repro.py](../../tools/repro/sdpa_repro.py), 192-cell
+sweep: S∈{64,120,256,1024,4096,16384} × GQA{8,32} × mask{none,bool4d,
+float_add} × backend{flash,mem_efficient,math,cudnn}, ComfyUI-style error
+flush) — full matrix:
+[evidence/sdpa-repro-matrix.md](evidence/sdpa-repro-matrix.md),
+raw JSON `evidence/sdpa-repro-7141.json` (+`-launch-blocking.json`):
+
+| failure class | cells | meaning |
+|---|---|---|
+| flash + mask=None (any S ≥ 64, GQA or MHA, causal or not) | 24 | **hipErrorInvalidValue at launch — the bug** |
+| mem_efficient, MHA shapes (any mask, any S ≥ 64) | 24 | **hipErrorInvalidValue at launch — the bug** |
+| mem_efficient + GQA (kv=8, all masks/S) | 24 | `No available kernel` — CPU-side shape rejection, NOT the bug |
+| flash + explicit mask (both kv, all S) | 24 | `No available kernel` — CPU-side mask rejection, NOT the bug |
+| cudnn (all cells) | 48 | `No available kernel` — not built for ROCm Windows |
+| math | 40 PASS / 8 OOM | PASS ≤4096 (0.26→90 ms, ~quadratic); OOM at S=16384 (32 GB dense scores) |
+
+Key refinements vs the Phase 1/2 notes:
+
+1. **Minimal case is S=64** — the launch failure is not shape-size-,
+   mask-, GQA-, or causal-dependent; any unmasked flash / dense
+   mem-efficient launch fails. (Phase 1 suspicion "specific shapes" is
+   refuted; it is the kernel itself.)
+2. `No available kernel` (CPU-side rejection) vs `hipErrorInvalidValue`
+   (kernel launch failure) are different classes — earlier notes lumped
+   them together ("no kernel" for cudnn was always the former).
+3. A `HIP_LAUNCH_BLOCKING=1`+`AMD_SERIALIZE_KERNEL=3` pass surfaces the
+   same message (no extra kernel-name attribution in this build).
+
+Wheel AOTriton evidence (recorded 2026-11-01, phase1 venv):
+
+- `torch/lib/aotriton.images/amd-gfx110x/` — flash kernels
+  (`attn_fwd.zip` + 4 bwd zips); `__signature__`:
+  `AOTRITON_GIT_SHA1=6e00ef3e335b45dfb49065259533b59c68995bfe`
+  (14 arches incl. gfx1100)
+- `torch/lib/aotriton_v2.dll` — exports `flash@v3@aotriton` (v3 API)
+  runtime symbols; no version/git string embedded; the pytorch-side
+  `__AOTRITON_CI_COMMIT` pin is not exposed by the installed wheel
+  (`torch.__config__.show()` has no aotriton field) — the mismatch can
+  only be confirmed against build metadata upstream, but the images SHA
+  above is the concrete local data point for #7315's maintainers.
+- torch build: `2.12.0+rocm7.14.1`, git `098172edc887399a593f0c74ae5c40b1fe043801`
+
+W2 contrasts this matrix against `2.12.0+rocm7.14.0` (the known-good
+build from the same index) — results below.
+
 ## Phase 2 refinement (2026-10-31): ComfyUI hits the SAME bug, survives via startup probe
 
 ComfyUI 0.43.0 (commit b5a4321), same torch stack, same GPU:

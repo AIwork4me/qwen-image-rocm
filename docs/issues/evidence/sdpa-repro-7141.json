@@ -1,0 +1,1953 @@
+{
+  "meta": {
+    "created_at": "2026-11-01T12:58:03+08:00",
+    "torch_version": "2.12.0+rocm7.14.1",
+    "torch_git_version": "098172edc887399a593f0c74ae5c40b1fe043801",
+    "hip_version": "7.14.60850",
+    "gfx_arch": "gfx1100",
+    "device_name": "AMD Radeon RX 7900 XTX",
+    "aotriton": {
+      "images_present": true,
+      "arches": {
+        "amd-gfx110x": {
+          "sha1": "6e00ef3e335b45dfb49065259533b59c68995bfe",
+          "flash_kernels": [
+            "attn_fwd.zip",
+            "bwd_kernel_dk_dv.zip",
+            "bwd_kernel_dq.zip",
+            "bwd_kernel_fuse.zip",
+            "bwd_preprocess.zip",
+            "bwd_preprocess_varlen.zip",
+            "debug_simulate_encoded_softmax.zip"
+          ]
+        }
+      },
+      "dll_present": true,
+      "lib_present": true,
+      "dll_v3_symbols": true
+    },
+    "launch_blocking": false
+  },
+  "results": [
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.265,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.286,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.339,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.274,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.263,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.326,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.412,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.272,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.366,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.406,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.386,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.374,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.373,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.424,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.409,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.386,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.817,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.876,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.794,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.771,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.765,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.778,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.537,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.45,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.583,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 6.174,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 6.075,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 6.366,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.771,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.949,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.989,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.914,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 83.923,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 90.396,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 89.028,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 88.517,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 83.807,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 91.779,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 88.912,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 89.236,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 33.48 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 34.48 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 34.23 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 33.98 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 33.42 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "CUDA error: invalid argument Search for `hipErrorInvalidValue' in https://rocm.docs.amd.com/projects/HIP/en/latest/index.html for more information. CUDA kernel errors might be asynchronously reported "
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 34.42 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 34.17 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 33.92 GiB is allocated by PyTorch, and 192.00 MiB is reserved"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    }
+  ]
+}
