@@ -135,23 +135,35 @@ cpu_offload 权重搬运（31GB 过 PCIe）+ 3.66s/step 去噪；ComfyUI 让 DiT
    真实"新 prompt"成本。
 5. **节点缓存价值 ~30%**：`--cache-none` 只有 0.68–0.71×。
 
-## ROCm Windows 生态发现（Phase 1 + 2）
+## ROCm Windows 生态发现（Phase 1-4）
 
-1. **flash 与 mem-efficient SDPA 后端报 `hipErrorInvalidValue`**
-   （Qwen3-VL 与 Qwen-Image-2.1 DiT 形状）——
-   [issue](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)
-2. **2048²（原生分辨率）不可达**：所有内存高效后端损坏或缺失；
-   math 与 flex 无 Triton 回退都需要单次 32.1GB 稠密注意力分配。
-3. **AMD 轮子源无 Windows Triton** → FlexAttention/torch.compile 走慢速
-   回退——[issue](docs/issues/2026-10-30-no-triton-windows-rocm.md)
+1. **flash 与 mem-efficient SDPA 启动失败** —— **上游已根因定位**
+   （TheRock#7315/#7992：torch 2.12.0+rocm7.14.1 Windows 轮子的
+   AOTriton 运行时/镜像版本错配），**本地已验证**（无权重 192 格复现：
+   S=64 起即失败；同索引 `2.12.0+rocm7.14.0` = 零启动失败），
+   **修复收益已测量**（7.14.0 flash：1024² 1.07 s/step，比 math 快
+   3.4×，省 1.9GB 显存）——
+   [issue](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)、
+   [W2 证据](docs/issues/evidence/phase4-w2-7140-verification.md)
+2. **2048²（原生分辨率）**：在好的 7.14.0 构建上注意力已不再是阻碍
+   （flash 可跑 S≈16k），但 bf16 VAE 解码 OOM（单次 20.25GB conv
+   分配）——实测 2048² 路线仍是 ComfyUI + 原生 int8（Phase 3：
+   40 步 328s / turbo 42s）。
+3. **AMD 轮子源无 Windows Triton**（2026-11-01 复核：TheRock PR#4006
+   已合并但未发布轮子；nightly 的 triton 仅 Linux）→
+   FlexAttention/torch.compile 走慢速回退——
+   [issue](docs/issues/2026-10-30-no-triton-windows-rocm.md)
 4. **cpu_offload 首轮 warmup 页文件抖动**（6× 步长减速，可自恢复）
-   （32GB 内存主机）——
+   （32GB 内存主机）；Phase 4 补充：抖动代价与后端相关（flash 免疫，
+   稠密 math 分配受害最深）——
    [issue](docs/issues/2026-10-30-warmup-pagefile-thrash-cpu-offload.md)
 5. **ComfyUI 通过启动探测在 SDPA 后端 bug 下幸存**：它同样撞上 flash
    注意力的 `invalid argument` 失败，但自动禁用并回退到次二次核——
    而 diffusers/transformers 会整体失败。同样的坏 kernel，不同的消费者
    韧性；证据（日志行 + 两张输出图的 SHA256）见
    [issue 1](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)。
+   Phase 4 草案提议把该探测模式移植上游——
+   [草案](docs/upstream/INDEX.md)（全部待用户批准，未发布）。
 
 ## 许可
 

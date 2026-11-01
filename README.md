@@ -146,19 +146,27 @@ Highlights:
    the real fresh-prompt cost on a 24 GB card with 31.8 GB of weights.
 5. **Node cache is worth ~30%**: `--cache-none` runs at 0.68–0.71×.
 
-## ROCm-on-Windows findings (Phase 1 + 2)
+## ROCm-on-Windows findings (Phases 1-4)
 
-1. **flash & mem-efficient SDPA backends fail** with
-   `hipErrorInvalidValue` on Qwen3-VL and Qwen-Image-2.1 DiT shapes —
-   [issue](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)
-2. **2048² (native resolution) unreachable**: every memory-efficient
-   backend is broken/unavailable; math and flex's no-Triton fallback both
-   need a single 32.1 GB dense attention allocation.
-3. **No Triton wheels for Windows ROCm** in AMD's wheel index →
-   FlexAttention/torch.compile run slow fallbacks —
+1. **flash & mem-efficient SDPA launch failures** —
+   **upstream-root-caused** (TheRock#7315/#7992: AOTriton runtime/images
+   mismatch in the torch 2.12.0+rocm7.14.1 Windows wheel),
+   **verified locally** (weights-free 192-cell repro: fails from S=64;
+   `2.12.0+rocm7.14.0` from the same index = zero launch failures),
+   **remediation measured** (7.14.0 flash: 1.07 s/step @1024², 3.4x vs
+   math, −1.9 GB VRAM) — [issue](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md),
+   [W2 evidence](docs/issues/evidence/phase4-w2-7140-verification.md)
+2. **2048² (native resolution)**: attention no longer the blocker on the
+   good 7.14.0 build (flash handles S≈16k), but bf16 VAE decode OOMs
+   (20.25 GB conv alloc) on 24 GB — the measured 2048² route remains
+   ComfyUI + native int8 (Phase 3: 328 s @40 steps / 42 s turbo).
+3. **No Triton wheels for Windows ROCm** in AMD's wheel index (verified
+   2026-11-01: TheRock PR#4006 merged but unpublished; nightly triton is
+   Linux-only) → FlexAttention/torch.compile run slow fallbacks —
    [issue](docs/issues/2026-10-30-no-triton-windows-rocm.md)
 4. **cpu_offload first-warmup pagefile thrash** (6× step time, recovers)
-   on 32 GB RAM hosts —
+   on 32 GB RAM hosts; Phase 4 found the thrash cost is backend-dependent
+   (flash immune, dense math allocations hit hardest) —
    [issue](docs/issues/2026-10-30-warmup-pagefile-thrash-cpu-offload.md)
 5. **ComfyUI survives the SDPA backend bug via startup probe**: it hits
    the same flash-attention `invalid argument` failure, auto-disables it,
@@ -166,6 +174,8 @@ Highlights:
    fail the whole call. Same broken kernels, different consumer
    resilience; evidence (log line + both output SHA256s) in
    [issue 1](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md).
+   Phase 4 drafts propose porting that probe pattern upstream —
+   [drafts](docs/upstream/INDEX.md) (all user-gated, unposted).
 
 ## License
 
