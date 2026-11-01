@@ -2,30 +2,45 @@
 
 Thanks for your interest! This project benchmarks and optimizes
 Qwen-Image-2.1 image generation on AMD RDNA3 GPUs (Radeon 7900 XTX) under
-Windows-native ROCm.
+Windows-native ROCm — with evidence discipline: every measured claim points
+at a committed run record.
 
 ## Getting started
 
-- Read `docs/specs/2026-10-30-qwen-image-2.1-rocm-7900xtx-design.md` for the
-  project design and `bench/prompts.json` for the frozen benchmark protocol.
-- `reproduce.ps1` sets up a full environment from scratch (see README).
+- Read the [README](README.md) for the 60-second picture, then
+  [`docs/benchmarks/CLAIM_EVIDENCE_MATRIX.md`](docs/benchmarks/CLAIM_EVIDENCE_MATRIX.md)
+  for how claims are justified, and
+  [`bench/prompts.json`](bench/prompts.json) for the frozen protocol.
+- `.\quickstart.ps1 -Mode Fast` sets up everything and generates a first
+  image; `reproduce.ps1` covers the Phase-1 diffusers baseline.
 
-## Running the tests
+## Running the tests (no GPU needed)
 
 ```
-uv run --with pytest --with jsonschema --with matplotlib --with ruff --with requests pytest tests/ -v
+uv run --with pytest --with jsonschema --with matplotlib --with pillow --with numpy --with requests pytest tests/ -v
+uv run --with ruff ruff check .
 ```
 
-No GPU is required for the test suite; GPU-dependent scripts under
-`phase1-diffusers/` are verified separately.
+This is exactly what the CPU CI gate runs. GPU validation is a separate
+manual, self-hosted workflow (`.github/workflows/gpu-validation.yml`) — a
+GitHub-hosted runner has no Radeon and is never claimed as GPU-verified.
 
-## Commit style
+## Making changes
 
-Conventional commits (`feat:`, `fix:`, `docs:`, `data:`, `chore:`). Keep
-commits atomic.
+- Conventional commits (`feat:`, `fix:`, `docs:`, `data:`, `chore:`); keep
+  them atomic.
+- **Never edit anything under `bench/results/`** — history is read-only.
+  New runs go into new directories (`run_variant.ps1` does this for you).
+- New performance/quality claims must land with their records and a row in
+  the claim matrix; PRs without evidence get downgraded or bounced.
+- README.md and README.zh-CN.md are mirrors — update both.
+- Scan any committed log output for secrets first:
+  `grep -riEl 'ghp_|gho_|hf_[A-Za-z0-9]{20}|api[_-]?key|password|authorization:|secret' <dir>`
 
 ## Reporting issues
 
-Include: full environment info (output of `tools/snapshot_env.py`), complete
-error output as text (not screenshots), and a minimal reproducer. Issues
-related to ROCm on Windows are triaged in `docs/issues/`.
+Use the issue templates. Bug reports need the output of
+`python -I tools\snapshot_env.py` and complete error text (not screenshots).
+ROCm-on-Windows problems are triaged in `docs/issues/` first, then posted
+upstream with links. GPU reports from untested cards are welcome and feed
+the community support matrix (CC-BY-4.0 with attribution to you).

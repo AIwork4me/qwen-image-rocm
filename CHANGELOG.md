@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026-11-01 — Release readiness (v0.1.0-rc1)
+
+**Quickstart**: `.\quickstart.ps1 -Mode Fast|Quality` — one command from
+clone to first image (env/GPU/gfx1100 checks, pinned venv + AMD wheels,
+pinned ComfyUI commit, sha256-verified resumable weight downloads,
+Radeon-required health gate, benchmark-driver smoke with cold/warm report;
+no silent CPU fallback; port-safe process handling everywhere). Dogfooded
+on the target GPU in both modes (Fast: boot 8.1 s / cold 12.1 s / warm
+8.11 s; Quality: cold 59.4 s / warm 46.4 s).
+**The production triple finally measured as a whole** (turbo int8 DiT +
+int8 TE + ck + `--disable-smart-memory`): warm medians 8.30/9.06/8.09 s
+(n=9), fresh-prompt +1.2 s, cold 17.1 s, sampled VRAM peak ≈ 7.7 GB; LPIPS
+fidelity vs e8: 0.012/0.058/0.014 (formal grid verdict pending owner).
+**2048² re-probed** on the triple config: warm 40.2 s / cold 43.3 s,
+sampled peak ≈ 8.3 GB (second session, second prompt — probe tier).
+**CI fixed & split**: checkout-dir-independent repo-root test (root cause
+of red main), explicit CPU test gate + manual self-hosted GPU validation
+workflow. **Evidence docs**: claim→evidence matrix, real-world latency
+(cold/fresh/warm split with sampling semantics), 2048 validation ledger,
+quality methodology (LPIPS semantics + verdict ledger), baseline audit.
+**Product README** (en/zh mirrors) with real gallery + provenance, support
+matrix, quickstart, forbidden-framings enforcement; social preview built
+from real outputs (CJK-verified). `bench/run_variant.ps1` no longer kills
+unrelated processes on its port. Issue/PR templates, troubleshooting,
+legal & attribution, v0.1.0-rc1 (owner-gated). 66 CPU tests green, ruff
+clean; secret scan clean on all new logs.
+
 ## 2026-11-01 — Phase 4: RCA verification + upstream contribution track
 
 Finding 1 (flash/mem-efficient SDPA `hipErrorInvalidValue`) **verified
