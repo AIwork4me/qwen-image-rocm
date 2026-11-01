@@ -21,16 +21,20 @@ ASSETS = REPO / "assets"
 COPIES = [
     (RAW / "2026-11-01-r1-triple/p1-zh-scene-42-r0.png",
      "fast-1024-p1-zh-scene-seed42.png",
-     "Fast profile (turbo int8 DiT + int8 TE + ck + nosmart), 1024², 8 steps, seed 42, p1-zh-scene — run 2026-11-01-r1-triple (r0 measure)"),
+     "Fast profile (turbo int8 DiT + int8 TE + ck + nosmart), 1024², 8 steps,"
+     " seed 42, p1-zh-scene — run 2026-11-01-r1-triple (r0 measure)"),
     (RAW / "2026-11-01-r1-triple/p2-en-scene-42-r0.png",
      "fast-1024-p2-en-scene-seed42.png",
-     "Fast profile, 1024², 8 steps, seed 42, p2-en-scene — run 2026-11-01-r1-triple (r0 measure)"),
+     "Fast profile, 1024², 8 steps, seed 42, p2-en-scene"
+     " — run 2026-11-01-r1-triple (r0 measure)"),
     (RAW / "2026-11-01-r1-triple/p3-poster-text-42-r0.png",
      "fast-1024-p3-poster-seed42.png",
-     "Fast profile, 1024², 8 steps, seed 42, p3-poster-text (Chinese typography) — run 2026-11-01-r1-triple (r0 measure)"),
+     "Fast profile, 1024², 8 steps, seed 42, p3-poster-text (Chinese"
+     " typography) — run 2026-11-01-r1-triple (r0 measure)"),
     (RAW / "2026-11-01-r2-2048fast/p2-en-scene-42-r0.png",
      "fast-2048-p2-en-scene-seed42.png",
-     "Fast profile, 2048² native, 8 steps, seed 42, p2-en-scene — run 2026-11-01-r2-2048fast (r0 measure)"),
+     "Fast profile, 2048² native, 8 steps, seed 42, p2-en-scene"
+     " — run 2026-11-01-r2-2048fast (r0 measure)"),
 ]
 
 PREVIEW_TILES = ["fast-1024-p1-zh-scene-seed42.png", "fast-1024-p3-poster-seed42.png",
@@ -88,7 +92,9 @@ def make_preview() -> None:
                      x0 + (i % 2) * (tw + gap) + tw, 36 + (i // 2) * (th + gap) + th],
                     outline=(90, 160, 255), width=2)
     # left: text block
-    f1 = font(52); f2 = font(30); f3 = font(24, bold=False)
+    f1 = font(52)
+    f2 = font(30)
+    f3 = font(24, bold=False)
     d.text((44, 70), "Qwen-Image 2.1", font=f1, fill=(240, 244, 255))
     d.text((44, 140), "on AMD Radeon GPUs", font=f1, fill=(90, 200, 250))
     d.text((44, 236), "Native Windows ROCm  ·  RX 7900 XTX 24 GB", font=f2, fill=(200, 210, 230))
