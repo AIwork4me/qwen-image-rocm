@@ -1,5 +1,7 @@
 # DRAFT issue — huggingface/accelerate (finding #4)
 
+**POSTED 2026-11-01 (user-approved):** https://github.com/huggingface/accelerate/issues/4488
+
 Target: https://github.com/huggingface/accelerate (new issue)
 Channel: issue (data point + doc suggestion). User posts or authorizes gh.
 

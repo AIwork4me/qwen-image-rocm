@@ -1,13 +1,13 @@
-# DRAFT — comfy-kitchen / ComfyUI RDNA3-Windows attention perf data point
+# DRAFT — comfy-kitchen RDNA3-Windows attention perf data point
 
-Target: comfyanonymous/ComfyUI discussion (perf data), or comfy-kitchen
-repo issue if maintainers prefer. Channel: discussion post; user posts or
+**POSTED 2026-11-01 (user-approved) as comfy-kitchen issue:** https://github.com/Comfy-Org/comfy-kitchen/issues/292
+
+Target: Comfy-Org/comfy-kitchen (issue). Channel: issue; user posts or
 authorizes gh.
 
 ---
 
-## Windows/RDNA3 data point: `--use-ck-attention` (comfy-kitchen 0.2.40)
-## is 1.30–1.37x vs default attention at 1024² (Qwen-Image-2.1)
+## Windows/RDNA3 data point: `--use-ck-attention` (comfy-kitchen 0.2.40) is 1.30–1.37x vs default attention at 1024² (Qwen-Image-2.1)
 
 There is no public Windows-RDNA3 benchmark for the Comfy Kitchen HIP
 attention backends that I could find, so here is a reproducible one.

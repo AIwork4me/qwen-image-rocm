@@ -162,8 +162,9 @@ cpu_offload 权重搬运（31GB 过 PCIe）+ 3.66s/step 去噪；ComfyUI 让 DiT
    而 diffusers/transformers 会整体失败。同样的坏 kernel，不同的消费者
    韧性；证据（日志行 + 两张输出图的 SHA256）见
    [issue 1](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)。
-   Phase 4 草案提议把该探测模式移植上游——
-   [草案](docs/upstream/INDEX.md)（全部待用户批准，未发布）。
+   Phase 4 已把该探测模式提议发到上游——
+   [transformers#50211](https://github.com/huggingface/transformers/issues/50211)
+   （6 项已批准贡献已于 2026-11-01 全部发布：[INDEX](docs/upstream/INDEX.md)）。
 
 ## 许可
 

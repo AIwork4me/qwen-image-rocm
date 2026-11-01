@@ -1,9 +1,13 @@
 # Issue: hipErrorInvalidValue during Qwen3-VL text-encoder forward on Windows ROCm (gfx1100)
 
 - Date found: 2026-10-30
-- Status: LOGGED (Phase 1 hard blocker; minimal workaround attempted)
-- Suspected layer: PyTorch ROCm Windows kernel / SDPA backend (TBD — async error)
-- Phase 4 RCA required
+- Status: **VERIFIED + UPSTREAM-REPORTED (2026-11-01)** — root cause
+  TheRock#7315/#7992 (AOTriton runtime/images mismatch); our gfx1100
+  data point posted (user-approved):
+  [TheRock#7315 comment](https://github.com/ROCm/TheRock/issues/7315#issuecomment-6554228687);
+  consumer-resilience proposal posted as
+  [transformers#50211](https://github.com/huggingface/transformers/issues/50211)
+- Suspected layer: PyTorch ROCm Windows kernel / SDPA backend (confirmed: SDPA flash/mem-efficient launch failures)
 
 ## UPDATE 2026-11-01: 2048-square UNBLOCKED by native int8 quantization (Phase 3 E2)
 

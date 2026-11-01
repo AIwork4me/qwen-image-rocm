@@ -1,7 +1,10 @@
 # Issue: first-warmup pagefile thrash (6x step time) with cpu_offload on 32GB-RAM Windows
 
 - Date found: 2026-10-30
-- Status: LOGGED (observation; recovered on its own — steady state unaffected)
+- Status: **REPORTED UPSTREAM (2026-11-01, user-approved):**
+  [accelerate#4488](https://github.com/huggingface/accelerate/issues/4488)
+  (Phase 4 added: thrash cost is backend-dependent — flash immune, dense
+  math allocations hit hardest; see W2 evidence)
 - Layer: Windows memory management x accelerate cpu_offload interaction
 
 ## Context

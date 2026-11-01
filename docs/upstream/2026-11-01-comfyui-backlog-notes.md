@@ -1,5 +1,7 @@
 # DRAFT backlog notes — comfyanonymous/ComfyUI (optional, only if time)
 
+**POSTED 2026-11-01 (user-approved) as two ComfyUI issues:** VAEDecodeTiled https://github.com/Comfy-Org/ComfyUI/issues/17469 · fp16_accumulation https://github.com/Comfy-Org/ComfyUI/issues/17470
+
 Two Windows-ROCm-observed behaviors worth upstream issues if maintainers
 agree they are actionable. Lower priority than items 1–5 (user may skip).
 

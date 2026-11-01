@@ -1,5 +1,7 @@
 # DRAFT comment — ROCm/TheRock#7315 (do NOT post without user approval)
 
+**POSTED 2026-11-01 (user-approved):** https://github.com/ROCm/TheRock/issues/7315#issuecomment-6554228687
+
 Target: https://github.com/ROCm/TheRock/issues/7315 (OPEN)
 Channel: comment — user posts personally (AMD employee) or authorizes gh.
 Optional one-line cross-post: ROCm/aotriton#210.

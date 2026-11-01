@@ -1,5 +1,7 @@
 # DRAFT — transformers/diffusers SDPA failure resilience (finding #5)
 
+**POSTED 2026-11-01 (user-approved) as transformers issue:** https://github.com/huggingface/transformers/issues/50211
+
 Target: huggingface/transformers (+ diffusers follow-up)
 Channel: issue first (design discussion), then PR. Root cause is upstream
 in the torch wheel (TheRock#7315) — this is NOT a dup of it; it asks how

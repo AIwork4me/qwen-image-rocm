@@ -17,7 +17,9 @@ per-backend SDPA probe; discriminates broken/good builds in ~15 s).
 Six upstream drafts staged in `docs/upstream/` (TheRock#7315 comment,
 transformers/diffusers SDPA resilience, accelerate pagefile issue,
 hf#4196 comment, comfy-kitchen RDNA3-Windows data, ComfyUI backlog) —
-**all user-gated, nothing posted**. Stack-switch decision sheet at
+**user-approved and all posted 2026-11-01** (links in
+`docs/upstream/INDEX.md`: TheRock#7315 comment, transformers#50211,
+accelerate#4488, hf#4196 comment, comfy-kitchen#292, ComfyUI#17469/17470). Stack-switch decision sheet at
 `docs/phase4-stack-switch-decision.md` (baselines unchanged). Ruling:
 `patches/` intentionally NOT created — the fixes live in upstream
 versions/builds (7.14.0, upstream merged patches), not in local patches

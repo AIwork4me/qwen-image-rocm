@@ -174,8 +174,10 @@ Highlights:
    fail the whole call. Same broken kernels, different consumer
    resilience; evidence (log line + both output SHA256s) in
    [issue 1](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md).
-   Phase 4 drafts propose porting that probe pattern upstream —
-   [drafts](docs/upstream/INDEX.md) (all user-gated, unposted).
+   Phase 4 proposed porting that probe pattern upstream —
+   [transformers#50211](https://github.com/huggingface/transformers/issues/50211)
+   (all six approved contributions posted 2026-11-01:
+   [INDEX](docs/upstream/INDEX.md)).
 
 ## License
 
