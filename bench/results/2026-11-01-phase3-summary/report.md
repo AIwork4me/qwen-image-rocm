@@ -22,6 +22,20 @@ Generated 2026-11-01T08:49:13. All numbers = median of measured runs; ratios are
 
 Notes: turbo-int8 2048² probe (not in table): 42.2s steady at native resolution; int8-dit-te 2048² probe: 328s (40-step). LPIPS verdict tables: per-experiment quality.md.
 
+## AI second-opinion review (GLM-5.3-Flash, 2026-11-01, commit 558ed07)
+
+8 experiments x 9 pairs judged independently of the human pass
+([AI_JUDGE_RESULTS.json](../AI_JUDGE_RESULTS.json), prompt:
+[AI_JUDGE_PROMPT.md](../AI_JUDGE_PROMPT.md)). Outcome: **5/5 match the human
+verdicts** (A1-A4 无感, A5 略降 — AI independently flagged the same p1-r0
+composition drift that produced the 0.41 LPIPS outlier, and the p3 row's
+fidelity); **B1-B3 received their first formal verdict** (无感; the human pass
+had only scanned these near-noise-floor items) — the commit headline's
+"8/8 match" should be read as 5 match + 3 first. All 24 poster outputs were
+glyph-checked at native resolution (one suspected "30H" in a 256px grid cell
+was confirmed a thumbnail artifact of the serif 日). No >=1-grade divergence
+anywhere: the quality gate is dual-confirmed and closed.
+
 ## LPIPS quality summary (vs bf16-40 control; noise floor 0.0000)
 
 | Experiment | semantics | p1 med | p2 med | p3 med | max |

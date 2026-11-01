@@ -10,6 +10,7 @@ VAEDecodeTiled, --highvram, --fast fp16_accumulation all rejected with data.
 torch.compile blocked: `TritonMissing` at inductor backend creation.
 Measurement infra v1.3: websocket node/step timing, true VRAM peak,
 manifest-driven variants, full server lifecycle per variant, quality gates
-with determinism noise floor (0.0000). User quality verdicts pending
-(REVIEW_PACK.md).
+with determinism noise floor (0.0000). User verdicts RECORDED (turbo×3+ck 无感, w4a8 略降→rejected, 2048 praised);
+AI second opinion (GLM-5.3-Flash) dual-confirmed: 5/5 match + 3 first
+verdicts, 0 divergence >=1 grade (558ed07). Recommended configs final.
 
