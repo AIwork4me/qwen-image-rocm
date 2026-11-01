@@ -47,7 +47,7 @@ sub-quadratic-vs-math divergence; verdict is the user's grid call.
 - **Speed**: Turbo 8-step int8 DiT (`qwen_image_2.1_turbo_int8_convrot.safetensors`)
   + int8 TE + `--use-ck-attention` + `--disable-smart-memory` (not yet
   measured as a triple; the two measured pairs compound) — ~9 s/image,
-  5.2-5.5x vs bf16-40. USER QUALITY VERDICT PENDING (grids in REVIEW_PACK).
+  5.2-5.5x vs bf16-40. USER VERDICT (2026-11-01): turbo(3 variants)+ck = 无感; w4a8 = 略降 (rejected); 2048 samples 非常好. A3 (turbo-bf16) and A4 (ck-40step) rated best-in-class.
 - **Quality-safe**: bf16-40 + `--use-ck-attention` + `--disable-smart-memory`
   (~35-37 s, 1.3-1.37x, numerics-path change pending verdict) or default
   attention + `--disable-smart-memory` (bit-identical, 1.06-1.14x).

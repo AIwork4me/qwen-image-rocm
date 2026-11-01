@@ -12,10 +12,10 @@
 
 ## Verdict (user final — 三档终审)
 
-- [ ] 无感 (imperceptible)
+- [x] 无感 (imperceptible)
 - [ ] 略降 (slightly degraded)
 - [ ] 不可接受 (unacceptable)
 
-Notes: 
+Notes: user 2026-11-01: A4 几乎无感，与 A3 并列最佳 → 最高质量推荐
 
 Grids: `quality_grid.png` (256px pairs), `quality_crops_poster.png` (native-res text crops, poster prompt).

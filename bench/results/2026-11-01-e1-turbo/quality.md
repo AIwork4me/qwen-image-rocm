@@ -13,10 +13,10 @@
 
 ## Verdict (user final — 三档终审)
 
-- [ ] 无感 (imperceptible)
+- [x] 无感 (imperceptible)
 - [ ] 略降 (slightly degraded)
 - [ ] 不可接受 (unacceptable)
 
-Notes: 
+Notes: user 2026-11-01: A3 几乎无感，用户评价优于 A1/A2 → 均衡推荐
 
 Grids: `quality_grid.png` (256px pairs), `quality_crops_poster.png` (native-res text crops, poster prompt).

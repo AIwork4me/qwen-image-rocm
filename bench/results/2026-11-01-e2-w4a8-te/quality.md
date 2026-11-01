@@ -13,9 +13,9 @@
 ## Verdict (user final — 三档终审)
 
 - [ ] 无感 (imperceptible)
-- [ ] 略降 (slightly degraded)
+- [x] 略降 (slightly degraded)
 - [ ] 不可接受 (unacceptable)
 
-Notes: 
+Notes: user 2026-11-01: A5 略降 → w4a8 拒绝，int8 TE 为替代
 
 Grids: `quality_grid.png` (256px pairs), `quality_crops_poster.png` (native-res text crops, poster prompt).
