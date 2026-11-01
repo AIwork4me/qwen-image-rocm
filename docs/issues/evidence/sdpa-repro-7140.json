@@ -1,0 +1,1954 @@
+{
+  "meta": {
+    "created_at": "2026-11-01T13:12:43+08:00",
+    "torch_version": "2.12.0+rocm7.14.0",
+    "torch_git_version": "13eab2b3ef4e03999247f063bc2dde01c94e9eaa",
+    "hip_version": "7.14.60850",
+    "gfx_arch": "gfx1100",
+    "device_name": "AMD Radeon RX 7900 XTX",
+    "aotriton": {
+      "images_present": true,
+      "arches": {
+        "amd-gfx11xx": {
+          "sha1": "dd1b68b604b5258ee7a9f7b66ad95e7a82c18065",
+          "flash_kernels": [
+            "attn_fwd",
+            "bwd_kernel_dk_dv",
+            "bwd_kernel_dq",
+            "bwd_kernel_fuse",
+            "bwd_postprocess",
+            "bwd_preprocess",
+            "bwd_preprocess_varlen",
+            "debug_simulate_encoded_softmax"
+          ]
+        }
+      },
+      "dll_present": true,
+      "lib_present": true,
+      "dll_v3_symbols": true
+    },
+    "launch_blocking": false
+  },
+  "results": [
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.1,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.094,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.29,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.173,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.123,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.284,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.115,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.266,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.211,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.263,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.093,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.26,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.107,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.305,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.293,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.282,
+      "error": null
+    },
+    {
+      "seq": 64,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.112,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.11,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.49,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.17,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.163,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.395,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.154,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.38,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.138,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.355,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.109,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.369,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.166,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.429,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.405,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.381,
+      "error": null
+    },
+    {
+      "seq": 120,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.214,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.213,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.859,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.329,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.303,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.754,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.235,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.706,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.212,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.489,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.108,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.446,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.172,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.495,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.499,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 0.649,
+      "error": null
+    },
+    {
+      "seq": 256,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.826,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.916,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.567,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.954,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 0.862,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.914,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 1.173,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.959,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 1.073,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.911,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.912,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.465,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 0.967,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.762,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.761,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 5.731,
+      "error": null
+    },
+    {
+      "seq": 1024,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 10.811,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 10.782,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 83.829,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 8.46,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 8.325,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 90.777,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 12.896,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 89.233,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 12.699,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 88.667,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 11.192,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 84.031,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 8.515,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 90.791,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 88.939,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "PASS",
+      "ms": 88.561,
+      "error": null
+    },
+    {
+      "seq": 4096,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 162.883,
+      "error": null
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 162.973,
+      "error": null
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 33.48 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 116.009,
+      "error": null
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 114.119,
+      "error": null
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 34.48 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 202.023,
+      "error": null
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 34.23 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "PASS",
+      "ms": 202.796,
+      "error": null
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 33.98 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 32,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 163.604,
+      "error": null
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 33.42 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "flash",
+      "status": "PASS",
+      "ms": 118.214,
+      "error": null
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 34.42 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "none",
+      "is_causal": true,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 34.17 GiB is allocated by PyTorch, and 0 bytes is reserved by"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "bool4d",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "flash",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "mem_efficient",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "math",
+      "status": "OOM",
+      "ms": null,
+      "error": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 33.92 GiB is allocated by PyTorch, and 192.00 MiB is reserved"
+    },
+    {
+      "seq": 16384,
+      "kv_heads": 8,
+      "mask_kind": "float_add",
+      "is_causal": false,
+      "backend": "cudnn",
+      "status": "FAIL",
+      "ms": null,
+      "error": "No available kernel. Aborting execution."
+    }
+  ]
+}

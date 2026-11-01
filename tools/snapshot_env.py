@@ -23,6 +23,9 @@ def build_snapshot(
     hip_version: str | None,
     gfx_arch: str | None,
     created_at: str,
+    transformers_version: str | None = None,
+    diffusers_version: str | None = None,
+    sdpa_probe: dict | None = None,
 ) -> dict:
     return {
         "os_build": os_build,
@@ -33,6 +36,9 @@ def build_snapshot(
         "torchvision_version": torchvision_version,
         "hip_version": hip_version,
         "gfx_arch": gfx_arch,
+        "transformers_version": transformers_version,
+        "diffusers_version": diffusers_version,
+        "sdpa_probe": sdpa_probe,
         "created_at": created_at,
     }
 
@@ -76,11 +82,59 @@ def _torch_info() -> tuple[str | None, str | None, str | None, str | None]:
     return torch.__version__, torchvision_version, str(hip) if hip else None, gfx_arch
 
 
+def _framework_versions() -> tuple[str | None, str | None]:
+    """(transformers, diffusers) versions, None where not installed."""
+    versions = []
+    for name in ("transformers", "diffusers"):
+        version = None
+        if importlib.util.find_spec(name) is not None:
+            try:
+                mod = importlib.import_module(name)
+                version = getattr(mod, "__version__", None)
+            except Exception:
+                pass
+        versions.append(str(version) if version else None)
+    return (versions[0], versions[1])
+
+
+def _sdpa_probe() -> dict | None:
+    """One tiny launch per SDPA backend -> {backend: PASS/FAIL/OOM}.
+
+    None when torch or a CUDA/HIP device is unavailable (CPU-only envs,
+    torch-less envs). Uses the ComfyUI-style flush via the shared repro
+    cell runner so a kernel that fails at launch is reported, not silent.
+    """
+    if importlib.util.find_spec("torch") is None:
+        return None
+    import torch
+
+    if not torch.cuda.is_available():
+        return None
+    # script may run under python -I (no cwd/script-dir on sys.path)
+    repo_root = str(Path(__file__).resolve().parent.parent)
+    if repo_root not in sys.path:
+        sys.path.insert(0, repo_root)
+    from tools.repro.sdpa_repro import BACKENDS, run_cell
+
+    probe = {}
+    for backend in BACKENDS:
+        cell = {
+            "seq": 64,
+            "kv_heads": 32,
+            "mask_kind": "none",
+            "is_causal": True,
+            "backend": backend,
+        }
+        probe[backend] = run_cell(cell, warmup=0, reps=1)["status"]
+    return probe
+
+
 def collect() -> dict:
     gpu_name, driver_version = _gpu_info()
     winver = getattr(sys, "getwindowsversion", None)
     os_build = str(winver().build) if winver else platform.platform()
     torch_version, torchvision_version, hip_version, gfx_arch = _torch_info()
+    transformers_version, diffusers_version = _framework_versions()
     return build_snapshot(
         os_build=os_build,
         gpu_name=gpu_name,
@@ -91,6 +145,9 @@ def collect() -> dict:
         hip_version=hip_version,
         gfx_arch=gfx_arch,
         created_at=datetime.now().astimezone().isoformat(timespec="seconds"),
+        transformers_version=transformers_version,
+        diffusers_version=diffusers_version,
+        sdpa_probe=_sdpa_probe(),
     )
 
 

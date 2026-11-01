@@ -1,0 +1,19 @@
+{
+  "os_build": "26300",
+  "gpu_name": "AMD Radeon RX 7900 XTX",
+  "driver_version": "32.0.21030.2001",
+  "python_version": "3.12.16",
+  "torch_version": "2.12.0+rocm7.14.1",
+  "torchvision_version": "0.27.0+rocm7.14.1",
+  "hip_version": "7.14.60850",
+  "gfx_arch": "gfx1100",
+  "transformers_version": "5.22.1",
+  "diffusers_version": "0.42.1",
+  "sdpa_probe": {
+    "flash": "FAIL",
+    "mem_efficient": "FAIL",
+    "math": "PASS",
+    "cudnn": "FAIL"
+  },
+  "created_at": "2026-11-01T13:02:04+08:00"
+}

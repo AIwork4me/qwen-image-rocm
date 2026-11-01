@@ -61,6 +61,34 @@ raising; web check 2026-10-31 found no installable production path on the
 mandated repo.amd.com stack (triton-land/TheRock upstreaming work is the
 thing to watch).
 
+## Phase 4 verification (2026-11-01): Triton-on-Windows status confirmed
+
+Primary-source check (2026-11-01) — **there is still no pip-installable
+Triton for torch 2.12.0+rocm7.14.1 on native Windows**:
+
+- TheRock PR#4006 ("triton-windows integration", merged 2026-03-23)
+  builds triton wheels in TheRock's pipeline with
+  `--pytorch-rocm-arch gfx1100` tested — but **no public index serves
+  them** as of 2026-11-01.
+- `nightly.repo.amd.com/rocm/whl-next/` triton 3.8.0 wheels: **Linux
+  only**.
+- Old `rocm.nightlies.amd.com/v2` gfx110X-dgpu channel: stale
+  (2025-11-20), no triton.
+- triton-lang/triton-windows (community): supports RDNA2/3/3.5/4 but
+  requires TheRock-matched builds (torch/triton version pairing) — none
+  published for the 2.12.0+7.14.1 stable line; import-order caveat
+  tracked in its issue #35.
+
+Conclusion for finding #3: closed as **verified distribution gap** — the
+code paths exist upstream (PR#4006), the wheels just never reach a public
+index. The actionable upstream nudge (TheRock: publish triton wheels for
+the stable Windows torch line) is folded into the Phase 4 upstream drafts
+rather than a separate issue (dedup: the ask is already implied by
+triton-windows#35 discussions).
+
+W2-stretch note (whl-next nightly venv, if run): `pip install triton`
+result there → [recorded below when available]
+
 ## Environment
 
 snapshot-20261030-212234.json; Python 3.12.16; torch 2.12.0+rocm7.14.1.

@@ -171,6 +171,24 @@ Wheel AOTriton evidence (recorded 2026-11-01, phase1 venv):
 W2 contrasts this matrix against `2.12.0+rocm7.14.0` (the known-good
 build from the same index) — results below.
 
+## Phase 4 W2 result (2026-11-01): 7.14.0 all-green, cause VERIFIED locally
+
+Full write-up: [evidence/phase4-w2-7140-verification.md](evidence/phase4-w2-7140-verification.md).
+Summary:
+
+- **Zero launch failures on 7.14.0** (vs 48 on 7.14.1): every
+  hipErrorInvalidValue cell passes; only the same CPU-side rejections
+  remain (flash+mask, mem_eff+GQA, cudnn). The wheel even ships a
+  different aotriton.images set (`amd-gfx11xx`, sha `dd1b68b6…` vs
+  `amd-gfx110x`, sha `6e00ef3e…`) — consistent with the #7315/#7992
+  runtime-images mismatch lineage.
+- **Measured benefit of the fix**: flash @1024² DiT = 1.07 s/step steady
+  (3.4x vs the 3.66 s/step math baseline, 1.9 GB lower VRAM); first
+  no-workaround diffusers generation on this machine.
+- **2048² bf16**: attention now passes at S≈16k (no 32.1 GB dense
+  alloc), but VAE decode OOMs (20.25 GB conv alloc) → still blocked on
+  24 GB, different blocker (see W2 doc §3).
+
 ## Phase 2 refinement (2026-10-31): ComfyUI hits the SAME bug, survives via startup probe
 
 ComfyUI 0.43.0 (commit b5a4321), same torch stack, same GPU:
