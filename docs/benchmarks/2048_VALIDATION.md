@@ -18,40 +18,40 @@ stays ComfyUI + native int8.
 
 | Scenario | Tier | When | Evidence | Numbers |
 |---|---|---|---|---|
-| Turbo-int8 8-step, p1 (zh scene), seed 42 | single probe (cold+warmup+n=1) | 2026-11-01 (phase 3) | `bench/results/2026-11-01-e2-turbo-int8-2048-probe/` | warm 42.2 s · cold 91.5 s · sampled VRAM 21.6/12.0 GB |
-| int8 DiT+TE 40-step, p1, seed 42 | single probe (n=1) | 2026-11-01 (phase 3) | `bench/results/2026-11-01-e2-int8-dit-te-2048-probe/` | warm 328.3 s · cold 332.3 s · sampled VRAM 20.1/16.7 GB |
-| **Fast profile (full triple), p2 (en scene), seed 42** | single probe (cold+warmup+n=1), different session AND different prompt than the turbo probe above | 2026-11-01 (this session) | `bench/results/2026-11-01-r2-2048fast/` | warm 40.2 s · cold 43.3 s (incl. load) · sampled VRAM ≈ 8.3 GB |
-| Cross-session/cross-prompt consistency | implied by the two turbo probes (42.2 vs 40.2 s) | — | above two rows | Δ ≈ 5% |
+| **Fast profile (full triple), bounded matrix: 3 prompts × 3 seeds, one session, prompt switching in-session** | **MEASURED (bounded matrix)** | 2026-11-01 (this revision, closes [#4](https://github.com/AIwork4me/qwen-image-rocm/issues/4)) | `bench/results/2026-11-01-r3-2048matrix/` (13 records: cold + 3×(warmup+3 measures)) | medians p1 40.27 / p2 40.32 / **p3 typography 40.36** s; all-measures 40.24–40.45 s (spread 0.5%); cold (incl. load) 47.5 s; sampled VRAM peak 8.3–12.6 GB; fresh-prompt TE at 2048 measured 1.28–1.31 s (warmup arms) |
+| Turbo-int8 8-step, p1, seed 42 | single probe (HISTORICAL) | 2026-11-01 (phase 3) | `…-e2-turbo-int8-2048-probe/` | warm 42.2 s · cold 91.5 s · sampled VRAM 21.6/12.0 GB |
+| int8 DiT+TE 40-step, p1, seed 42 | single probe (HISTORICAL) | 2026-11-01 (phase 3) | `…-e2-int8-dit-te-2048-probe/` | warm 328.3 s · cold 332.3 s · sampled VRAM 20.1/16.7 GB |
+| Fast profile (full triple), p2, seed 42 | single probe (HISTORICAL) | 2026-11-01 (release session) | `…-r2-2048fast/` | warm 40.2 s · cold 43.3 s · sampled peak 8.3 GB |
 
-## What is NOT yet validated (explicitly)
+Cross-session consistency: three independent sessions (42.2 / 40.2 / 40.2–40.4 s)
+agree within ~5%.
 
-- **Multi-seed repeats** at 2048² (n=1 per scenario measured to date).
-- **Multi-prompt coverage within one session** (p1 and p2 each have exactly
-  one probe; p3 — the long-text poster, the hardest resolution case — has
-  **zero** 2048² runs).
-- **Fresh-prompt switching** at 2048² (no measured TE-recompute arm).
-- **Long continuous runs** (no >3-image session at 2048²).
+## Still NOT validated (explicitly)
+
+- **Long continuous runs / soak** (longest session = 13 consecutive 2048
+  generations; no multi-hour run).
 - **OOM recovery** (no deliberate pressure/recovery test).
-- **Bounded cost of closing these gaps** (estimate): a 3-prompt × 3-seed
-  Fast-profile 2048² matrix ≈ 9 × ~41 s + 2 model-reload colds ≈ **~15 min
-  GPU**; not executed in this session to keep the release-candidate scope
-  bounded. Owners can run it with:
-  `powershell -File bench\run_variant.ps1 -Experiment p4-qs-fast-1024x1024 -Date <tag> -Resolution 2048 -Measured 3`
-  (the manifest carries the full triple config).
+- **Rebooted-machine cold start** at 2048 (all boots had warm OS cache).
+- Formal quality gate at 2048: no bf16-2048 reference exists (it OOMs), so
+  LPIPS-vs-baseline is **N/A by construction**; the p3 typography output is
+  committed as a sample for eyeball review:
+  [docs/gallery/fast-2048-p3-poster-seed42.png](../gallery/fast-2048-p3-poster-seed42.png)
+  (provenance in the gallery dir) — 1024² gates remain the quality
+  evidence base.
 
 ## VRAM statement semantics
 
-All GB numbers above are **sampled** `/system_stats` polls (0.5 s) — lower
-bounds on transients, not PyTorch allocator peaks. The int8 route's ~8–12 GB
-sampled peaks leave real headroom on 24 GB; the 40-step route samples up to
-~20 GB and is the closer call.
+All GB numbers are **sampled** `/system_stats` polls (0.5 s) — lower bounds
+on transients, not PyTorch allocator peaks. The int8 route's ~8–12.6 GB
+sampled peaks leave real headroom on 24 GB.
 
 ## Allowed vs not-allowed wording
 
-- ✅ "2048² native generation demonstrated and re-probed across two sessions
-  and two prompts: ~40–42 s/image (turbo int8, 8 steps), ~328 s (int8,
-  40 steps)"
+- ✅ "2048² native: bounded matrix measured — 3 prompts × 3 seeds, medians
+  40.27/40.32/40.36 s (all measures 40.24–40.45 s), plus two earlier
+  single probes; ~328 s on the int8 40-step route (probe)"
 - ✅ "quickstart: `.\quickstart.ps1 -Mode Fast -Resolution 2048`"
-- ❌ "2048² validated / production-stable / hours of continuous use"
+- ❌ "2048² validated for production / hours of continuous use" (soak &
+  OOM-recovery untested)
 - ❌ extrapolating the 1024² 5.2–5.5× ratio to 2048² (different bottleneck
-  mix; only the probe times themselves are quotable)
+  mix; only the measured 2048 numbers are quotable)

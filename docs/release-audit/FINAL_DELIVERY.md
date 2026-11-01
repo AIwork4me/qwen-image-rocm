@@ -1,5 +1,9 @@
 # Final delivery report — release-ready v0.1.0-rc1 (2026-11-01)
 
+> **Revision round 2 appended at the bottom** — all independent-review
+> findings fixed, re-verified on the real GPU, and the 2048² bounded
+> matrix (#4) executed. Status: **READY FOR FINAL OWNER REVIEW**.
+
 ## A. What was actually done
 
 **P0 (all closed)**
@@ -115,3 +119,43 @@ Reddit, 中文社区, maintainer outreach) — nothing auto-posted.
 ## H. Merge recommendation
 
 **READY FOR OWNER REVIEW** (not self-merged by design).
+
+---
+
+# Revision round 2 — delivery addendum (2026-11-01, same day)
+
+Owner-requested independent review produced 7 P0 + 4 P1 findings. All
+fixed; verification summary (full detail in FINAL_AUDIT round-2 table):
+
+- **P0-1/2 evidence integrity**: quality.md baseline label now derived from
+  records (the r1 file claimed "bf16, 40 steps" vs actual E8 baseline);
+  LPIPS p1/p2/p3 mapping corrected repo-wide + in PR #7 body and issue #5
+  (p1=0.058 / p2=0.012 / p3=0.014; pinned by tests via quality.json).
+- **P0-3 process safety**: PID-tree ownership (`bench/portops.ps1`),
+  listeners never killed, `-KeepServer` honored; live dual-checkout decoy
+  test passed — and caught a **real PS 5.1 defect** (first CIM query in a
+  fresh process reads empty → port check now bind-probes).
+- **P0-4 weight integrity**: pinned revision `aacf31a6` + embedded sha256
+  table (LFS-pointer ↔ local-hash cross-check 8/8); digests enforced for
+  pre-existing files too; same-size-wrong-content injection tests fail
+  correctly; stamp cache cannot mask corruption.
+- **P0-5 stack verification**: ComfyUI commit drift fails closed
+  (`-AllowComfyCommitDrift` = experimental, `stack_verified=false`
+  recorded); `-SkipSetup` still verifies torch/commit/digests.
+- **P0-6/7 wording**: unified cold-start vocabulary (Server boot /
+  Ready-to-first-image / Full cold start / Warm mean+median) everywhere;
+  triple verdict remains PENDING (#5) in both READMEs.
+- **P1-8/9/10**: GPU workflow provisions clean checkouts; step-times audit
+  (105/337 records partial — inventoried, no published number derives from
+  them); quickstart results gitignored; run_variant overwrite guard.
+- **Issue #4 EXECUTED**: `2026-11-01-r3-2048matrix/` — 3 prompts × 3 seeds
+  at 2048², medians 40.27/40.32/40.36 s (incl. first-ever typography
+  runs), spread 0.5%, cold 47.5 s, sampled VRAM 8.3–12.6 GB; issue closed
+  with data; claim C3 upgraded PROBED → MEASURED (bounded matrix).
+- **Re-verification**: 91/91 CPU tests, ruff clean, live Fast + Quality
+  regressions exit 0 (full cold 20.3 s / 63.1 s), zh/en consistency audit
+  clean, worktree stays clean after user runs.
+
+Remaining before a stable tag: **#5 owner verdict** (+ manual
+social-preview upload). Not merged, not tagged, not released.
+

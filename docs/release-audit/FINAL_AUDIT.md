@@ -1,5 +1,12 @@
 # Final release audit (independent pass) — 2026-11-01
 
+> **Revision round 2** (same day, owner-requested independent review):
+> every finding from the review was fixed and re-verified; a round-2
+> section follows the original 15-point checklist. The live port-safety
+> test in round 2 caught an additional REAL defect the original audit
+> missed (PS 5.1 cold-CIM flakiness) — evidence that behavioral testing
+> beats source review.
+
 Auditor role separated from author role; nothing below passes "because I
 wrote it" — each verdict cites its check. Gate vocabulary: PASS / FAIL /
 BLOCKED / NOT APPLICABLE (no "basically done").
@@ -50,3 +57,38 @@ cost — recorded as NOT TESTED (this session).
 #5 owner verdict on the triple grid (required), #4 2048 bounded matrix
 (recommended). Social preview upload is a manual owner step (asset ready).
 No auto-merge performed; no tag created.
+
+---
+
+# Revision round 2 — independent-review findings, fixed & re-verified
+
+| # | Review finding | Fix | Verification |
+|---|---|---|---|
+| P0-1 | r1-triple quality.md labeled its baseline "bf16, 40 steps" (hardcoded) while the actual baseline was E8 turbo-int8/bf16-TE/ck @8 steps | `describe_baseline()` derives the label from the baseline's own run records; `--baseline-desc` override; fail-safe text when no records; quality.json machine echo added | quality.md regenerated (LPIPS values identical — deterministic rerun); `tests/test_quality_gate_baseline_desc.py` (6 tests incl. committed-md assertions) |
+| P0-2 | LPIPS per-prompt mapping transposed in docs (0.012/0.058/0.014 presented as p1/p2/p3) | corrected everywhere to p1=0.058 / p2=0.012 / p3=0.014 (original values untouched) | grep-verified across README/zh/CHANGELOG/matrix/methodology/delivery + PR #7 body + issue #5 body edited; mapping now PINNED by a test reading quality.json |
+| P0-3 | kill-by-command-line-string ownership; default killed existing listeners | `bench/portops.ps1`: PID-tree ownership only; existing listeners never touched (spare-port fallback); teardown = own started tree only; `-KeepServer` honored with printed PIDs; string matching deleted | static contract tests (7) + **live dual-checkout test**: decoy with "phase2-comfyui" in its command line held 8188 through a full Fast run (untouched), quickstart took 8189, teardown freed 8189, decoy survived until manually killed |
+| P0-3b (found live) | **PS 5.1 cold-CIM flake**: the first NetTCPIP/CIM query in a fresh process transiently returns empty → occupied port read "free" → server died on bind | `Test-PortBusy` now **bind-probes** (the same syscall the server uses); CIM warmed at dot-source for informational queries | reproduced (porttest -File said False while bind failed), fixed, re-run of the full live test passed; minimal repro + fix rationale in code comments |
+| P0-4 | size-only "present" check = digest bypass for pre-existing files | revision `aacf31a6` pinned; sha256 table embedded in-repo (provenance: LFS pointers via mirror AND full local-file hashes — 8/8 match); digest enforced for EVERY file EVERY run; stamp cache keyed size+mtime (corruption re-hashes); official-vs-mirror distinction documented (trust anchor = in-repo table, not transport) | live run verified all three Fast files + all three Quality files; injection tests: same-size-wrong-content FAILS, truncated FAILS, absent FAILS, cache cannot mask corruption |
+| P0-5 | ComfyUI commit drift only warned; `-SkipSetup` skipped verification | drift fails closed unless `-AllowComfyCommitDrift` (run recorded `stack_verified=false` in provisioning.json); `-SkipSetup` still verifies torch pin + commit + digests | static contract tests; live runs printed pinned-commit OK and `stack_verified=True` |
+| P0-6 | "cold start" conflated ready-to-first with full cold | unified 4-metric vocabulary (Server boot / Ready-to-first-image / Full cold start / Warm mean+median) in quickstart output, provisioning.json, REAL_WORLD_LATENCY, READMEs, rc1 | live output shows all four; docs audited for stale wording |
+| P0-7 | triple verdict must stay PENDING until #5 | READMEs (en/zh) now state verdict status explicitly: turbo-int8+ck judged (A1); triple = LPIPS-gated, formal verdict PENDING #5 | wording sweep + zh/en consistency audit script (all key numbers/labels present in both, no stale forms) |
+| P1-8 | GPU workflow assumed venv/weights exist | runs full quickstart (no -SkipSetup) on a clean checkout; snapshot moved after provisioning; drift fails closed there | workflow file rewritten; same provisioning path live-verified earlier in the clean-clone acceptance |
+| P1-9 | step_times_s completeness unchecked | `tools/check_step_times.py` + tests; corpus scanned: 337 records → 183 complete / **105 incomplete** (step-1 event loss in warmup/fresh/cold) / 49 monitor-absent (pre-v1.3) | finding documented in REAL_WORLD_LATENCY + no published number derives from step arrays (totals/node timings are server-side) — verified by re-reading claim sources |
+| P1-10 | quickstart dirtied the git worktree; run_variant could clobber records | results under gitignored `bench/results/quickstart/`; `run_variant` refuses existing record dirs without `-OverwriteResults` | live run left `git status` clean; overwrite guard present + contract-tested |
+| #4 | 2048² bounded matrix not executed | executed: `2026-11-01-r3-2048matrix/` | medians 40.27/40.32/40.36 s (p1/p2/p3 — **first 2048² typography runs**), all measures 40.24–40.45 s, cold 47.5 s, sampled VRAM 8.3–12.6 GB; issue #4 closed with data; docs/matrix/rc1/READMEs upgraded from probe-tier wording |
+
+## Round-2 gate summary
+
+- CPU tests: **91 passed** (66 → 91: quickstart suite 11→15 with digest
+  injection/cache tests; +7 baseline-desc; +5 step-times audit; +9 PS
+  safety contracts), ruff clean
+- Live GPU regressions after the changes: Fast exit 0 (full cold start
+  20.3 s, warm mean 8.15 s), Quality exit 0 (full cold start 63.1 s, warm
+  mean 46.22 s), 2048 matrix exit 0 (13 records)
+- Historical evidence untouched (`bench/results` additions only; no edits
+  to pre-existing record files — r1 quality.md regenerated by the fixed
+  tool with identical numbers, label corrected as an errata of our own
+  round-1 file, not of frozen phase-3 evidence)
+- Remaining blocker before a stable tag: **#5 owner verdict only**
+  (+ manual social-preview upload). Status: **READY FOR FINAL OWNER
+  REVIEW**.

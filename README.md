@@ -11,7 +11,7 @@ number on this page.
 |---|---|---|
 | **1024² generation, Fast mode** | **~8–9 s / image (warm)** | Same prompt, models resident, text-encoder cached. Full cold start 20–46 s, changed prompt ≈ +1.2 s → [real-world latency](docs/benchmarks/REAL_WORLD_LATENCY.md) |
 | **Speedup vs bf16-40 baseline** | **5.2–5.5× (warm, paired)** | Same-session measured pair; images differ (8-step turbo) — quality judged by humans on the frozen grid, not assumed lossless |
-| **2048² native resolution** | **~40–42 s / image** | Demonstrated + re-probed across sessions/prompts; bounded validation pending — [details](docs/benchmarks/2048_VALIDATION.md) |
+| **2048² native resolution** | **40.2–40.4 s / image** | Bounded matrix measured: 3 prompts × 3 seeds, spread 0.5%, first-ever 2048² typography runs — soak/OOM-recovery not claimed — [details](docs/benchmarks/2048_VALIDATION.md) |
 | Tested GPU / OS | RX 7900 XTX (gfx1100) · Windows 11 | Native Windows ROCm — no WSL2, no CPU fallback. Other GPUs untested (fail-closed by default) |
 | ROCm stack | torch 2.12.0+rocm7.14.1 · ComfyUI pinned | Pinned AMD wheels, pinned ComfyUI commit, schema-validated run records |
 
@@ -63,7 +63,7 @@ Phase-1 diffusers reproduction stays available: `.\reproduce.ps1 -Quick`.
 |---|---|---|
 | Config | Turbo 8-step · int8 DiT + int8 TE · `--use-ck-attention` · `--disable-smart-memory` | bf16 40-step · `--disable-smart-memory` |
 | 1024² warm | ~8–9 s | ~45–51 s |
-| 2048² | ✅ ~40–42 s | ❌ (bf16 VAE decode OOMs on 24 GB) |
+| 2048² | ✅ 40.2–40.4 s (bounded matrix, n=9) | ❌ (bf16 VAE decode OOMs on 24 GB) |
 | Output vs baseline | different (8-step schedule). Verdict status: turbo-int8+ck judged 无感 on the frozen grid (A1); the **full triple is LPIPS-gated vs e8 (0.058/0.012/0.014, p1/p2/p3) with the formal grid verdict PENDING owner review ([#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5))**; int8 quantization near-lossless (LPIPS 0.004–0.060) | **bit-identical** (LPIPS 0.0000) |
 | Weights on disk | ~18 GB | ~32 GB |
 
@@ -94,7 +94,7 @@ Unified vocabulary — defined precisely in
 | **Full cold start** (launch → 1st PNG) | **20.2 s** | **45.5 s** |
 | Fresh prompt (text changed) | ~10 s | — |
 | Warm repeat (new seed), mean | 8.1–8.6 s | — |
-| 2048² Fast (ready-to-first / warm) | 43.3 s / 40.2 s | single-prompt probes |
+| 2048² Fast (ready-to-first / warm) | 43.3 s / 40.3 s | warm = 3×3 bounded matrix |
 
 Quality (bf16-40): full cold start 67.5 s, warm ~46 s. Rebooted-machine
 cold start **not tested**; VRAM figures are 0.5 s samples (lower bounds).
@@ -147,7 +147,8 @@ Key results (medians of measured runs; full tables in
 
 - Warm numbers ≠ user latency (cold/fresh/warm are separated
   [here](docs/benchmarks/REAL_WORLD_LATENCY.md)).
-- 2048² validation is two probes deep, not a soak test
+- 2048² is validated to bounded-matrix depth (13 consecutive generations);
+  soak/OOM-recovery untested
   ([ledger](docs/benchmarks/2048_VALIDATION.md)).
 - VRAM figures are 0.5 s samples — lower bounds on transients.
 - Quality verdicts describe the frozen 3-prompt × 3-seed set, nothing wider.
@@ -185,9 +186,10 @@ Real-workload RCA with minimal reproducers — all posted upstream
 
 ## Roadmap
 
-- [ ] 2048² bounded matrix (3 prompts × 3 seeds, ~15 min GPU) — closes the
-      biggest evidence gap
-- [ ] Formal three-tier verdict on the production-triple grid (owner review)
+- [x] 2048² bounded matrix (3 prompts × 3 seeds) — **done 2026-11-01**:
+      medians 40.27/40.32/40.36 s, spread 0.5%, first-ever 2048² typography
+      runs ([#4](https://github.com/AIwork4me/qwen-image-rocm/issues/4))
+- [ ] Formal three-tier verdict on the production-triple grid (owner review, [#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5))
 - [ ] Rebooted-cold-start measurement (true disk-bound first boot)
 - [ ] Stack-switch trial: default to 7.14.0 flash (3.4× attention) behind an
       opt-in once upstream ships the fix in a stable tag

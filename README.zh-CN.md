@@ -8,7 +8,7 @@
 |---|---|---|
 | **1024² 生成 · Fast 模式** | **~8–9 秒/张（热态）** | 同一 prompt、模型常驻、文本编码缓存命中。完整冷启动 20–46 s，改 prompt ≈ +1.2 s → [真实延迟](docs/benchmarks/REAL_WORLD_LATENCY.md) |
 | **相对 bf16-40 基线加速** | **5.2–5.5×（热态、同会话配对）** | 同会话实测配对；8 步 turbo 输出必然不同——画质经人工目检裁决，未宣称无损 |
-| **2048² 原生分辨率** | **~40–42 秒/张** | 已演示并跨会话/跨 prompt 复测；有界验证仍待补 → [明细](docs/benchmarks/2048_VALIDATION.md) |
+| **2048² 原生分辨率** | **40.2–40.4 秒/张** | 有界矩阵实测：3 prompt × 3 seed、离散 0.5%，含首次 2048² 排版海报运行；不宣称长时间稳定性 → [明细](docs/benchmarks/2048_VALIDATION.md) |
 | 测试硬件 / 系统 | RX 7900 XTX (gfx1100) · Windows 11 | 原生 Windows ROCm，不用 WSL2、不静默回退 CPU。其他 GPU 未测（默认拒绝执行） |
 | ROCm 栈 | torch 2.12.0+rocm7.14.1 · ComfyUI 固定 commit | AMD 轮子固定版本、ComfyUI 锁 commit、运行记录过 schema 校验 |
 
@@ -56,7 +56,7 @@ Phase-1 diffusers 复现入口保留：`.\reproduce.ps1 -Quick`。
 |---|---|---|
 | 配置 | Turbo 8 步 · int8 DiT + int8 TE · `--use-ck-attention` · `--disable-smart-memory` | bf16 40 步 · `--disable-smart-memory` |
 | 1024² 热态 | ~8–9 s | ~45–51 s |
-| 2048² | ✅ ~40–42 s | ❌（bf16 VAE 解码在 24 GB 上 OOM） |
+| 2048² | ✅ 40.2–40.4 s（有界矩阵，n=9） | ❌（bf16 VAE 解码在 24 GB 上 OOM） |
 | 输出 vs 基线 | 不同（8 步调度）。裁决状态：turbo-int8+ck 已在冻结网格上判"无感"（A1）；**完整三联组合仅通过 vs e8 的 LPIPS 门（0.058/0.012/0.014，p1/p2/p3），正式网格裁决待 owner 复核（[#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5)）**；int8 量化近无损（LPIPS 0.004–0.060） | **逐位一致**（LPIPS 0.0000） |
 | 磁盘权重 | ~18 GB | ~32 GB |
 
@@ -85,7 +85,7 @@ quickstart 不可能偏离已测配置。画质评判方法见
 | **完整冷启动**（启动 → 首图） | **20.2 s** | **45.5 s** |
 | 换 prompt（文本变化） | ~10 s | — |
 | 热态重复（换 seed）均值 | 8.1–8.6 s | — |
-| 2048² Fast（就绪到首图 / 热态） | 43.3 s / 40.2 s | 单 prompt 探测 |
+| 2048² Fast（就绪到首图 / 热态） | 43.3 s / 40.3 s | 热态 = 3×3 有界矩阵 |
 
 Quality（bf16-40）：完整冷启动 67.5 s、热态 ~46 s。重启后的冷启动
 **未测**；VRAM 数字为 0.5 s 采样值（下界）。
@@ -136,7 +136,7 @@ powershell -File bench\run_variant.ps1 -Experiment p3-turbo-int8-ck-te-nosmart-1
 
 - 热态数字 ≠ 用户延迟（冷/换词/热三分，
   见[真实延迟](docs/benchmarks/REAL_WORLD_LATENCY.md)）。
-- 2048² 验证深度为两次探测，非长时间稳定性测试
+- 2048² 验证深度为有界矩阵（连续 13 次生成）；长时间稳定性/OOM 恢复未测
   （[台账](docs/benchmarks/2048_VALIDATION.md)）。
 - VRAM 为 0.5 s 采样值——瞬态峰值的下界。
 - 画质裁决只覆盖冻结的 3 prompt × 3 seed 集合，不外推。
@@ -170,8 +170,10 @@ powershell -File bench\run_variant.ps1 -Experiment p3-turbo-int8-ck-te-nosmart-1
 
 ## 路线图
 
-- [ ] 2048² 有界矩阵（3 prompt × 3 seed，约 15 分钟 GPU）——补最大证据缺口
-- [ ] 生产组合网格的正式三档裁决（owner 复核）
+- [x] 2048² 有界矩阵（3 prompt × 3 seed）——**2026-11-01 完成**：中位数
+      40.27/40.32/40.36 s、离散 0.5%，p3 排版海报首次 2048² 运行
+     （[#4](https://github.com/AIwork4me/qwen-image-rocm/issues/4)）
+- [ ] 生产组合网格的正式三档裁决（owner 复核，[#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5)）
 - [ ] 重启后冷启动测量（真实磁盘首启）
 - [ ] 切栈试用：上游修复进入稳定 tag 后，默认切 7.14.0 flash（注意力 3.4×）
 - [ ] 更广的画质套件（人像、产品、长英文 prompt）——独立、明确标注的新集

@@ -8,3 +8,4 @@ Do not crop/recolor these files — they are evidence.
 - `fast-1024-p2-en-scene-seed42.png` — Fast profile, 1024², 8 steps, seed 42, p2-en-scene — run 2026-11-01-r1-triple (r0 measure)
 - `fast-1024-p3-poster-seed42.png` — Fast profile, 1024², 8 steps, seed 42, p3-poster-text (Chinese typography) — run 2026-11-01-r1-triple (r0 measure)
 - `fast-2048-p2-en-scene-seed42.png` — Fast profile, 2048² native, 8 steps, seed 42, p2-en-scene — run 2026-11-01-r2-2048fast (r0 measure)
+- `fast-2048-p3-poster-seed42.png` — Fast profile, 2048² native, 8 steps, seed 42, p3-poster-text (Chinese typography at native resolution) — run 2026-11-01-r3-2048matrix (r0 measure, bounded-matrix session)
