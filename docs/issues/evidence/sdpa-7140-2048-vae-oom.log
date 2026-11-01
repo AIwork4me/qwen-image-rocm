@@ -1,0 +1,131 @@
+C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\diffusers\utils\deprecation_utils.py:23: FutureWarning: `torch_dtype` is deprecated and will be removed in version 1.0.0. Please use `dtype` instead.
+  deprecate("torch_dtype", "1.0.0", _TORCH_DTYPE_DEPRECATION_MESSAGE)
+Loading pipeline components...:   0%|          | 0/5 [00:00<?, ?it/s]
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s][ALoading checkpoint shards: 100%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 2/2 [00:00<00:00, 27.10it/s]
+Loading pipeline components...:  20%|¨€¨€        | 1/5 [00:00<00:00,  8.78it/s]Loading pipeline components...:  40%|¨€¨€¨€¨€      | 2/5 [00:00<00:01,  1.82it/s]
+Loading weights:   0%|          | 0/750 [00:00<?, ?it/s][A
+Loading weights:   0%|          | 2/750 [00:00<01:34,  7.90it/s][A
+Loading weights:   1%|¨‡         | 10/750 [00:00<00:25, 28.95it/s][A
+Loading weights:   2%|¨‡         | 14/750 [00:01<00:35, 20.57it/s][A
+Loading weights:   2%|¨‡         | 17/750 [00:01<01:01, 11.98it/s][A
+Loading weights:   3%|¨†         | 19/750 [00:01<01:22,  8.81it/s][A
+Loading weights:   3%|¨†         | 21/750 [00:01<01:14,  9.85it/s][A
+Loading weights:   3%|¨†         | 23/750 [00:02<01:22,  8.84it/s][A
+Loading weights:   3%|¨†         | 25/750 [00:02<01:28,  8.22it/s][A
+Loading weights:   4%|¨†         | 27/750 [00:02<01:33,  7.73it/s][A
+Loading weights:   4%|¨†         | 28/750 [00:02<01:46,  6.81it/s][A
+Loading weights:   4%|¨…         | 29/750 [00:03<02:08,  5.63it/s][A
+Loading weights:   4%|¨…         | 32/750 [00:03<01:28,  8.14it/s][A
+Loading weights:   4%|¨…         | 33/750 [00:03<01:36,  7.46it/s][A
+Loading weights:   5%|¨…         | 37/750 [00:03<01:18,  9.06it/s][A
+Loading weights:   5%|¨„         | 39/750 [00:04<01:20,  8.82it/s][A
+Loading weights:   5%|¨„         | 40/750 [00:04<01:22,  8.56it/s][A
+Loading weights:   5%|¨„         | 41/750 [00:04<01:52,  6.29it/s][A
+Loading weights:   6%|¨„         | 42/750 [00:04<02:12,  5.35it/s][A
+Loading weights:   8%|¨‚         | 58/750 [00:05<00:27, 24.72it/s][A
+Loading weights:   8%|¨‚         | 62/750 [00:05<00:34, 20.00it/s][A
+Loading weights:   9%|¨‚         | 65/750 [00:05<00:44, 15.27it/s][A
+Loading weights:  10%|¨         | 74/750 [00:06<00:35, 18.83it/s][A
+Loading weights:  10%|¨€         | 77/750 [00:06<00:33, 19.87it/s][A
+Loading weights:  11%|¨€         | 80/750 [00:06<00:46, 14.56it/s][A
+Loading weights:  11%|¨€         | 82/750 [00:07<01:02, 10.62it/s][A
+Loading weights:  12%|¨€¨‡        | 88/750 [00:07<00:54, 12.11it/s][A
+Loading weights:  13%|¨€¨†        | 94/750 [00:07<00:46, 14.06it/s][A
+Loading weights:  13%|¨€¨†        | 96/750 [00:08<00:54, 12.10it/s][A
+Loading weights:  13%|¨€¨†        | 98/750 [00:08<00:59, 10.93it/s][A
+Loading weights:  13%|¨€¨†        | 100/750 [00:08<01:11,  9.04it/s][A
+Loading weights:  13%|¨€¨†        | 101/750 [00:09<01:27,  7.39it/s][A
+Loading weights:  14%|¨€¨…        | 105/750 [00:09<01:09,  9.22it/s][A
+Loading weights:  14%|¨€¨…        | 106/750 [00:09<01:12,  8.85it/s][A
+Loading weights:  14%|¨€¨…        | 107/750 [00:09<01:45,  6.12it/s][A
+Loading weights:  15%|¨€¨…        | 110/750 [00:10<01:20,  7.95it/s][A
+Loading weights:  15%|¨€¨…        | 111/750 [00:10<01:29,  7.11it/s][A
+Loading weights:  15%|¨€¨…        | 112/750 [00:10<01:58,  5.39it/s][A
+Loading weights:  15%|¨€¨„        | 113/750 [00:11<02:27,  4.33it/s][A
+Loading weights:  15%|¨€¨„        | 114/750 [00:11<02:49,  3.74it/s][A
+Loading weights:  16%|¨€¨„        | 118/750 [00:11<01:47,  5.89it/s][A
+Loading weights:  16%|¨€¨„        | 121/750 [00:12<01:29,  7.06it/s][A
+Loading weights:  16%|¨€¨ƒ        | 122/750 [00:12<01:25,  7.32it/s][A
+Loading weights:  16%|¨€¨ƒ        | 123/750 [00:12<01:59,  5.23it/s][A
+Loading weights:  17%|¨€¨ƒ        | 124/750 [00:13<02:22,  4.39it/s][A
+Loading weights:  17%|¨€¨ƒ        | 126/750 [00:13<01:55,  5.42it/s][A
+Loading weights:  17%|¨€¨ƒ        | 127/750 [00:13<02:16,  4.57it/s][A
+Loading weights:  20%|¨€¨        | 149/750 [00:13<00:19, 30.18it/s][A
+Loading weights:  24%|¨€¨€¨…       | 180/750 [00:13<00:08, 69.35it/s][A
+Loading weights:  28%|¨€¨€¨‚       | 211/750 [00:14<00:04, 108.19it/s][A
+Loading weights:  32%|¨€¨€¨€¨‡      | 238/750 [00:14<00:03, 139.15it/s][A
+Loading weights:  36%|¨€¨€¨€¨„      | 270/750 [00:14<00:02, 173.41it/s][A
+Loading weights:  39%|¨€¨€¨€¨      | 296/750 [00:14<00:02, 188.39it/s][A
+Loading weights:  43%|¨€¨€¨€¨€¨†     | 319/750 [00:14<00:03, 141.87it/s][ALoading weights: 100%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 750/750 [00:14<00:00, 51.08it/s] 
+Loading pipeline components...:  80%|¨€¨€¨€¨€¨€¨€¨€¨€  | 4/5 [00:18<00:05,  5.73s/it]Loading pipeline components...: 100%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 5/5 [00:18<00:00,  4.07s/it]Loading pipeline components...: 100%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 5/5 [00:18<00:00,  3.79s/it]
+  0%|          | 0/4 [00:00<?, ?it/s] 25%|¨€¨€¨„       | 1/4 [00:19<00:57, 19.00s/it] 50%|¨€¨€¨€¨€¨€     | 2/4 [00:28<00:26, 13.25s/it] 75%|¨€¨€¨€¨€¨€¨€¨€¨„  | 3/4 [00:37<00:11, 11.65s/it]100%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 4/4 [00:47<00:00, 10.71s/it]100%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 4/4 [00:47<00:00, 11.81s/it]
+Traceback (most recent call last):
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\generate.py", line 181, in <module>
+    main()
+  File "C:\Users\Rocm\Desktop\image\phase1-diffusers\generate.py", line 117, in main
+    image = pipe(
+            ^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\utils\_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\diffusers\pipelines\qwenimage21\pipeline_qwenimage21.py", line 853, in __call__
+    image = self.vae.decode(latents, return_dict=False)[0][:, :, 0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\diffusers\utils\accelerate_utils.py", line 49, in wrapper
+    return method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\diffusers\models\autoencoders\autoencoder_kl_qwenimage21.py", line 1356, in decode
+    decoded = self._decode(z).sample
+              ^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\diffusers\models\autoencoders\autoencoder_kl_qwenimage21.py", line 1318, in _decode
+    out = self.decoder(
+          ^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\diffusers\models\autoencoders\autoencoder_kl_qwenimage21.py", line 913, in forward
+    x = up_block(x, feat_cache=feat_cache, feat_idx=feat_idx, first_chunk=first_chunk)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\diffusers\models\autoencoders\autoencoder_kl_qwenimage21.py", line 727, in forward
+    x = self.upsampler(x, feat_cache=feat_cache, feat_idx=feat_idx)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\diffusers\models\autoencoders\autoencoder_kl_qwenimage21.py", line 312, in forward
+    x = self.resample(x)
+        ^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\container.py", line 253, in forward
+    input = module(input)
+            ^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\conv.py", line 565, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Rocm\Desktop\image\phase4-diag-7140\.venv\Lib\site-packages\torch\nn\modules\conv.py", line 560, in _conv_forward
+    return F.conv2d(
+           ^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 20.25 GiB. GPU 0 has a total capacity of 23.98 GiB of which 0 bytes is free. Of the allocated memory 15.16 GiB is allocated by PyTorch, and 6.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)

@@ -1,0 +1,34 @@
+{
+  "experiment": "p1-bf16-512x512",
+  "phase": 1,
+  "framework": "diffusers",
+  "precision": "bf16",
+  "width": 512,
+  "height": 512,
+  "steps": 4,
+  "seed": 42,
+  "prompt_id": "p1-zh-scene",
+  "protocol_version": "v1",
+  "runs": [
+    {
+      "kind": "cold",
+      "total_s": 46.009,
+      "text_encode_s": null,
+      "denoise_s": 25.843,
+      "vae_decode_s": null,
+      "step_times_s": [
+        24.699,
+        0.391,
+        0.377,
+        0.376
+      ]
+    }
+  ],
+  "vram_peak_mb": 16860.6,
+  "env_ref": "snapshot-20261101-133200.json",
+  "created_at": "2026-11-01T13:31:45+08:00",
+  "output_image": "bench\\results\\raw\\2026-11-01-phase4-7140-math-512\\p1-bf16-512x512\\42-1793511105.png",
+  "run_kind": "cold",
+  "attention_backend": "math-sdp",
+  "env_ref_note": "corrected post-hoc: generate.py stamps newest snapshot at run time, which was the 7.14.1 one; run executed in phase4-diag-7140 venv"
+}

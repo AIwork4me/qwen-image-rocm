@@ -140,7 +140,7 @@ raw JSON `evidence/sdpa-repro-7141.json` (+`-launch-blocking.json`):
 | mem_efficient + GQA (kv=8, all masks/S) | 24 | `No available kernel` — CPU-side shape rejection, NOT the bug |
 | flash + explicit mask (both kv, all S) | 24 | `No available kernel` — CPU-side mask rejection, NOT the bug |
 | cudnn (all cells) | 48 | `No available kernel` — not built for ROCm Windows |
-| math | 40 PASS / 8 OOM | PASS ≤4096 (0.26→90 ms, ~quadratic); OOM at S=16384 (32 GB dense scores) |
+| math | 40 PASS / 8 OOM | PASS ≤4096 (0.26→91.8 ms, ~quadratic); OOM at S=16384 (32 GB dense scores) |
 
 Key refinements vs the Phase 1/2 notes:
 
@@ -156,12 +156,14 @@ Key refinements vs the Phase 1/2 notes:
 
 Wheel AOTriton evidence (recorded 2026-11-01, phase1 venv):
 
-- `torch/lib/aotriton.images/amd-gfx110x/` — flash kernels
-  (`attn_fwd.zip` + 4 bwd zips); `__signature__`:
+- `torch/lib/aotriton.images/amd-gfx110x/` — 7 flash kernel archives
+  (`attn_fwd.zip`, 3× `bwd_kernel_*.zip`, `bwd_preprocess{,_varlen}.zip`,
+  `debug_simulate_encoded_softmax.zip`); `__signature__`:
   `AOTRITON_GIT_SHA1=6e00ef3e335b45dfb49065259533b59c68995bfe`
   (14 arches incl. gfx1100)
-- `torch/lib/aotriton_v2.dll` — exports `flash@v3@aotriton` (v3 API)
-  runtime symbols; no version/git string embedded; the pytorch-side
+- `torch/lib/aotriton_v2.dll` — contains v3-API symbol strings
+  (`…@flash@v3@aotriton…` in the binary; byte-scan evidence, not an
+  export-table dump); no version/git string embedded; the pytorch-side
   `__AOTRITON_CI_COMMIT` pin is not exposed by the installed wheel
   (`torch.__config__.show()` has no aotriton field) — the mismatch can
   only be confirmed against build metadata upstream, but the images SHA
@@ -188,6 +190,17 @@ Summary:
 - **2048² bf16**: attention now passes at S≈16k (no 32.1 GB dense
   alloc), but VAE decode OOMs (20.25 GB conv alloc) → still blocked on
   24 GB, different blocker (see W2 doc §3).
+
+## Remediation paths (Phase 4, all measured on this machine)
+
+| path | what | measured cost/benefit |
+|---|---|---|
+| 1. disable broken backends | `QIR_SDP=math` (what Phases 1-3 ran) | works everywhere; 3.66 s/step @1024²; 2048² attention OOM (32.1 GB dense); in memory-pressed regimes dense math can degrade to ~24 s/step (finding 4 interaction) |
+| 2. downgrade to `2.12.0+rocm7.14.0` (same index) | pin the known-good build | 0 launch failures; flash 1.07 s/step @1024² (**3.4x**, −1.9 GB VRAM); 2048² attention passes but bf16 VAE decode still OOMs (20.25 GB conv) |
+| 3. whl-next nightly (`2.15.0+rocm10.3.0a`) | `nightly.repo.amd.com/rocm/whl-next/` | 0 launch failures; fastest kernels (3.7 ms @S=4096 causal vs 8.5 on 7140); nightly churn risk; no end-to-end generation measured (stretch scope = matrix only) |
+
+Decision context for this project: [phase4-stack-switch-decision.md](../phase4-stack-switch-decision.md)
+(baselines unchanged; recommendation C = opt-in profile now).
 
 ## Phase 2 refinement (2026-10-31): ComfyUI hits the SAME bug, survives via startup probe
 

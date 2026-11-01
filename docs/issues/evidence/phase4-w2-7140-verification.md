@@ -23,18 +23,20 @@ raw JSON `sdpa-repro-7140.json`):
 fails at launch PASSES on 7.14.0 — TheRock#7992's report confirmed on
 gfx1100 via the stable whl-multi-arch index.
 
-Headline shape numbers (kv=32, mask=none): flash S=4096 **8.5-11.2 ms**
-(math: 84-91 ms, ~8x); S=16384 flash **116-163 ms**, mem_efficient
-**114-203 ms** — where math cannot even allocate (32 GB dense).
+Headline shape numbers (kv=32, mask=none — the DiT shape): flash
+S=4096 **8.5-10.8 ms** (math: 84-91 ms, ~8-10x); S=16384 flash
+**116-163 ms**, mem_efficient **114-203 ms** — where math cannot even
+allocate (32 GB dense). (kv=8 GQA cells are faster still, up to 11.2 ms
+@S=4096 non-causal.)
 
 ## 2. End-to-end benefit (diffusers, p1-zh-scene, bf16, cpu_offload)
 
 First-ever no-workaround generation on this machine: default SDPA
 (flash) completes at 1024².
 
-| config | steady s/step @1024² | VRAM peak |
+| config | steady s/step @1024² (median of steps 2-4) | VRAM peak |
 |---|---|---|
-| 7140 flash (steps 2-4, two runs) | **1.07 / 1.06** | 16.86 GB |
+| 7140 flash, two runs | **1.069 / 1.075** | 16.86 GB |
 | 7141 math — Phase 1 protocol baseline (n=many, healthy host) | 3.66 | 18.8 GB |
 | 7140 math, this session (4-step runs, thrash regime) | 24-25 | 18.8 GB |
 | 7140 math @512² (same session, control) | 0.38 | 16.9 GB |
@@ -48,8 +50,12 @@ First-ever no-workaround generation on this machine: default SDPA
   RAM, pagefile regime — finding #4 family) while flash's fixed small
   workspace is immune (1.07 s/step in the same regime). Bonus data point
   for finding #4: the thrash cost is backend-dependent.
-- Raw JSONs: `bench/results/raw/2026-11-01-phase4-7140-{flash,math,math-warm,flash-warm,math-512}/`,
-  2048² attempt log in the SDD workspace / w2-gen-flash2048.log.
+- Raw JSONs: `bench/results/raw/2026-11-01-phase4-7140-{flash,math,math-warm,flash-warm,math-512}/`
+  (committed; `env_ref` corrected post-hoc in all of them —
+  `generate.py` stamps the newest snapshot at run time, which was still
+  the 7.14.1 one; the runs executed in the 7140 venv, matching
+  `snapshot-20261101-133200.json`). 2048² attempt traceback:
+  [sdpa-7140-2048-vae-oom.log](sdpa-7140-2048-vae-oom.log).
 
 ## 3. 2048² bf16 probe: attention UNBLOCKED, VAE decode is the new blocker
 
@@ -76,9 +82,10 @@ SDPA probe) discriminate the broken/good builds in ~15 s.
 ## 5. Stretch: whl-next nightly (2.15.0+rocm10.3.0a20261031)
 
 - SDPA matrix: **all-green** (0 launch failures), same pattern as 7.14.0;
-  flash even faster (2.56 ms @S=4096 causal vs 8.5 ms on 7140;
-  40 ms @S=16384 causal). Third distinct aotriton images set
-  (`amd-gfx110x`, sha `c11b5b88…`). Evidence:
+  flash faster on the DiT shape (kv=32, mask=none):
+  **3.7 ms @S=4096 causal** (vs 8.5 ms on 7140) and
+  **39 ms @S=16384 causal** (vs 116 ms). Third distinct aotriton images
+  set (`amd-gfx110x`, sha `c11b5b88…`). Evidence:
   `sdpa-repro-matrix-next-2150.md` / `sdpa-repro-next-2150.json`.
 - `pip install triton` on whl-next: **no Windows wheels** (`from
   versions: none`) — finding #3 closed with a final negative.

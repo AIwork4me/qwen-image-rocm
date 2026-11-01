@@ -31,7 +31,7 @@ raw JSON alongside):
 | mem-efficient + GQA (8 KV heads) | `No available kernel` (CPU-side shape rejection — expected, not the bug) |
 | flash + explicit mask | `No available kernel` (CPU-side mask rejection — expected) |
 | cudnn | `No available kernel` (not built) |
-| math | PASS ≤ S=4096 (0.26→90 ms, quadratic); OOM at S=16384 (32 GB dense scores) |
+| math | PASS ≤ S=4096 (0.26→91.8 ms, quadratic); OOM at S=16384 (32 GB dense scores) |
 
 Real-world impact (why we chased this): Qwen-Image-2.1 on diffusers fails
 end-to-end because the text encoder (GQA, unmasked/causal) and DiT (dense)
@@ -48,9 +48,12 @@ message with no additional kernel attribution.
 
 - `torch/lib/aotriton.images/amd-gfx110x/__signature__`:
   `AOTRITON_GIT_SHA1=6e00ef3e335b45dfb49065259533b59c68995bfe`
-  (14 arches incl. gfx1100; flash kernels `attn_fwd.zip` + 4 bwd zips)
-- `torch/lib/aotriton_v2.dll`: exports `flash@v3@aotriton` (v3 API)
-  symbols; no embedded version/git string; the pytorch-side
+  (14 arches incl. gfx1100; 7 flash kernel archives: `attn_fwd.zip`,
+  3× `bwd_kernel_*.zip`, `bwd_preprocess{,_varlen}.zip`,
+  `debug_simulate_encoded_softmax.zip`)
+- `torch/lib/aotriton_v2.dll`: binary contains v3-API symbol strings
+  (`…@flash@v3@aotriton…`; byte-scan evidence); no embedded version/git
+  string; the pytorch-side
   `__AOTRITON_CI_COMMIT` pin is not exposed anywhere in the installed
   wheel (`torch.__config__.show()` has no aotriton field) — if useful to
   the maintainers, the images SHA above is the concrete local artifact to
@@ -86,9 +89,10 @@ described in this issue and #7992.
 The current nightly is also healthy on this machine:
 `torch 2.15.0+rocm10.3.0a20261031` from `nightly.repo.amd.com/rocm/whl-next/`
 (torch git `dde42be1…`, images `amd-gfx110x` sha `c11b5b88…`) — same
-all-green pattern (0 launch failures; flash 2.6 ms @S=4096 causal, 40 ms
-@S=16384 causal). So of the three Windows gfx1100 builds checked, only
-the stable-pinned 2.12.0+rocm7.14.1 is broken.
+all-green pattern (0 launch failures; on the dense DiT shape, flash
+3.7 ms @S=4096 causal and 39 ms @S=16384 causal). So of the three
+Windows gfx1100 builds checked, only the stable-pinned
+2.12.0+rocm7.14.1 is broken.
 
 ## Channel hygiene note
 
