@@ -9,25 +9,45 @@ distance 语义 = 图必然不同（不同模型/数值路径），判质量级�
 ## A. 需要终审的 5 项（决定最终推荐配置）
 
 ### A1. Turbo 8步 + int8 DiT + ck 注意力 — 推荐候选（9.1s，5.2-5.5×）distance
-(缺失: 2026-11-01-e8-turbo-int8-ck/quality_grid.png)
-### A1. Turbo 8步 + int8 DiT + ck 注意力 海报原生裁剪
-(缺失: 2026-11-01-e8-turbo-int8-ck/quality_crops_poster.png)
+
+![A1. Turbo 8步 + int8 DiT + ck 注意力 — 推荐候选（9.1s，5.2-5.5×）distance](2026-11-01-e8-turbo-int8-ck/quality_grid.png)
+
+### A1. Turbo 8步 + int8 DiT + ck 注意力 — 推荐候选（9.1s，5.2-5.5×）distance — 海报原生裁剪
+
+![A1. Turbo 8步 + int8 DiT + ck 注意力 — 推荐候选（9.1s，5.2-5.5×）distance — 海报原生裁剪](2026-11-01-e8-turbo-int8-ck/quality_crops_poster.png)
+
 ### A2. Turbo 8步 + int8 DiT（9.1-9.2s，5.3×）distance
-(缺失: 2026-11-01-e2-turbo-int8/quality_grid.png)
-### A2. Turbo 8步 + int8 DiT（9.1-9.2s，5.3×）distance 海报原生裁剪
-(缺失: 2026-11-01-e2-turbo-int8/quality_crops_poster.png)
+
+![A2. Turbo 8步 + int8 DiT（9.1-9.2s，5.3×）distance](2026-11-01-e2-turbo-int8/quality_grid.png)
+
+### A2. Turbo 8步 + int8 DiT（9.1-9.2s，5.3×）distance — 海报原生裁剪
+
+![A2. Turbo 8步 + int8 DiT（9.1-9.2s，5.3×）distance — 海报原生裁剪](2026-11-01-e2-turbo-int8/quality_crops_poster.png)
+
 ### A3. Turbo 8步 bf16（11.1-13.1s，3.7-4.5×）distance
-(缺失: 2026-11-01-e1-turbo/quality_grid.png)
-### A3. Turbo 8步 bf16（11.1-13.1s，3.7-4.5×）distance 海报原生裁剪
-(缺失: 2026-11-01-e1-turbo/quality_crops_poster.png)
+
+![A3. Turbo 8步 bf16（11.1-13.1s，3.7-4.5×）distance](2026-11-01-e1-turbo/quality_grid.png)
+
+### A3. Turbo 8步 bf16（11.1-13.1s，3.7-4.5×）distance — 海报原生裁剪
+
+![A3. Turbo 8步 bf16（11.1-13.1s，3.7-4.5×）distance — 海报原生裁剪](2026-11-01-e1-turbo/quality_crops_poster.png)
+
 ### A4. ck 注意力 · 40步 bf16（35-37s，1.3-1.37×）— 数值路径不同，判质量级
-(缺失: 2026-11-01-e4-ck/quality_grid.png)
-### A4. ck 注意力 · 40步 bf16（35-37s，1.3-1.37×） 海报原生裁剪
-(缺失: 2026-11-01-e4-ck/quality_crops_poster.png)
+
+![A4. ck 注意力 · 40步 bf16（35-37s，1.3-1.37×）— 数值路径不同，判质量级](2026-11-01-e4-ck/quality_grid.png)
+
+### A4. ck 注意力 · 40步 bf16（35-37s，1.3-1.37×）— 数值路径不同，判质量级 — 海报原生裁剪
+
+![A4. ck 注意力 · 40步 bf16（35-37s，1.3-1.37×）— 数值路径不同，判质量级 — 海报原生裁剪](2026-11-01-e4-ck/quality_crops_poster.png)
+
 ### A5. w4a8 TE · 40步（预期难过关：LPIPS max 0.41）fidelity
-(缺失: 2026-11-01-e2-w4a8-te/quality_grid.png)
-### A5. w4a8 TE · 40步（预期难过关：LPIPS max 0.41）fidelity 海报原生裁剪
-(缺失: 2026-11-01-e2-w4a8-te/quality_crops_poster.png)
+
+![A5. w4a8 TE · 40步（预期难过关：LPIPS max 0.41）fidelity](2026-11-01-e2-w4a8-te/quality_grid.png)
+
+### A5. w4a8 TE · 40步（预期难过关：LPIPS max 0.41）fidelity — 海报原生裁剪
+
+![A5. w4a8 TE · 40步（预期难过关：LPIPS max 0.41）fidelity — 海报原生裁剪](2026-11-01-e2-w4a8-te/quality_crops_poster.png)
+
 
 ---
 
