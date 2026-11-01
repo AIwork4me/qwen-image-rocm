@@ -6,7 +6,7 @@
 
 | 本栈实测 | 数值 | 含义（与边界） |
 |---|---|---|
-| **1024² 生成 · Fast 模式** | **~8–9 秒/张（热态）** | 同一 prompt、模型常驻、文本编码缓存命中。冷启动 ≈ 12–17 s，改 prompt ≈ +1.2 s → [真实延迟](docs/benchmarks/REAL_WORLD_LATENCY.md) |
+| **1024² 生成 · Fast 模式** | **~8–9 秒/张（热态）** | 同一 prompt、模型常驻、文本编码缓存命中。完整冷启动 20–46 s，改 prompt ≈ +1.2 s → [真实延迟](docs/benchmarks/REAL_WORLD_LATENCY.md) |
 | **相对 bf16-40 基线加速** | **5.2–5.5×（热态、同会话配对）** | 同会话实测配对；8 步 turbo 输出必然不同——画质经人工目检裁决，未宣称无损 |
 | **2048² 原生分辨率** | **~40–42 秒/张** | 已演示并跨会话/跨 prompt 复测；有界验证仍待补 → [明细](docs/benchmarks/2048_VALIDATION.md) |
 | 测试硬件 / 系统 | RX 7900 XTX (gfx1100) · Windows 11 | 原生 Windows ROCm，不用 WSL2、不静默回退 CPU。其他 GPU 未测（默认拒绝执行） |
@@ -41,10 +41,11 @@ cd qwen-image-rocm
 ```
 
 一条命令完成：Windows/GPU/gfx1100 检查 → 隔离 venv + 固定版本 AMD ROCm 轮子
-→ 固定 commit 的 ComfyUI → 权重下载（权威 sha256 校验、断点续传）→
-**要求 Radeon 设备**的服务健康门（不允许静默 CPU 回退）→ 用与基准测试相同的
-驱动执行生成 → 打印图片路径与冷/热耗时。首次运行需下载权重；此后服务器启动
-到首图约 12–17 秒（Fast、缓存热）。
+→ 固定 commit 的 ComfyUI（不匹配即拒绝执行）→ 权重完整性（固定 revision 的
+SHA256，**每个文件**都强校验、断点续传）→ **要求 Radeon 设备**的服务健康门
+（不允许静默 CPU 回退）→ 用与基准测试相同的驱动执行生成 → 按统一口径打印
+`服务器启动 / 就绪到首图 / 完整冷启动 / 热态均值+中位数`。首次运行需下载权重；
+此后完整冷启动约 20 秒（缓存热）至 46 秒（全新安装）。
 
 Phase-1 diffusers 复现入口保留：`.\reproduce.ps1 -Quick`。
 
@@ -55,7 +56,7 @@ Phase-1 diffusers 复现入口保留：`.\reproduce.ps1 -Quick`。
 | 配置 | Turbo 8 步 · int8 DiT + int8 TE · `--use-ck-attention` · `--disable-smart-memory` | bf16 40 步 · `--disable-smart-memory` |
 | 1024² 热态 | ~8–9 s | ~45–51 s |
 | 2048² | ✅ ~40–42 s | ❌（bf16 VAE 解码在 24 GB 上 OOM） |
-| 输出 vs 基线 | 不同（8 步调度）——冻结网格上人工目检"无感"；int8 量化近无损（LPIPS 0.004–0.060） | **逐位一致**（LPIPS 0.0000） |
+| 输出 vs 基线 | 不同（8 步调度）。裁决状态：turbo-int8+ck 已在冻结网格上判"无感"（A1）；**完整三联组合仅通过 vs e8 的 LPIPS 门（0.058/0.012/0.014，p1/p2/p3），正式网格裁决待 owner 复核（[#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5)）**；int8 量化近无损（LPIPS 0.004–0.060） | **逐位一致**（LPIPS 0.0000） |
 | 磁盘权重 | ~18 GB | ~32 GB |
 
 两个档位都是冻结的实验清单（[bench/quickstart_config.py](bench/quickstart_config.py)），
@@ -74,15 +75,19 @@ quickstart 不可能偏离已测配置。画质评判方法见
 
 ## 真实延迟（Fast，1024²）
 
-| 场景 | 等待 | 说明 |
-|---|---|---|
-| 冷启动（服务就绪 → 首图） | 12–17 s | 含模型加载；OS 文件缓存热 |
-| 换 prompt（文本变化） | ~10 s | 真实 int8 文本编码 1.2 s，模型不换 |
-| 热态重复（换 seed） | 8–9 s | 文本编码节点缓存命中——头条数字即此状态 |
-| 2048² Fast | 40–43 s | 单 prompt 探测 |
+统一口径——精确定义见 [REAL_WORLD_LATENCY.md](docs/benchmarks/REAL_WORLD_LATENCY.md)：
 
-完整表（逐运行记录、缓存状态、采样口径）：
-[REAL_WORLD_LATENCY.md](docs/benchmarks/REAL_WORLD_LATENCY.md)。
+| 指标 | 缓存热的主机 | 全新安装 |
+|---|---|---|
+| 服务器启动 | 8.1 s | 28.3 s |
+| 就绪到首图 | 12.1 s | 17.2 s |
+| **完整冷启动**（启动 → 首图） | **20.2 s** | **45.5 s** |
+| 换 prompt（文本变化） | ~10 s | — |
+| 热态重复（换 seed）均值 | 8.1–8.6 s | — |
+| 2048² Fast（就绪到首图 / 热态） | 43.3 s / 40.2 s | 单 prompt 探测 |
+
+Quality（bf16-40）：完整冷启动 67.5 s、热态 ~46 s。重启后的冷启动
+**未测**；VRAM 数字为 0.5 s 采样值（下界）。
 
 ## 复现基准测试
 
@@ -105,7 +110,7 @@ powershell -File bench\run_variant.ps1 -Experiment p3-turbo-int8-ck-te-nosmart-1
 | 杠杆（1024²，热态） | 总耗时 | vs 同会话 bf16 对照 | 画质 |
 |---|---|---|---|
 | Turbo-int8 + ck（e8） | 9.1 | 5.2–5.5× | distance 0.21–0.36 → 用户裁决：无感 |
-| **完整生产组合（r1）** | **8.0–9.2** | 跨会话 ~5.5–6.0×* | vs e8 LPIPS：0.012/0.058/0.014（fidelity） |
+| **完整生产组合（r1）** | **8.0–9.2** | 跨会话 ~5.5–6.0×* | vs e8 LPIPS：0.058/0.012/0.014（fidelity） |
 | 仅 ck 注意力（40 步） | 35–37 | 1.30–1.37× | 数值路径不同 → 网格裁决 |
 | int8 DiT / TE（40 步） | 45–50 | ~1.0× | 近无损 0.004–0.060 |
 | `--disable-smart-memory` | 42–46 | 1.06–1.14× | 逐位一致 |

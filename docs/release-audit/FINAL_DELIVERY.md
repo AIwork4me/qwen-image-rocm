@@ -42,7 +42,7 @@ Reddit, 中文社区, maintainer outreach) — nothing auto-posted.
 | Problem | Root cause | Fix | Evidence |
 |---|---|---|---|
 | CI red on every main push | `test_core_exports` asserted `REPO.name == "image"` (local dir name); GitHub checks out `qwen-image-rocm` | structural assertions (`REPO` contains `bench/core.py`; PROMPTS/SCHEMA files exist) | local 55/55 → PR #7 fresh runner green (run 41281913975, 14 s) |
-| Recommended config claimed but never measured as a whole | phase-3 manifests measured pairs only (e8 used bf16 TE, no nosmart) | measured the triple (new manifest + run) | r1-triple records: 8.30/9.06/8.09 s (n=9), fresh 10.0 s, cold 17.1 s; LPIPS vs e8 0.012/0.058/0.014 |
+| Recommended config claimed but never measured as a whole | phase-3 manifests measured pairs only (e8 used bf16 TE, no nosmart) | measured the triple (new manifest + run) | r1-triple records: 8.30/9.06/8.09 s (n=9), fresh 10.0 s, cold 17.1 s; LPIPS vs e8 0.058/0.012/0.014 |
 | 9.1 s sold without regime; cold/fresh/warm conflated | warm-only benchmark framing | quickstart prints all three; REAL_WORLD_LATENCY.md | quickstart-Fast-20261101-142448 + r1 fresh arms (TE 1.22–1.24 s, cache-busted) |
 | `run_variant.ps1` killed any listener on 8188 | unconditional `Kill-Port` pre-start | own-orphans-only (command-line matched) + spare-port fallback | code + parse check; exercised in 4 server lifecycles today without touching foreign processes |
 | quickstart first dogfood failed (config) | missing `jsonschema` in the uv env used for `config` | added to the invocation | second dogfood run PASS |
@@ -63,7 +63,7 @@ Reddit, 中文社区, maintainer outreach) — nothing auto-posted.
 - **Fast @2048²**: cold 43.3 s · warm 40.2 s (probe tier)
 - **Server boot** (launch→healthy): 8.1 s (warm cache; reboot-cold NOT
   TESTED)
-- **Quality gates**: triple vs e8 LPIPS 0.012/0.058/0.014 (max 0.075);
+- **Quality gates**: triple vs e8 LPIPS 0.058/0.012/0.014 (max 0.075);
   Quality bit-identical per phase-3 SHA256 gate
 - **Samples**: `bench/results/{2026-11-01-r1-triple, 2026-11-01-r2-2048fast,
   quickstart-Fast-20261101-142448, quickstart-Quality-20261101-142606}/`

@@ -62,7 +62,7 @@ it never retroactively redefines the frozen baseline.
   3 first verdicts, 0 divergence ≥1 grade (`bench/results/AI_JUDGE_RESULTS.json`).
 - **This session (2026-11-01):** the full production triple
   (`p3-turbo-int8-ck-te-nosmart`) has **objective evidence only** — LPIPS
-  fidelity vs the already-judged e8 config: 0.012 / 0.058 / 0.014 (median,
+  fidelity vs the already-judged e8 config: 0.058 / 0.012 / 0.014 (median,
   p1/p2/p3), max 0.075, inside the int8 near-lossless band. Grid +
   native-res crops are committed at `bench/results/2026-11-01-r1-triple/`.
   The **formal three-tier verdict on this exact grid is PENDING** (owner

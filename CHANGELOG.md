@@ -12,7 +12,7 @@ on the target GPU in both modes (Fast: boot 8.1 s / cold 12.1 s / warm
 **The production triple finally measured as a whole** (turbo int8 DiT +
 int8 TE + ck + `--disable-smart-memory`): warm medians 8.30/9.06/8.09 s
 (n=9), fresh-prompt +1.2 s, cold 17.1 s, sampled VRAM peak ≈ 7.7 GB; LPIPS
-fidelity vs e8: 0.012/0.058/0.014 (formal grid verdict pending owner).
+fidelity vs e8: 0.058/0.012/0.014 (formal grid verdict pending owner).
 **2048² re-probed** on the triple config: warm 40.2 s / cold 43.3 s,
 sampled peak ≈ 8.3 GB (second session, second prompt — probe tier).
 **CI fixed & split**: checkout-dir-independent repo-root test (root cause

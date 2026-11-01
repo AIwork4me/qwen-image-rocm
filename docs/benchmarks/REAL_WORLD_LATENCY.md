@@ -1,52 +1,53 @@
-# Real-world latency: cold / fresh / warm
+# Real-world latency: unified cold-start vocabulary
 
-Warm steady-state throughput (e.g. "9.1 s/image") is a *benchmark* number.
-A user's actual wait depends on cache state. This page separates the three
-user-facing scenarios and never mixes them. All rows: RX 7900 XTX, Windows
-11, torch 2.12.0+rocm7.14.1, ComfyUI pinned commit, euler/simple, cfg 1.0 —
+Warm steady-state throughput (e.g. "9 s/image") is a *benchmark* number.
+A user's actual wait depends on cache state. This page separates the
+scenarios and never mixes them. All rows: RX 7900 XTX, Windows 11,
+torch 2.12.0+rocm7.14.1, ComfyUI pinned commit, euler/simple, cfg 1.0 —
 environment evidence `bench/results/env/snapshot-20261101-141420.json`.
 
-**Scenario definitions**
+**The four metrics (exact definitions — used everywhere in this repo):**
 
-- **Cold start** — ComfyUI launched → first image file on disk (includes
-  model loading; the table also shows the server *boot* sub-phase
-  separately, because `quickstart.ps1` prints both).
-- **Fresh prompt** — server warm, user changes the prompt *text* (text
-  encoder recomputed; node cache for `CLIPTextEncode` defeated — verified
-  by `text_encode_s > 0` and `CLIPTextEncode` absent from `cached_nodes`).
-- **Warm repeat** — same prompt, different seed, models resident.
+| Metric | Definition |
+|---|---|
+| **Server boot** | server process launch → `/system_stats` reports a healthy Radeon device |
+| **Ready-to-first-image** | server healthy → first PNG on disk (includes model load + cold text-encode) |
+| **Full cold start** | process launch → first PNG on disk = Server boot + Ready-to-first-image. Ready-to-first must NEVER be quoted as "cold start" on its own |
+| **Warm mean / median** | same prompt, new seed, models resident, text-encode a node-cache hit; mean and median over the measured runs |
+
+Plus **Fresh prompt** = warm server, prompt *text* changed (text encoder
+recomputed; verified by `text_encode_s > 0` and `CLIPTextEncode` absent
+from `cached_nodes`).
 
 ## Fast profile (`.\quickstart.ps1 -Mode Fast`, 1024², 8 steps)
 
-| Metric | Value | Source (records) | Cache state / notes |
+| Metric | Warm-cache host | Fresh-install clone (clean-dir acceptance) | Source (records) |
 |---|---|---|---|
-| Server boot (launch → `/system_stats` healthy) | 8.1 s | `bench/results/quickstart-Fast-20261101-142448/` + script timer | weights already in OS file cache & RAM from prior session; first boot after a reboot reads ~18 GB from disk and will be slower — **not yet measured in rebooted state** |
-| Cold image (healthy → 1st PNG, incl. load) | **12.1 s** (TE 2.37 · denoise+load 7.4+ · VAE 0.92) | same run, `p2-…-cold.json` | same warm-cache caveat; colder session measured 17.1 s (`2026-11-01-r1-triple/` cold record, p1) |
-| Fresh prompt (warm + real int8 TE) | **10.0–10.1 s** (TE 1.22–1.24) | `2026-11-01-r1-triple/` fresh-prompt arm, n=3 prompts | models resident (17.9 GB working set); no model swap needed |
-| Warm repeat | **8.0–9.2 s** (medians 8.30/9.06/8.09; quickstart avg 8.11) | `2026-11-01-r1-triple/` n=9 + quickstart run | TE is a node-cache hit (`cached=6`) — this is the 9.1 s-class headline number, correctly qualified |
-| Total wall, launch → 4 images | 48.1 s | quickstart run | includes boot + cold + warmup + 2 measured |
-| One-time (ever) | weight download ~18 GB (Fast set) | `docs/weights.md` | resumable; not timed here |
+| Server boot | 8.1 s | **28.3 s** | quickstart timers (boot benefits from OS file cache on the bench host; the clone number is the honest provisioning-fresh one) |
+| Ready-to-first-image | **12.1 s** (TE 2.37 · load+denoise · VAE 0.92) | **17.2 s** (TE 5.03 — cold-cache text encode) | cold records: `quickstart-Fast-20261101-142448/`, clone acceptance run; colder session r1 cold = 17.1 s |
+| **Full cold start** | **20.2 s** | **45.5 s** | sum of the two rows above; a rebooted machine (cold disk cache) is **NOT TESTED** — expect worse |
+| Fresh prompt | **10.0–10.1 s** (real int8 TE 1.22–1.24 s, n=3 prompts) | not measured on clone | `2026-11-01-r1-triple/` fresh-prompt arm |
+| Warm | **mean 8.11 s** (dev run) / medians 8.30/9.06/8.09 s (n=9) | mean 8.57 s (clone) | r1-triple + quickstart runs |
+| Total wall, launch → 4 images | 48.1 s | 73.9 s | script timers |
+| One-time (ever) | weight download ~18 GB (Fast set) | idem | `docs/weights.md`; resumable, not timed here |
 
 ## Fast profile at 2048² (`-Mode Fast -Resolution 2048`)
 
 | Metric | Value | Source | Notes |
 |---|---|---|---|
-| Cold image | 43.3 s (TE 2.29 · KSampler 36.5 · VAE 2.85) | `2026-11-01-r2-2048fast/` cold | triple config |
-| Warm | 40.2–40.3 s | same, warmup+measure | single prompt (p2), n=1 measured — see 2048_VALIDATION.md |
+| Ready-to-first-image | 43.3 s (TE 2.29 · KSampler 36.5 · VAE 2.85) | `2026-11-01-r2-2048fast/` cold | triple config; boot not timed on that run → Full cold start N/A, not guessed |
+| Warm | 40.2–40.3 s | same, warmup+measure | probe tier — see 2048_VALIDATION.md |
 
 ## Quality profile (`-Mode Quality`, 1024², bf16, 40 steps)
 
-Measured this session by the quickstart dogfood run
-(`bench/results/quickstart-Quality-20261101-142606/`):
-
 | Metric | Value | Source | Notes |
 |---|---|---|---|
-| Server boot (launch → healthy) | 8.1 s | script timer | bf16 weights in OS cache from benchmark session |
-| Cold image (healthy → 1st PNG) | **59.4 s** (TE 7.46 · KSampler+load 49.7 · VAE 1.22) | `p2-…-cold.json` | 31.8 GB of bf16 weights on a 32 GB-RAM host |
-| Warm repeat | **45.6–46.3 s** (avg 46.4) | warmup + 2 measures | historical band 45–51 s (`2026-10-31-e1-control`) ✓ consistent |
-| Total wall, launch → 4 images | 208.5 s | script timer | includes boot + cold + warmup + 2 measured |
-| Fresh prompt (bf16 TE recompute) | TE 3–7.5 s on top of warm (phase-3 + this run's cold TE) | records | plus model-swap cost when RAM-pressured (phase-3 finding) |
-| One-time (ever) | weight download ~32 GB (Quality set) | `docs/weights.md` | resumable |
+| Server boot | 8.1 s | script timer | warm OS cache |
+| Ready-to-first-image | **59.4 s** (TE 7.46 · KSampler+load 49.7 · VAE 1.22) | `quickstart-Quality-20261101-142606/` cold | 31.8 GB of bf16 weights on a 32 GB-RAM host |
+| **Full cold start** | **67.5 s** | sum | — |
+| Warm | mean 46.4 s / median 46.3 s (n=2); historical band 45–51 s ✓ | same run + `2026-10-31-e1-control` | — |
+| Total wall, launch → 4 images | 208.5 s | script timer | — |
+| Fresh prompt | TE 3–7.5 s on top of warm | phase-3 + this run's cold TE | plus model-swap cost under RAM pressure |
 
 ## Measurement semantics & limitations (read before quoting)
 
@@ -55,13 +56,19 @@ Measured this session by the quickstart dogfood run
   transient allocation peaks. PyTorch allocator peaks are not captured;
   `vram_residency_mb` in the records is a different quantity (model
   residency). No number here claims to be the true instantaneous peak.
+- **Per-step arrays are partial for non-measured records** (step-times
+  audit, 2026-11-01): in monitor-era records the step-1 websocket event is
+  frequently lost and some cold records have no step events (105/337
+  records carry `step_times_s` shorter than `steps`). No published number
+  in this repo derives from those arrays — totals and node timings
+  (`total_s`, `ksampler_s`, `text_encode_s`, `vae_decode_s`) are
+  server-authoritative. Audit tool: `python -I tools/check_step_times.py`.
 - Host RAM: not instrumented in these runs → **N/A**, not 0.
 - Cache-hit counts come from ComfyUI's node cache report per record
   (`cached_nodes`); warm rows are exactly the cache-hit case.
-- Cold rows above were measured on a machine whose file cache was already
-  warm from the benchmark session; a rebooted machine's first cold start
-  will be slower (disk-bound). Labelled above, bounded reboot measurement
-  **not run** (would need a reboot mid-session).
+- Cold rows on the bench host had a warm OS file cache; a rebooted
+  machine's first cold start will be slower (disk-bound). Labelled above;
+  bounded reboot measurement **not run**.
 - `MB` in records follows ComfyUI's own reporting convention (2²⁰-based);
   treat GB figures as approximate.
 - Timer source: driver wall clock (`total_s` per record) + PowerShell
@@ -71,8 +78,8 @@ Measured this session by the quickstart dogfood run
 ## How to reproduce each row
 
 ```powershell
-.\quickstart.ps1 -Mode Fast                    # boot + cold + warm, printed
-.\quickstart.ps1 -Mode Fast -Resolution 2048   # 2048 cold + warm
+.\quickstart.ps1 -Mode Fast                    # prints boot / ready-to-first / full-cold / warm mean+median
+.\quickstart.ps1 -Mode Fast -Resolution 2048
 .\quickstart.ps1 -Mode Quality
 # protocol-grade fresh-prompt arms (n=3 prompts, records):
 powershell -File bench\run_variant.ps1 -Experiment p3-turbo-int8-ck-te-nosmart-1024x1024 -Date <tag>

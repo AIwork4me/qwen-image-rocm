@@ -9,8 +9,8 @@ number on this page.
 
 | Verified on this exact stack | Number | What it means (and what it doesn't) |
 |---|---|---|
-| **1024² generation, Fast mode** | **~8–9 s / image (warm)** | Same prompt, models resident, text-encoder cached. Cold ≈ 12–17 s, changed prompt ≈ +1.2 s → [real-world latency](docs/benchmarks/REAL_WORLD_LATENCY.md) |
-| **Speedup vs bf16-40 baseline** | **5.2–5.5× (warm, paired)** | Same-session measured pair; images differ (8-step turbo) — quality was human-judged, not assumed lossless |
+| **1024² generation, Fast mode** | **~8–9 s / image (warm)** | Same prompt, models resident, text-encoder cached. Full cold start 20–46 s, changed prompt ≈ +1.2 s → [real-world latency](docs/benchmarks/REAL_WORLD_LATENCY.md) |
+| **Speedup vs bf16-40 baseline** | **5.2–5.5× (warm, paired)** | Same-session measured pair; images differ (8-step turbo) — quality judged by humans on the frozen grid, not assumed lossless |
 | **2048² native resolution** | **~40–42 s / image** | Demonstrated + re-probed across sessions/prompts; bounded validation pending — [details](docs/benchmarks/2048_VALIDATION.md) |
 | Tested GPU / OS | RX 7900 XTX (gfx1100) · Windows 11 | Native Windows ROCm — no WSL2, no CPU fallback. Other GPUs untested (fail-closed by default) |
 | ROCm stack | torch 2.12.0+rocm7.14.1 · ComfyUI pinned | Pinned AMD wheels, pinned ComfyUI commit, schema-validated run records |
@@ -46,12 +46,13 @@ cd qwen-image-rocm
 ```
 
 One command runs the whole chain: OS/GPU/gfx1100 checks → isolated venv with
-pinned AMD ROCm wheels → ComfyUI at the pinned commit → weight download with
-authoritative sha256 verification (resumable) → server health gate that
-**requires a Radeon device** (no silent CPU fallback) → generation via the
-same driver as the benchmarks → printed image paths + cold/warm timings.
-First-ever run downloads weights once; after that, server boot to first
-image is ~12–17 s (Fast, warm cache).
+pinned AMD ROCm wheels → ComfyUI at the pinned commit (a mismatched commit
+fails closed) → weight integrity via pinned-revision SHA256 for **every**
+file (resumable downloads) → server health gate that **requires a Radeon
+device** (no silent CPU fallback) → generation via the same driver as the
+benchmarks → printed `Server boot / Ready-to-first-image / Full cold start /
+Warm mean+median`. First-ever run downloads weights once; after that, full
+cold start is ~20 s (warm cache) to ~46 s (fresh install).
 
 Phase-1 diffusers reproduction stays available: `.\reproduce.ps1 -Quick`.
 
@@ -62,7 +63,7 @@ Phase-1 diffusers reproduction stays available: `.\reproduce.ps1 -Quick`.
 | Config | Turbo 8-step · int8 DiT + int8 TE · `--use-ck-attention` · `--disable-smart-memory` | bf16 40-step · `--disable-smart-memory` |
 | 1024² warm | ~8–9 s | ~45–51 s |
 | 2048² | ✅ ~40–42 s | ❌ (bf16 VAE decode OOMs on 24 GB) |
-| Output vs baseline | different (8-step schedule) — human-judged indistinguishable on the frozen grid; int8 quantization near-lossless (LPIPS 0.004–0.060) | **bit-identical** (LPIPS 0.0000) |
+| Output vs baseline | different (8-step schedule). Verdict status: turbo-int8+ck judged 无感 on the frozen grid (A1); the **full triple is LPIPS-gated vs e8 (0.058/0.012/0.014, p1/p2/p3) with the formal grid verdict PENDING owner review ([#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5))**; int8 quantization near-lossless (LPIPS 0.004–0.060) | **bit-identical** (LPIPS 0.0000) |
 | Weights on disk | ~18 GB | ~32 GB |
 
 Both profiles are frozen experiment manifests
@@ -82,15 +83,20 @@ cannot drift from what was measured. How quality is judged:
 
 ## Real-world latency (Fast, 1024²)
 
-| Scenario | Wait | Notes |
-|---|---|---|
-| Cold start (server up → 1st image) | 12–17 s | incl. model load; OS file cache warm |
-| Fresh prompt (text changed) | ~10 s | real int8 text-encode 1.2 s, models stay resident |
-| Warm repeat (new seed) | 8–9 s | text-encoder is a node-cache hit — *this* is the headline number's regime |
-| 2048² Fast | 40–43 s | single-prompt probes |
+Unified vocabulary — defined precisely in
+[REAL_WORLD_LATENCY.md](docs/benchmarks/REAL_WORLD_LATENCY.md):
 
-Full table with per-run records, cache states, and sampling caveats:
-[REAL_WORLD_LATENCY.md](docs/benchmarks/REAL_WORLD_LATENCY.md).
+| Metric | Warm-cache host | Fresh install |
+|---|---|---|
+| Server boot | 8.1 s | 28.3 s |
+| Ready-to-first-image | 12.1 s | 17.2 s |
+| **Full cold start** (launch → 1st PNG) | **20.2 s** | **45.5 s** |
+| Fresh prompt (text changed) | ~10 s | — |
+| Warm repeat (new seed), mean | 8.1–8.6 s | — |
+| 2048² Fast (ready-to-first / warm) | 43.3 s / 40.2 s | single-prompt probes |
+
+Quality (bf16-40): full cold start 67.5 s, warm ~46 s. Rebooted-machine
+cold start **not tested**; VRAM figures are 0.5 s samples (lower bounds).
 
 ## Reproduce the benchmarks
 
@@ -114,7 +120,7 @@ Key results (medians of measured runs; full tables in
 | Lever (1024², warm) | total s | vs paired bf16 control | quality |
 |---|---|---|---|
 | Turbo-int8 + ck (e8) | 9.1 | 5.2–5.5× | distance 0.21–0.36 → user verdict: indistinguishable |
-| **Full production triple (r1)** | **8.0–9.2** | ~5.5–6.0× cross-session* | LPIPS vs e8: 0.012/0.058/0.014 (fidelity) |
+| **Full production triple (r1)** | **8.0–9.2** | ~5.5–6.0× cross-session* | LPIPS vs e8: 0.058/0.012/0.014 (fidelity) |
 | ck attention alone (40-step) | 35–37 | 1.30–1.37× | different numerics path → grid verdict |
 | int8 DiT / TE (40-step) | 45–50 | ~1.0× | near-lossless 0.004–0.060 |
 | `--disable-smart-memory` | 42–46 | 1.06–1.14× | bit-identical |
