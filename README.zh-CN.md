@@ -1,177 +1,208 @@
-# qwen-image-rocm
+# Qwen-Image 2.1 · AMD Radeon GPU 原生 Windows ROCm
 
-在 **AMD Radeon RX 7900 XTX** + **Windows 原生 ROCm** 上运行 Qwen-Image-2.1
-图像生成——可复现的基线（diffusers + ComfyUI）、优化实验，以及面向
-ROCm Windows 生态的公开证据。
+**原生 Windows ROCm · 可复现图像生成 · AMD Radeon RX 7900 XTX 24 GB**
 
-## 使命
+在 24 GB Radeon 显卡上、原生 Windows ROCm 环境下本地运行 Qwen-Image-2.1 —— 一条命令的快速上手、冻结协议的基准测试、经过质量门禁的优化组合，以及页面上每一个数字背后的公开证据。
 
-1. 把 ComfyUI + Qwen-Image-2.1 在 7900 XTX 上的出图速度推到极限，
-   画质不降或只略降。
-2. 用这个真实工作负载发现 ROCm Windows 生态的问题：每个问题都做
-   根因分析、最小复现、修复，并向上游提 PR（见 `docs/issues/`）。
+| 本栈实测 | 数值 | 含义（与边界） |
+|---|---|---|
+| **1024² 生成 · Fast 模式** | **~9 秒/张（热态）** | 同一 prompt、模型常驻、文本编码缓存命中。完整冷启动 50.8 s（E8 默认档，实测），改 prompt ≈ +3–7 s（bf16 TE）→ [真实延迟](docs/benchmarks/REAL_WORLD_LATENCY.md) |
+| **相对 bf16-40 基线加速** | **5.2–5.5×（热态、同会话配对）** | 同会话实测配对；8 步 turbo 输出必然不同——画质经人工目检裁决，未宣称无损 |
+| **2048² 原生分辨率** | **40.2–40.4 秒/张** | 有界矩阵实测：3 prompt × 3 seed、离散 0.5%，含首次 2048² 排版海报运行；不宣称长时间稳定性 → [明细](docs/benchmarks/2048_VALIDATION.md) |
+| 测试硬件 / 系统 | RX 7900 XTX (gfx1100) · Windows 11 | 原生 Windows ROCm，不用 WSL2、不静默回退 CPU。其他 GPU 未测（默认拒绝执行） |
+| ROCm 栈 | torch 2.12.0+rocm7.14.1 · ComfyUI 固定 commit | AMD 轮子固定版本、ComfyUI 锁 commit、运行记录过 schema 校验 |
 
-**状态：Phase 3 完成**（优化循环：1024² 提速 5.2–5.5×，2048² 解锁；
-下一步 Phase 4 RCA）。见
-[设计文档](docs/specs/2026-10-30-qwen-image-2.1-rocm-7900xtx-design.md)与
-[Phase 3 计划](docs/superpowers/plans/2026-10-31-phase3-optimization-loop.md)。
+*以上每条声明都能对应到已提交的运行记录：[声明-证据矩阵](docs/benchmarks/CLAIM_EVIDENCE_MATRIX.md)。*
 
-## 环境搭建
+## 真实输出（未修图，可溯源）
 
-前置条件：Windows 11、AMD Radeon RX 7900 XTX（gfx1100）、较新的 Adrenalin
-驱动、[uv](https://docs.astral.sh/uv/)、git。
+| 1024² Fast · 中文场景 | 1024² Fast · 英文场景 | 1024² Fast · 中文排版海报 |
+|---|---|---|
+| ![江南水乡夕照](docs/gallery/fast-1024-p1-zh-scene-seed42.png) | ![山脊徒步者与云海](docs/gallery/fast-1024-p2-en-scene-seed42.png) | ![深空飞船电影海报、中文标题锐利](docs/gallery/fast-1024-p3-poster-seed42.png) |
 
-"陌生人标准"一键复现（30 分钟门槛）：
+| 2048² 原生 · Fast | bf16-40 基线（Phase 2） | turbo-int8 vs bf16 配对网格 |
+|---|---|---|
+| ![2048 原生山景](docs/gallery/fast-2048-p2-en-scene-seed42.png) | ![Phase-2 基线样张](bench/results/2026-10-31-comfyui-1024/sample-p1-zh-r0.png) | ![左 bf16-40，右 turbo-int8-ck，3 prompt × 3 seed](bench/results/2026-11-01-e8-turbo-int8-ck/quality_grid.png) |
+
+全部图片可追溯到运行记录（实验、prompt、seed、步数）：
+[docs/gallery/PROVENANCE.md](docs/gallery/PROVENANCE.md)。不使用其他模型生成图、不做修饰。
+
+## 快速开始
+
+前置：Windows 11、Radeon RX 7900 XTX、较新 Adrenalin 驱动、
+[uv](https://docs.astral.sh/uv/)、git、Fast 模式权重约 26 GB 磁盘。
 
 ```powershell
-.\reproduce.ps1 -Quick    # 单配置：p2-en-scene，1024²，40 步，seed 42
-.\reproduce.ps1 -Full     # 完整 Phase 1 协议（约 1.5–3 小时）
+git clone https://github.com/AIwork4me/qwen-image-rocm.git
+cd qwen-image-rocm
+.\quickstart.ps1 -Mode Fast        # 数分钟内出第一张图；热态 ~8-9 s/张
+.\quickstart.ps1 -Mode Quality     # bf16 40 步，与基线逐位一致
+.\quickstart.ps1 -Mode Fast -Resolution 2048
 ```
 
-它会创建隔离的 `.venv-repro`、安装固定的 AMD ROCm 栈、跑 HIP 冒烟、从
-ModelScope 下载权重（约 30GB，仅一次），然后执行。
+一条命令完成：Windows/GPU/gfx1100 检查 → 隔离 venv + 固定版本 AMD ROCm 轮子
+→ 固定 commit 的 ComfyUI（不匹配即拒绝执行）→ 权重完整性（固定上游
+revision `aacf31a6` 的 SHA256，摘要内置于仓库，**每个文件**都强校验、断点
+续传）→ **要求 Radeon 设备**的服务健康门
+（不允许静默 CPU 回退）→ 用与基准测试相同的驱动执行生成 → 按统一口径打印
+`服务器启动 / 就绪到首图 / 完整冷启动 / 热态均值+中位数`。首次运行需下载权重；
+此后完整冷启动约 51 秒（E8 默认档、bf16 文本编码器；实测）。
 
-手动等价步骤（`reproduce.ps1` 自动化的内容）：
+Phase-1 diffusers 复现入口保留：`.\reproduce.ps1 -Quick`。
 
-1. `uv venv phase1-diffusers/.venv --python 3.12 --seed`
-2. **只**用指定的 AMD 轮子命令装 torch（逐字执行）：
-   ```
-   python -m pip install --index-url https://repo.amd.com/rocm/whl-multi-arch/ "torch[device-gfx1100]==2.12.0+rocm7.14.1" "torchvision[device-gfx1100]==0.27.0+rocm7.14.1" "torchaudio==2.11.0+rocm7.14.1"
-   ```
-3. `python -m pip install -r phase1-diffusers/requirements.txt`，随后断言
-   `torch.__version__.endswith("rocm7.14.1")`（防止被换成 PyPI 版）
-4. `modelscope download --model Qwen/Qwen-Image-2.1 --local_dir weights/diffusers-format`
-5. `python -I phase1-diffusers/smoke_hip.py`（必须输出 `gcn_arch=gfx1100`）
-6. 设置 `QIR_SDP=math`（本栈必需——见下方发现 1），然后出图：
-   `python -I phase1-diffusers/generate.py --prompt-id p2-en-scene
-   --width 1024 --height 1024 --steps 40 --seed 42 --out results/raw/repro`
+## Fast 与 Quality
 
-每份结果的环境证据在 `bench/results/env/`（由 `tools/snapshot_env.py`
-生成）。精确冻结的依赖清单见 `phase1-diffusers/requirements.lock.txt`
-（pip freeze；ROCm 栈不在 PyPI 上，该锁依赖 AMD 轮子源）。
+| | Fast | Quality |
+|---|---|---|
+| 配置 | Turbo 8 步 · int8 DiT + **bf16 TE** · `--use-ck-attention`（E8，owner 已裁决） | bf16 40 步 · `--disable-smart-memory` |
+| 1024² 热态 | ~8–9 s | ~45–51 s |
+| 2048² | ✅ 40.2–40.4 s（有界矩阵，n=9） | ❌（bf16 VAE 解码在 24 GB 上 OOM） |
+| 输出 vs 基线 | 不同（8 步调度），**冻结网格上判"无感"（A1 + #5）**。int8-TE 变体（"生产三联"，略快）已被 owner 裁决**否决**——p1 略降、p3 排版海报不可接受（[#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5)）；LPIPS 未预测出 p3 问题——人工门禁为终审 | **逐位一致**（LPIPS 0.0000） |
+| 磁盘权重 | ~26 GB | ~32 GB |
 
-## 基准协议
+两个档位都是冻结的实验清单（[bench/quickstart_config.py](bench/quickstart_config.py)），
+quickstart 不可能偏离已测配置。画质评判方法见
+[QUALITY_METHODOLOGY.md](docs/benchmarks/QUALITY_METHODOLOGY.md)。
 
-冻结于 [`bench/prompts.json`](bench/prompts.json)：3 条 prompt
-（中文场景 / 英文场景 / 文字渲染海报）× 40 步 ×
-seeds `[42, 1337, 20261030]`。**仅在 1024² 执行**——在 24GB RDNA3 卡 +
-当前 Windows ROCm 栈的任何可用注意力后端上，2048² 目前无法完成
-（见下方发现）。结果为 JSON（schema：`bench/schema/result.schema.json`）
-+ Markdown 报告（含中位数、离散度、局限性声明）。
+## 硬件支持矩阵
 
-## Phase 1 结果（diffusers 基线，1024²，bf16，40 步）
+| GPU / 系统 | 状态 |
+|---|---|
+| RX 7900 XTX (gfx1100) · Windows 11 原生 | ✅ **已测试——本页全部数字** |
+| 其他 gfx1100 Radeon（7900 XT/GRE、7800 XT…）· Windows 11 | ⚠️ 预期可用；未实测——quickstart 需 `-AllowUntestedGpu` |
+| gfx1151 / RDNA4、核显 Radeon | ⚠️ 未测试 |
+| Linux ROCm | 不在本仓库范围（Windows-ROCm 结论未必适用） |
+| NVIDIA / Intel / CPU | ❌ 不支持；quickstart 直接拒绝 |
 
-每配置 3 次测量取中位；完整报告：
-[math](bench/results/2026-10-31-math-1024/report.md) ·
-[flex](bench/results/2026-10-31-flex-1024/report.md)
+## 真实延迟（Fast，1024²）
 
-| DiT 注意力后端 | s/step（稳态中位） | 总耗时（中位） | 显存 |
+统一口径——精确定义见 [REAL_WORLD_LATENCY.md](docs/benchmarks/REAL_WORLD_LATENCY.md)。Fast 出货配置为 E8（bf16 TE），冷路径含 17.5 GB 文本编码器载入 + ~7 s 冷编码：
+
+| 指标 | Fast（E8，默认档，2026-11-01 实测） |
+|---|---|
+| 服务器启动 | 18.2 s |
+| 就绪到首图 | 32.6 s（含冷 TE 7.16 s） |
+| **完整冷启动**（启动 → 首图） | **50.8 s** |
+| 换 prompt（文本变化） | 热态 + 3–7 s（bf16 TE，phase-3 实测） |
+| 热态重复（换 seed） | 均值 9.18 s / 中位 9.07 s |
+| 2048² Fast 热态 | 42.2 s（turbo-int8 探测，同 bf16-TE 家族） |
+
+参考：被否决的 int8-TE 三联变体冷启更快（完整冷启 20–46 s、热态
+8.0–9.2 s、换词 ~10 s），见
+[REAL_WORLD_LATENCY.md](docs/benchmarks/REAL_WORLD_LATENCY.md)。Quality
+（bf16-40）：完整冷启动 67.5 s、热态 ~46 s。重启后的冷启动
+**未测**；VRAM 数字为 0.5 s 采样值（下界）。
+
+## 复现基准测试
+
+```powershell
+# 协议级（每变体独立服务器、3 prompt × 3 seed、质量门禁）：
+powershell -File bench\run_variant.ps1 -Experiment p3-turbo-int8-ck-te-nosmart-1024x1024 -Date mydate
+# Phase-1 diffusers 基线：
+.\reproduce.ps1 -Full
+```
+
+冻结协议：3 个 prompt（中文场景/英文场景/中文排版海报）× seeds
+[42, 1337, 20261030]，euler/simple，cfg 1.0，cold+warmup+measured 纪律与
+防缓存种子（[bench/prompts.json](bench/prompts.json)、
+[schema](bench/schema/result.schema.json)）。历史结果只读；修正以新运行 +
+勘误落地，绝不改写原始数据。
+
+关键结果（实测中位数；完整表见
+[Phase-3 汇总](bench/results/2026-11-01-phase3-summary/report.md)）：
+
+| 杠杆（1024²，热态） | 总耗时 | vs 同会话 bf16 对照 | 画质 |
 |---|---|---|---|
-| math SDPA      | 3.60 – 3.70 | 239 – 254 | 18.8 GB |
-| flex（无 Triton） | 16.1 – 18.9 | 756 – 875 | 20.8 GB |
+| Turbo-int8 + ck（e8） | 9.1 | 5.2–5.5× | distance 0.21–0.36 → 用户裁决：无感 |
+| **Fast = Turbo-int8 + ck（E8，出货默认）** | **9.1** | 5.2–5.5× | 判"无感"（A1 + #5） |
+| int8-TE"三联"变体（r1）——**已被 #5 否决为默认** | 8.0–9.2 | 跨会话 ~5.5–6.0×* | 裁决：p1 略降、p3 不可接受（vs e8 LPIPS 0.058/0.012/0.014 未预测出） |
+| 仅 ck 注意力（40 步） | 35–37 | 1.30–1.37× | 数值路径不同 → 网格裁决 |
+| int8 DiT / TE（40 步） | 45–50 | ~1.0× | 近无损 0.004–0.060 |
+| `--disable-smart-memory` | 42–46 | 1.06–1.14× | 逐位一致 |
+| `--highvram`、`--fast fp16_accumulation` | 163/224 | 0.2–0.3× | 有数据地否决 |
+| diffusers + cpu_offload 基线 | 239–254 | — | Phase 1 |
 
-s/step = 第 2..40 步的中位数（稳态）；`step_times_s[0]` 含文本编码 +
-cpu-offload 权重恢复，被排除（协议 v1.1——见各报告的 Limitations 节）。
+\* 仅为跨会话参考；同会话配对声明以 e8 行为准。
 
-环境证据：`bench/results/env/snapshot-20261030-212234.json`。
+## 架构与优化
 
-## Phase 2 结果（ComfyUI 基线，1024²，bf16，40 步）
+- **ComfyUI 为何比 diffusers 快 5×**：diffusers 每次运行付出 ~90 s 的
+  cpu_offload PCIe 搬运（31 GB）+ 3.66 s/步；ComfyUI 保持 DiT 常驻。详见
+  [Phase 2 报告](bench/results/2026-10-31-comfyui-1024/report.md)。
+- **int8 解锁**：原生 `.comfy_quant` 检查点由普通 loader 自动识别（无自定义
+  节点）——权重减半、1024² 速度持平，并且是 2048² 注意力+权重塞进 24 GB 的
+  唯一路径。
+- **测量设施（协议 v1.3）**：websocket 节点/步级计时（文本编码/去噪/VAE 分
+  解）、节点缓存命中核算、采样式 VRAM 峰值、每变体完整服务器生命周期 +
+  从服务器日志抓取注意力路径证据（[bench/comfyui_client.py](bench/comfyui_client.py)）。
 
-ComfyUI 0.43.0（固定 commit）、独立 uv venv、同一指定 ROCm 栈、
-euler/simple/cfg-1（官方 Qwen-Image-2.1 模板默认）、API 顺序驱动、
-默认注意力（开箱即用——见发现 5）。报告：
-[comfyui](bench/results/2026-10-31-comfyui-1024/report.md) ·
-跨框架对比图：
-[cross_framework.png](bench/results/2026-10-31-comfyui-1024/cross_framework.png)
+## 已知限制
 
-| 框架（1024²，warm） | 总耗时中位 (s) | s/step | 显存 |
-|---|---|---|---|
-| diffusers + cpu_offload (math) | 239 – 254 | 稳态 3.60 – 3.70 | 18.8 GB |
-| **ComfyUI（默认注意力）** | **45 – 51** | ~1.1（按执行时间估算） | 16.6 GB |
+- 热态数字 ≠ 用户延迟（冷/换词/热三分，
+  见[真实延迟](docs/benchmarks/REAL_WORLD_LATENCY.md)）。
+- 2048² 验证深度为有界矩阵（连续 13 次生成）；长时间稳定性/OOM 恢复未测
+  （[台账](docs/benchmarks/2048_VALIDATION.md)）。
+- VRAM 为 0.5 s 采样值——瞬态峰值的下界。
+- 画质裁决只覆盖冻结的 3 prompt × 3 seed 集合，不外推。
+- torch.compile/FlexAttention 被阻断：Windows ROCm 无 Triton 轮子。
 
-同等数值配置下 ComfyUI warm 端到端快约 5 倍：diffusers 每轮付 ~90s 的
-cpu_offload 权重搬运（31GB 过 PCIe）+ 3.66s/step 去噪；ComfyUI 让 DiT
-常驻显存、每换 prompt 一次性换模型（~350s warmup，其后缓存）。该框架
-差异数据即 Phase 3 的基线。注：ComfyUI API 不暴露逐步耗时，总耗时取
-服务器执行时间。
+## ROCm-on-Windows 发现与上游贡献
 
-**更正（Phase 3，2026-11-01）**：45–51s 稳态数字**不含文本编码**——正式
-测量与 warmup 只差 seed，ComfyUI 节点缓存直接跳过 `CLIPTextEncode`
-（v1.3 websocket 计时揭示；真实 TE 计算 bf16 3–7s / int8 1.1–2.6s）。
+以真实工作负载驱动的 RCA 与最小复现——已于 2026-11-01 全部发上游
+（[索引](docs/upstream/INDEX.md)）：
 
-## Phase 3 结果（优化循环，2026-11-01，协议 v1.3）
-
-同会话、同重启机制；所有提速均为对**同会话 bf16 影子对照**
-（48.2 / 50.2 / 48.4s）的配对比值。节点级计时（文本编码/去噪/VAE）与
-真实显存峰值来自新增 websocket 监视器。总表：
-[summary](bench/results/2026-11-01-phase3-summary/report.md) · 各实验
-`quality.md` + 对比网格 · [目检包](bench/results/REVIEW_PACK.md)。
-
-| 手段（1024²，warm） | 总耗时 (s) | 提速 | 画质（对 bf16-40 的 LPIPS） |
-|---|---|---|---|
-| bf16 影子对照 | 48.2–50.2 | 1.00× | —（噪声底 0.0000） |
-| **Turbo 8 步 + int8 DiT + ck 注意力** | **9.1（全 prompt 一致）** | **5.2–5.5×** | distance 0.21–0.36（待目检） |
-| Turbo 8 步 + int8 DiT | 9.1–9.2 | 5.3× | distance 0.19–0.35 |
-| Turbo 8 步（bf16） | 11.1–13.1 | 3.7–4.5× | distance 0.19–0.28 |
-| 仅 ck 注意力（40 步 bf16） | 35.2–37.5 | 1.30–1.37× | 数值路径不同（网格判定） |
-| int8 DiT / TE（40 步） | 44.5–50.5 | ~1.0× | 保真 0.004–0.031（近无损） |
-| --disable-smart-memory | 42.4–46.4 | 1.06–1.14× | 逐字节一致 |
-| --highvram / --fast fp16_accumulation | p3 163 / 224 | 0.22–0.30×（p3） | 一致但严重变慢 |
-| torch.compile（diffusers 侧） | 阻断 | — | `TritonMissing`（inductor 建后端即失败） |
-
-要点：
-
-1. **2048² 解锁**（原"所有后端均不可能"，发现 2）：原生 int8 权重
-   （DiT 7.26GB + TE 9.35GB）+ sub-quadratic 注意力跑通 2048×2048——
-   40 步 328s，**Turbo-int8 仅 42.2s**。
-2. **原生 int8 量化近无损且零成本**：普通 `UNETLoader` 自动识别
-   `.comfy_quant`；1024² 速度持平、权重减半。此模型**无 fp8**；w4a8 TE
-   条件漂移大（LPIPS 最高 0.41），int8 是甜点。
-3. **ck 注意力（`--use-ck-attention`）是 gfx1100 上唯一更快的后端**
-   （1.30–1.37×）；split 略慢、quad=默认、`--use-pytorch-cross-attention`
-   即使 math-hard 包装也被发现 1 阻断（TE 路径仍触发坏 kernel）。
-4. **文本编码便宜、模型换入换出贵**：新 prompt 只付 1.1–2.6s TE 计算
-   （int8），但内存压力下模型对换要 ~60–470s——24GB 卡跑 31.8GB 权重的
-   真实"新 prompt"成本。
-5. **节点缓存价值 ~30%**：`--cache-none` 只有 0.68–0.71×。
-
-## ROCm Windows 生态发现（Phase 1-4）
-
-1. **flash 与 mem-efficient SDPA 启动失败** —— **上游已根因定位**
-   （TheRock#7315/#7992：torch 2.12.0+rocm7.14.1 Windows 轮子的
-   AOTriton 运行时/镜像版本错配），**本地已验证**（无权重 192 格复现：
-   S=64 起即失败；同索引 `2.12.0+rocm7.14.0` = 零启动失败），
-   **修复收益已测量**（7.14.0 flash：1024² 1.07 s/step，比 math 快
-   3.4×，省 1.9GB 显存）——
-   [issue](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)、
-   [W2 证据](docs/issues/evidence/phase4-w2-7140-verification.md)
-2. **2048²（原生分辨率）**：在好的 7.14.0 构建上注意力已不再是阻碍
-   （flash 可跑 S≈16k），但 bf16 VAE 解码 OOM（单次 20.25GB conv
-   分配）——实测 2048² 路线仍是 ComfyUI + 原生 int8（Phase 3：
-   40 步 328s / turbo 42s）。
-3. **AMD 轮子源无 Windows Triton**（2026-11-01 复核：TheRock PR#4006
-   已合并但未发布轮子；nightly 的 triton 仅 Linux）→
-   FlexAttention/torch.compile 走慢速回退——
-   [issue](docs/issues/2026-10-30-no-triton-windows-rocm.md)
-4. **cpu_offload 首轮 warmup 页文件抖动**（6× 步长减速，可自恢复）
-   （32GB 内存主机）；Phase 4 补充：抖动代价与后端相关（flash 免疫，
-   稠密 math 分配受害最深）——
-   [issue](docs/issues/2026-10-30-warmup-pagefile-thrash-cpu-offload.md)
-5. **ComfyUI 通过启动探测在 SDPA 后端 bug 下幸存**：它同样撞上 flash
-   注意力的 `invalid argument` 失败，但自动禁用并回退到次二次核——
-   而 diffusers/transformers 会整体失败。同样的坏 kernel，不同的消费者
-   韧性；证据（日志行 + 两张输出图的 SHA256）见
-   [issue 1](docs/issues/2026-10-30-hiperrorinvalidvalue-qwen3vl-textencoder.md)。
-   Phase 4 已把该探测模式提议发到上游——
+1. torch 2.12.0+rocm7.14.1 Windows 上 flash/高效 SDPA 自 S=64 起
+   `hipErrorInvalidValue` —— 根因为轮子内 AOTriton 运行时/镜像不匹配
+   （TheRock#7315/#7992）；本地以免权重 192 格复现验证；同索引 7.14.0
+   干净且 flash 快 3.4×——切栈是显式的用户决策，仓库默认保持 7.14.1 +
+   `QIR_SDP=math` workaround。
+   [TheRock#7315 评论](https://github.com/ROCm/TheRock/issues/7315#issuecomment-6554228687) ·
    [transformers#50211](https://github.com/huggingface/transformers/issues/50211)
-   （6 项已批准贡献已于 2026-11-01 全部发布：[INDEX](docs/upstream/INDEX.md)）。
+2. Windows ROCm 无 Triton 轮子（已核实的发行缺口；TheRock PR#4006 已合未发）
+   → [issue 文档](docs/issues/2026-10-30-no-triton-windows-rocm.md)
+3. 32 GB 内存主机 cpu_offload 首次预热 pagefile 抖动 →
+   [accelerate#4488](https://github.com/huggingface/accelerate/issues/4488)
+4. 韧性不对称：ComfyUI 靠启动探测躲过坏 SDPA 内核并回退；diffusers/
+   transformers 整个调用失败——探测模式提案已发 transformers#50211。
+5. hf_transfer/hub 在不稳定镜像上的断点行为 →
+   [huggingface_hub#4196 评论](https://github.com/huggingface/huggingface_hub/issues/4196#issuecomment-6554229435)
+6. RDNA3-Windows 注意力后端性能数据：`--use-ck-attention` 1.30–1.37× →
+   [comfy-kitchen#292](https://github.com/Comfy-Org/comfy-kitchen/issues/292)；
+   VAEDecodeTiled 与 fp16_accumulation 回归 →
+   [ComfyUI#17469](https://github.com/Comfy-Org/ComfyUI/issues/17469) ·
+   [ComfyUI#17470](https://github.com/Comfy-Org/ComfyUI/issues/17470)
 
-## 许可
+## 路线图
 
-- 代码：MIT（见 [LICENSE](LICENSE)）
-- 基准数据与报告（`bench/results/`）：CC-BY-4.0
-  （见 [docs/DATA_LICENSE.md](docs/DATA_LICENSE.md)）
+- [x] 2048² 有界矩阵（3 prompt × 3 seed）——**2026-11-01 完成**：中位数
+      40.27/40.32/40.36 s、离散 0.5%，p3 排版海报首次 2048² 运行
+     （[#4](https://github.com/AIwork4me/qwen-image-rocm/issues/4)）
+- [x] 生产组合网格的正式三档裁决——**2026-11-01 已记录（[#5](https://github.com/AIwork4me/qwen-image-rocm/issues/5)）：p1 略降、p2 无感、p3 不可接受 → 三联被否决为 Fast 默认；Fast 采用 E8 配置（判"无感"）**
+- [ ] 重启后冷启动测量（真实磁盘首启）
+- [ ] 切栈试用：上游修复进入稳定 tag 后，默认切 7.14.0 flash（注意力 3.4×）
+- [ ] 更广的画质套件（人像、产品、长英文 prompt）——独立、明确标注的新集
+- [ ] 可选：7900 XT / GRE 的 gfx1100 家族验证
+
+## 参与贡献
+
+见 [CONTRIBUTING.md](CONTRIBUTING.md)。CPU 测试门：
+`uv run --with pytest --with jsonschema --with matplotlib --with pillow --with numpy --with requests pytest tests/ -v`
+（无需 GPU；GPU 硬件验证是独立的 self-hosted workflow）。
+Bug 报告需附 `tools/snapshot_env.py` 输出——见 issue 模板。
+
+## 许可证与致谢
+
+- 本项目代码：**MIT**（[LICENSE](LICENSE)）
+- 基准数据与报告（`bench/results/`、`docs/benchmarks/`）：**CC-BY-4.0**
+  （[docs/DATA_LICENSE.md](docs/DATA_LICENSE.md)）
+- 模型权重：Qwen-Image-2.1 与 Qwen3-VL 遵循各自上游许可，由使用者自行
+  下载，绝不入库（[docs/weights.md](docs/weights.md)）
+- ComfyUI（GPL-3.0）在安装时按固定 commit 克隆；本仓库不复制其代码。
+  完整归因与边界：[docs/LEGAL_AND_ATTRIBUTION.md](docs/LEGAL_AND_ATTRIBUTION.md)
+
+*独立社区基准项目——非 AMD 或阿里巴巴/Qwen 官方项目。所有数字均在维护者的
+RX 7900 XTX 上实测，附可复现证据。*
 
 ## English
 
-See [README.md](README.md).
+English README: [README.md](README.md).

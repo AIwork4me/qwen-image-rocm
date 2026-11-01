@@ -1,0 +1,28 @@
+{
+  "name": "p4-qs-fast-1024x1024",
+  "phase": 4,
+  "description": "Quickstart Fast profile = E8 config (turbo int8 DiT + bf16 TE + ck attention), owner-verdict approved (A1 无感 + #5). The int8-TE 'production triple' variant was REJECTED as Fast default by the #5 verdict (p1 略降, p3 typography 不可接受)",
+  "framework": "comfyui",
+  "precision": "int8-convrot",
+  "resolution": 1024,
+  "steps": 8,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_turbo_int8_convrot.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "ck",
+  "measured": 2,
+  "fresh_prompt_arm": false,
+  "sdp_mode": "math",
+  "server_flags": [
+    "--use-ck-attention"
+  ],
+  "env_vars": {},
+  "attention_log_patterns": [
+    "attention|quadratic|disabling"
+  ]
+}

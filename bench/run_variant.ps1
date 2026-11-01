@@ -19,11 +19,13 @@ param(
     [int]$RestartIdx = 0,
     [int]$HealthTimeoutS = 600,
     [string]$OnlyPrompt = "",
-    [int]$Measured = 0
+    [int]$Measured = 0,
+    [switch]$OverwriteResults
 )
 
 $ErrorActionPreference = "Continue"  # Phase-1 lesson: native stderr must not kill PS5.1
 $repo = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot "portops.ps1")
 $launch = Join-Path $repo "phase2-comfyui\launch_comfyui.ps1"
 $uvCandidates = @(
     "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\astral-sh.uv_Microsoft.Winget.Source_8wekyb3d8bbwe\uv.exe",
@@ -36,23 +38,25 @@ $manifestPath = Join-Path $repo "bench\experiments\$Experiment.json"
 if (-not (Test-Path $manifestPath)) { Write-Error "no manifest: $manifestPath"; exit 2 }
 $m = Get-Content $manifestPath -Raw | ConvertFrom-Json
 $resultsDir = Join-Path $repo "bench\results\$Date"
+# overwrite guard (review P1-10): an existing run's records are evidence;
+# refuse to clobber them unless explicitly told to
+if (Test-Path $resultsDir) {
+    $existing = @(Get-ChildItem $resultsDir -Filter *.json -ErrorAction SilentlyContinue)
+    if ($existing.Count -gt 0 -and -not $OverwriteResults) {
+        Write-Error "results dir already contains $($existing.Count) record(s): $resultsDir - use a new -Date or pass -OverwriteResults to clobber deliberately"
+        exit 6
+    }
+}
 New-Item -ItemType Directory -Force -Path $resultsDir | Out-Null
 $serverOut = Join-Path $resultsDir "server.log"
 $serverErr = Join-Path $resultsDir "server.err.log"
 
-function Kill-Port([int]$p) {
-    $conns = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue
-    foreach ($c in $conns) {
-        if ($c.OwningProcess -gt 0) {
-            Write-Host "killing PID $($c.OwningProcess) on port $p"
-            taskkill /PID $c.OwningProcess /T /F 2>$null | Out-Null
-        }
-    }
-    Start-Sleep 2
-}
-
-# --- 1. clean slate ---------------------------------------------------------
-Kill-Port $Port
+# --- 1. clean slate (port-safe: NEVER touch an existing listener; review P0-3)
+# Ownership = PIDs of the tree WE start in this invocation (portops.ps1).
+# Anything already listening - even a leftover server from a previous run of
+# THIS repo - is left alone; we simply take the next free port.
+$Port = Select-ServerPort $Port
+if ($Port -lt 0) { Write-Error "no free port in the search window"; exit 5 }
 
 # --- 2. start server with the variant's flags -------------------------------
 # manifest optional fields are also baked into the JSON; defaults here are
@@ -94,10 +98,11 @@ if (-not $healthy) {
     Write-Error "server failed health gate in ${HealthTimeoutS}s; log tail:"
     if (Test-Path $serverOut) { Get-Content $serverOut -Tail 30 }
     if (Test-Path $serverErr) { Get-Content $serverErr -Tail 30 }
-    Kill-Port $Port
+    Stop-OwnTree $server.Id @() $Port   # our own tree only; strangers untouched
     exit 3
 }
-Write-Host "server healthy on port $Port"
+$ownPids = Get-DescendantPids $server.Id   # remember OUR tree while root is alive
+Write-Host "server healthy on port $Port (root PID $($server.Id)$(if ($ownPids) { ', children ' + ($ownPids -join ',') }))"
 
 # --- 4. run the driver -------------------------------------------------------
 $driverArgs = @("run", "--python", "3.12",
@@ -134,9 +139,8 @@ foreach ($f in @($serverOut, $serverErr)) {
 if ($lines) { $lines | Set-Content -Encoding UTF8 $evidence; Write-Host "attention evidence -> $evidence" }
 else { Write-Warning "no attention/native-ops lines found in server log" }
 
-# --- 7. teardown + verify -----------------------------------------------------
-if (-not $server.HasExited) { taskkill /PID $server.Id /T /F 2>$null | Out-Null }
-Kill-Port $Port
-$portFree = -not (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue)
+# --- 7. teardown (own process tree ONLY, by PID; review P0-3) -----------------
+Stop-OwnTree $server.Id $ownPids $Port
+$portFree = -not (Test-PortBusy $Port)
 Write-Host "teardown done; port free: $portFree; driver exit: $driverCode"
 exit $driverCode

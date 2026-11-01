@@ -17,7 +17,13 @@ def test_core_exports():
     assert core.steady_step_rate([12.0, 1.0, 1.0]) == 1.0
     assert isinstance(core.load_schema(), dict)
     assert core.PROMPTS_PATH.name == "prompts.json"
-    assert core.REPO.name == "image"
+    # checkout-directory-name independent: GitHub CI checks out as
+    # "qwen-image-rocm", local clones may use any name. REPO is valid
+    # wherever it is the root that actually contains the bench package
+    # (works for both Windows and POSIX path styles).
+    assert (core.REPO / "bench" / "core.py").is_file()
+    assert core.PROMPTS_PATH.is_file()
+    assert core.SCHEMA_PATH.is_file()
 
 
 def test_validate_record_rejects_bad():

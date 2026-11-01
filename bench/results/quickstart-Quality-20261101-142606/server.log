@@ -1,0 +1,1 @@
+launching: QIR_SDP=math python C:\Users\Rocm\Desktop\image\phase2-comfyui\launch_wrapper.py --listen 127.0.0.1 --port 8188 --extra-model-paths-config C:\Users\Rocm\Desktop\image\phase2-comfyui\extra_model_paths.yaml --disable-smart-memory

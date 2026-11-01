@@ -1,5 +1,105 @@
 # Changelog
 
+## 2026-11-01 — Owner quality verdict applied (PR #7, verdict round)
+
+**Formal verdict recorded** ([#5 comment](https://github.com/AIwork4me/qwen-image-rocm/issues/5#issuecomment-6555955095), verbatim): p1 略降 · p2 无感 ·
+**p3 typography 不可接受 → the int8-TE "production triple" is REJECTED as
+the Fast default** (single 不可接受 tier fails the pre-published scale).
+Consequences applied end-to-end: **Fast profile reverted to the E8 config**
+(turbo int8 DiT + **bf16 TE** + ck — judged 无感 A1; manifest
+`p4-qs-fast-1024x1024` now mirrors e8 exactly, quickstart weights set
+updated, tests pin the equality); E8-default Fast **re-verified on GPU
+post-verdict** (boot 18.2 s / ready 32.6 s / full cold 50.8 s / warm mean
+9.18 s — inference config changed, so a real run was mandatory); verdict
+recorded verbatim in `2026-11-01-r1-triple/quality.md` (三档勾选) and the
+methodology ledger; READMEs (en/zh), claim matrix (C2 superseded, C7
+qualified), REAL_WORLD_LATENCY (E8-default section + triple re-labeled as
+variant evidence), rc1 (stable-tag blockers → NONE), OWNER_QUALITY_REVIEW
+(outcome header) all synchronized. Key methodology finding: **LPIPS
+fidelity (p3 0.0137) did not predict the owner's p3 不可接受** — concrete
+proof the human gate is binding and LPIPS is auxiliary-only. #5 closed
+with the outcome recorded. 102 tests, ruff clean.
+
+## 2026-11-01 — Final release closure (PR #7, round 3)
+
+Last fidelity-semantics hardcode removed from the quality-gate generator:
+the FIDELITY note said "closer to the bf16 reference" regardless of the
+actual baseline — wrong for the r1-triple gate whose baseline is E8. Now:
+"closer perceptual similarity to the specified baseline image; LPIPS is
+not an absolute image-quality score" (docstring, CLI help, and generated
+markdown all baseline-agnostic; fidelity/distance distinction preserved).
+r1-triple quality.md regenerated with byte-identical numbers (p1
+0.0583/0.0748 · p2 0.0115/0.0150 · p3 0.0137/0.0154 — deterministic
+rerun). Anti-regression: 6-case semantics suite (true-bf16 / E8 / future
+non-bf16 / missing-metadata fail-closed / committed-artifact agreement /
+not-a-quality-score) + evidence pinning suite that RECOMPUTES all quoted
+r1/r3 medians from the committed JSON records (8.30/9.06/8.09 s @1024²;
+40.268/40.324/40.362 s, range 40.236–40.445 @2048²; warm records verified
+as cache-hit runs, never fresh-prompt). Audit docs layered: historical
+round-1 sections marked "Historical Round-1 Snapshot — Superseded" with a
+Current Final Release Assessment on top; no future SHAs committed.
+OWNER_QUALITY_REVIEW.md added — the human-decision pack for issue #5
+(configs, sample matrix, LPIPS table, direct image links, per-prompt
+visual dimensions, verdict scale, non-binding AI observations clearly
+labeled). 101/101 tests, ruff clean; no inference-path changes (round-2
+GPU evidence stands); no history rewrites; links + zh/en audits pass.
+
+## 2026-11-01 — Independent-review revision (PR #7, round 2)
+
+P0: r1-triple quality.md baseline relabeled from a hardcoded "bf16, 40
+steps" to the actual baseline (E8 turbo-int8/bf16-TE/ck, 8 steps), now
+derived from run records + machine-readable quality.json; LPIPS per-prompt
+mapping corrected in every doc/PR/issue (p1=0.058, p2=0.012, p3=0.014 —
+original values unchanged, rerun deterministic). Process ownership rebuilt
+PID-first (bench/portops.ps1): existing listeners are never touched
+(spare-port fallback), teardown kills only the tree this run started,
+command-line string matching removed entirely; live dual-checkout test
+passed (decoy server with "phase2-comfyui" in its command line survived a
+full run untouched). Found & fixed a real PS 5.1 hazard while testing: the
+FIRST CIM/NetTCPIP query in a fresh process can transiently return empty —
+the port check now bind-probes instead (same syscall as the server).
+Weight integrity hardened: revision aacf31a6 pinned, sha256 table embedded
+(cross-verified LFS-pointer vs local hashes 8/8), digests enforced for
+pre-existing files (size-only was a bypass), stamp cache keyed size+mtime,
+same-size-wrong-content injection tests added. ComfyUI commit drift now
+fails closed (-AllowComfyCommitDrift = experimental, recorded
+stack_verified=false in provisioning.json); -SkipSetup still verifies
+torch/commit/digests. Unified cold-start vocabulary (Server boot /
+Ready-to-first-image / Full cold start / Warm mean+median) in script and
+docs. Triple grid verdict remains PENDING (#5). P1: gpu-validation.yml
+provisions a clean checkout (no venv/weights assumptions); step-times
+audit tool (105/337 records carry partial step_times_s — step-1 events
+lost; no published number derives from them); quickstart local results
+gitignored; run_variant refuses to clobber existing records
+(-OverwriteResults to override). 91+ CPU tests, ruff clean.
+
+## 2026-11-01 — Release readiness (v0.1.0-rc1)
+
+**Quickstart**: `.\quickstart.ps1 -Mode Fast|Quality` — one command from
+clone to first image (env/GPU/gfx1100 checks, pinned venv + AMD wheels,
+pinned ComfyUI commit, sha256-verified resumable weight downloads,
+Radeon-required health gate, benchmark-driver smoke with cold/warm report;
+no silent CPU fallback; port-safe process handling everywhere). Dogfooded
+on the target GPU in both modes (Fast: boot 8.1 s / cold 12.1 s / warm
+8.11 s; Quality: cold 59.4 s / warm 46.4 s).
+**The production triple finally measured as a whole** (turbo int8 DiT +
+int8 TE + ck + `--disable-smart-memory`): warm medians 8.30/9.06/8.09 s
+(n=9), fresh-prompt +1.2 s, cold 17.1 s, sampled VRAM peak ≈ 7.7 GB; LPIPS
+fidelity vs e8: 0.058/0.012/0.014 (formal grid verdict pending owner).
+**2048² re-probed** on the triple config: warm 40.2 s / cold 43.3 s,
+sampled peak ≈ 8.3 GB (second session, second prompt — probe tier).
+**CI fixed & split**: checkout-dir-independent repo-root test (root cause
+of red main), explicit CPU test gate + manual self-hosted GPU validation
+workflow. **Evidence docs**: claim→evidence matrix, real-world latency
+(cold/fresh/warm split with sampling semantics), 2048 validation ledger,
+quality methodology (LPIPS semantics + verdict ledger), baseline audit.
+**Product README** (en/zh mirrors) with real gallery + provenance, support
+matrix, quickstart, forbidden-framings enforcement; social preview built
+from real outputs (CJK-verified). `bench/run_variant.ps1` no longer kills
+unrelated processes on its port. Issue/PR templates, troubleshooting,
+legal & attribution, v0.1.0-rc1 (owner-gated). 66 CPU tests green, ruff
+clean; secret scan clean on all new logs.
+
 ## 2026-11-01 — Phase 4: RCA verification + upstream contribution track
 
 Finding 1 (flash/mem-efficient SDPA `hipErrorInvalidValue`) **verified

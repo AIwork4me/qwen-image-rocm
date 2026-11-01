@@ -1,0 +1,33 @@
+name: GPU hardware validation (manual)
+
+# Hardware validation gate: REAL inference on an AMD Radeon GPU.
+#
+# Requirements (NOT satisfiable by GitHub-hosted runners — they have no
+# Radeon GPU, and CPU CI must never be reported as GPU verification):
+#   - self-hosted Windows 11 runner labeled `self-hosted, windows, rocm`
+#   - AMD Radeon RX 7900 XTX (gfx1100), up-to-date Adrenalin driver
+#   - git + uv on PATH (winget uv path is auto-detected by quickstart)
+#
+# This workflow does NOT assume a pre-provisioned checkout: it runs
+# quickstart WITHOUT -SkipSetup, so a clean clone of the runner workspace
+# provisions its own isolated venv (pinned AMD ROCm wheels), clones ComfyUI
+# at the pinned commit, verifies weight digests (downloads ~18 GB once if
+# weights/ is empty — pre-seed weights\comfyui-split\ to skip that), then
+# health-gates on a real Radeon device (no CPU fallback) and generates.
+# A ComfyUI commit drift fails closed here (no -AllowComfyCommitDrift):
+# GPU validation never runs an unverified stack.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  gpu-smoke:
+    runs-on: [self-hosted, windows, rocm]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fast-profile smoke generation (1024², real GPU, full provisioning)
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File .\quickstart.ps1 -Mode Fast
+        shell: cmd
+      - name: Environment snapshot (evidence; venv now exists)
+        run: phase2-comfyui\.venv\Scripts\python.exe -I tools\snapshot_env.py
+        shell: cmd

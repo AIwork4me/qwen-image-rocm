@@ -12,3 +12,4 @@ modelscope_cache/
 uv.lock 
 phase3-quality/.venv/
 .zcode/
+bench/results/quickstart/

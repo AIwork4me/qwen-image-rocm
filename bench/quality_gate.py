@@ -1,7 +1,9 @@
 r"""Quality-gate tooling (design doc 画质门槛协议): paired grids + LPIPS.
 
-Each speed experiment pairs against the bf16-40-step baseline at the same
-prompt+seed. Deliberately TWO separate outputs:
+Each speed experiment pairs against a DECLARED baseline at the same
+prompt+seed (any frozen config — e.g. the bf16-40 control, or another
+already-judged experiment like E8 — see --baseline-desc). Deliberately TWO
+separate outputs:
 
 1. quality_grid.png — side-by-side [baseline | experiment] tiles per prompt
    and seed (256 px) for the overall look.
@@ -26,6 +28,7 @@ Run inside the phase3-quality venv (PyPI CPU torch + lpips + pillow + numpy):
 """
 
 import argparse
+import json
 import statistics
 import sys
 from pathlib import Path
@@ -149,9 +152,10 @@ def lpips_table(
 SEMANTICS_NOTE = {
     "fidelity": (
         "LPIPS semantics: FIDELITY — same model, same seed, only the numerics "
-        "path changed (quantization / attention backend). Lower = closer to the "
-        "bf16 reference; compare against the noise floor before reading "
-        "anything into small values."
+        "path changed (quantization / attention backend). Lower LPIPS means "
+        "closer perceptual similarity to the specified baseline image. LPIPS "
+        "is not an absolute image-quality score; compare against the noise "
+        "floor before reading anything into small values."
     ),
     "distance": (
         "LPIPS semantics: DISTANCE, NOT QUALITY — a different model/schedule "
@@ -159,6 +163,33 @@ SEMANTICS_NOTE = {
         "mean worse. The three-tier verdict is the user's 目检 call on the grid."
     ),
 }
+
+
+def describe_baseline(baseline_dir: str | Path, override: str | None = None) -> str:
+    """Human description of what the baseline images actually are.
+
+    Derived from the baseline's own run records (raw dirs are named after
+    their bench/results/<name>/ records dir), never hardcoded — a fidelity
+    gate against e8 (turbo int8, 8 steps) must not be labeled "bf16, 40
+    steps" (regression: r1-triple's quality.md shipped with exactly that
+    wrong label). ``override`` wins; no records found -> explicit "(no run
+    records found...)" so a mislabel cannot slip through silently.
+    """
+    if override:
+        return override
+    name = Path(baseline_dir).name
+    records = REPO / "bench" / "results" / name
+    jsons = sorted(records.glob("*.json")) if records.is_dir() else []
+    if not jsons:
+        return f"`{baseline_dir}` (no run records found for {name!r} — pass --baseline-desc)"
+    r = json.loads(jsons[0].read_text(encoding="utf-8"))
+    bits = [str(r.get("precision", "?")), f"{r.get('steps', '?')} steps"]
+    unet, clip = r.get("unet"), r.get("clip")
+    if unet:
+        bits.append(unet.replace(".safetensors", ""))
+    if clip:
+        bits.append("TE " + clip.replace(".safetensors", "").replace("qwen3vl_8b_", ""))
+    return f"`{baseline_dir}` ({r.get('experiment', name)}: " + ", ".join(bits) + ")"
 
 
 def write_quality_md(
@@ -169,11 +200,12 @@ def write_quality_md(
     noise_floor: float | None,
     baseline_dir: str,
     experiment_dir: str,
+    baseline_desc: str | None = None,
 ) -> None:
     lines = [
         f"# Quality gate — {experiment_name}",
         "",
-        f"- Baseline: `{baseline_dir}` (bf16, 40 steps)",
+        f"- Baseline: {describe_baseline(baseline_dir, baseline_desc)}",
         f"- Experiment: `{experiment_dir}`",
         f"- {SEMANTICS_NOTE[semantics]}",
     ]
@@ -208,7 +240,9 @@ def write_quality_md(
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--baseline", required=True, help="raw dir of the bf16 baseline runs")
+    ap.add_argument("--baseline", required=True,
+                    help="raw dir of the baseline runs (any frozen config;"
+                         " label comes from its records or --baseline-desc)")
     ap.add_argument("--experiment", required=True, help="raw dir of the experiment runs")
     ap.add_argument("--experiment-name", required=True)
     ap.add_argument("--semantics", choices=["fidelity", "distance"], required=True)
@@ -218,6 +252,9 @@ def main() -> None:
     ap.add_argument("--noise-b", default=None, help="same-config rerun image B")
     ap.add_argument("--skip-lpips", action="store_true",
                     help="grids only (torch/lpips unavailable)")
+    ap.add_argument("--baseline-desc", default=None,
+                    help="explicit baseline description (default: derived from the"
+                         " baseline's own run records; required if none exist)")
     ns = ap.parse_args(sys.argv[1:])
 
     out_dir = Path(ns.out)
@@ -246,9 +283,34 @@ def main() -> None:
 
     write_quality_md(
         out_dir / "quality.md", ns.experiment_name, ns.semantics, table,
-        noise_floor, ns.baseline, ns.experiment,
+        noise_floor, ns.baseline, ns.experiment, baseline_desc=ns.baseline_desc,
     )
     print(f"quality.md -> {out_dir / 'quality.md'}")
+
+    # machine-readable echo: the doc/transcription layer (READMEs, matrices,
+    # release notes) reads THIS, so per-prompt numbers cannot transpose again
+    base_records = REPO / "bench" / "results" / Path(ns.baseline).name
+    base_jsons = sorted(base_records.glob("*.json")) if base_records.is_dir() else []
+    base_experiment = (
+        json.loads(base_jsons[0].read_text(encoding="utf-8"))["experiment"]
+        if base_jsons else None
+    )
+    echo = {
+        "experiment_name": ns.experiment_name,
+        "semantics": ns.semantics,
+        "baseline_dir": ns.baseline,
+        "baseline_experiment": base_experiment,
+        "baseline_desc": describe_baseline(ns.baseline, ns.baseline_desc),
+        "median": {p: s["median"] for p, s in table.items()},
+        "max": {p: s["max"] for p, s in table.items()},
+        "n_pairs": {p: s["n"] for p, s in table.items()},
+        "noise_floor": noise_floor,
+        "monitor": "lpips(alex, v0.1)",
+    }
+    (out_dir / "quality.json").write_text(
+        json.dumps(echo, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    print(f"quality.json -> {out_dir / 'quality.json'}")
 
 
 if __name__ == "__main__":
