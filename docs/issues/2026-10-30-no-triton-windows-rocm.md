@@ -86,8 +86,14 @@ the stable Windows torch line) is folded into the Phase 4 upstream drafts
 rather than a separate issue (dedup: the ask is already implied by
 triton-windows#35 discussions).
 
-W2-stretch note (whl-next nightly venv, if run): `pip install triton`
-result there → [recorded below when available]
+W2-stretch note (whl-next nightly, 2026-11-01): `torch 2.15.0+
+rocm10.3.0a20261031` installed fine on Windows gfx1100 (SDPA matrix
+all-green, 0 launch failures — evidence `sdpa-repro-matrix-next-2150.md`),
+but **`pip install triton --index-url .../whl-next/` still resolves to
+nothing on Windows** (`from versions: none`). Finding #3's answer is
+final: no public Triton wheel exists for ANY current AMD Windows index
+(stable, stale gfx110X channel, or whl-next nightly) — torch.compile and
+real FlexAttention remain unavailable on this platform as of 2026-11-01.
 
 ## Environment
 

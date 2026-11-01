@@ -72,3 +72,13 @@ kernel fix. No attempt made to enable VAE tiling here (out of W2 scope).
 
 The new snapshot fields (transformers/diffusers versions + per-backend
 SDPA probe) discriminate the broken/good builds in ~15 s.
+
+## 5. Stretch: whl-next nightly (2.15.0+rocm10.3.0a20261031)
+
+- SDPA matrix: **all-green** (0 launch failures), same pattern as 7.14.0;
+  flash even faster (2.56 ms @S=4096 causal vs 8.5 ms on 7140;
+  40 ms @S=16384 causal). Third distinct aotriton images set
+  (`amd-gfx110x`, sha `c11b5b88…`). Evidence:
+  `sdpa-repro-matrix-next-2150.md` / `sdpa-repro-next-2150.json`.
+- `pip install triton` on whl-next: **no Windows wheels** (`from
+  versions: none`) — finding #3 closed with a final negative.

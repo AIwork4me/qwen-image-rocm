@@ -83,6 +83,13 @@ runtime/images pairings differ, and only the newer one is broken on
 Windows gfx1100 — consistent with the runtime/images mismatch lineage
 described in this issue and #7992.
 
+The current nightly is also healthy on this machine:
+`torch 2.15.0+rocm10.3.0a20261031` from `nightly.repo.amd.com/rocm/whl-next/`
+(torch git `dde42be1…`, images `amd-gfx110x` sha `c11b5b88…`) — same
+all-green pattern (0 launch failures; flash 2.6 ms @S=4096 causal, 40 ms
+@S=16384 causal). So of the three Windows gfx1100 builds checked, only
+the stable-pinned 2.12.0+rocm7.14.1 is broken.
+
 ## Channel hygiene note
 
 As of 2026-11-01 the stable `repo.amd.com/rocm/whl-multi-arch/` index
