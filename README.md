@@ -48,7 +48,8 @@ cd qwen-image-rocm
 One command runs the whole chain: OS/GPU/gfx1100 checks → isolated venv with
 pinned AMD ROCm wheels → ComfyUI at the pinned commit (a mismatched commit
 fails closed) → weight integrity via pinned-revision SHA256 for **every**
-file (resumable downloads) → server health gate that **requires a Radeon
+file (upstream revision `aacf31a6`, digests embedded in-repo; resumable
+downloads) → server health gate that **requires a Radeon
 device** (no silent CPU fallback) → generation via the same driver as the
 benchmarks → printed `Server boot / Ready-to-first-image / Full cold start /
 Warm mean+median`. First-ever run downloads weights once; after that, full

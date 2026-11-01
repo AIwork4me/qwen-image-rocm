@@ -1,5 +1,34 @@
 # Changelog
 
+## 2026-11-01 — Independent-review revision (PR #7, round 2)
+
+P0: r1-triple quality.md baseline relabeled from a hardcoded "bf16, 40
+steps" to the actual baseline (E8 turbo-int8/bf16-TE/ck, 8 steps), now
+derived from run records + machine-readable quality.json; LPIPS per-prompt
+mapping corrected in every doc/PR/issue (p1=0.058, p2=0.012, p3=0.014 —
+original values unchanged, rerun deterministic). Process ownership rebuilt
+PID-first (bench/portops.ps1): existing listeners are never touched
+(spare-port fallback), teardown kills only the tree this run started,
+command-line string matching removed entirely; live dual-checkout test
+passed (decoy server with "phase2-comfyui" in its command line survived a
+full run untouched). Found & fixed a real PS 5.1 hazard while testing: the
+FIRST CIM/NetTCPIP query in a fresh process can transiently return empty —
+the port check now bind-probes instead (same syscall as the server).
+Weight integrity hardened: revision aacf31a6 pinned, sha256 table embedded
+(cross-verified LFS-pointer vs local hashes 8/8), digests enforced for
+pre-existing files (size-only was a bypass), stamp cache keyed size+mtime,
+same-size-wrong-content injection tests added. ComfyUI commit drift now
+fails closed (-AllowComfyCommitDrift = experimental, recorded
+stack_verified=false in provisioning.json); -SkipSetup still verifies
+torch/commit/digests. Unified cold-start vocabulary (Server boot /
+Ready-to-first-image / Full cold start / Warm mean+median) in script and
+docs. Triple grid verdict remains PENDING (#5). P1: gpu-validation.yml
+provisions a clean checkout (no venv/weights assumptions); step-times
+audit tool (105/337 records carry partial step_times_s — step-1 events
+lost; no published number derives from them); quickstart local results
+gitignored; run_variant refuses to clobber existing records
+(-OverwriteResults to override). 91+ CPU tests, ruff clean.
+
 ## 2026-11-01 — Release readiness (v0.1.0-rc1)
 
 **Quickstart**: `.\quickstart.ps1 -Mode Fast|Quality` — one command from

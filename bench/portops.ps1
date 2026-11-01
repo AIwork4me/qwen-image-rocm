@@ -15,8 +15,27 @@
 #     Anything else still listening on our port afterwards is reported and
 #     left alone.
 
+# Warm the CIM session at dot-source time: the first CIM/NetTCPIP query in
+# a fresh PS 5.1 process can transiently return empty (see Test-PortBusy);
+# remaining Get-NetTCPConnection uses here are informational-only, but warm
+# them anyway so ownership REPORTING is not flaky either.
+$null = Get-CimInstance -ClassName Win32_ComputerSystem -Property Name -ErrorAction SilentlyContinue
+
 function Test-PortBusy([int]$p) {
-    [bool](Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue)
+    <# Bind-probe, NOT a Get-NetTCPConnection query: on PS 5.1 the FIRST
+       CIM/NetTCPIP query in a fresh process can transiently return empty
+       (observed live 2026-11-01: quickstart's one-and-only query said
+       "free" while a listener held the port, and the server then died on
+       bind). Actually trying to bind is the same syscall the server will
+       perform, so it cannot lie. #>
+    try {
+        $l = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, $p)
+        $l.Start()
+        $l.Stop()
+        return $false
+    } catch {
+        return $true   # bind refused -> something owns the port
+    }
 }
 
 function Select-ServerPort([int]$RequestedPort, [int]$MaxOffset = 20) {
