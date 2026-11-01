@@ -1,11 +1,11 @@
-# qwen-image-rocm quickstart — the one-command path to a first real image.
+# qwen-image-rocm quickstart - the one-command path to a first real image.
 #
 #   .\quickstart.ps1 -Mode Fast       # ~8-9 s/image @1024 (turbo int8 + ck)
 #   .\quickstart.ps1 -Mode Quality    # bf16-40, bit-identical baseline
 #   .\quickstart.ps1 -Mode Fast -Resolution 2048
 #
 # Both modes map to frozen, measured experiment manifests (see
-# bench/quickstart_config.py — single source of truth). The script:
+# bench/quickstart_config.py - single source of truth). The script:
 #   checks Windows 11 / Radeon GPU / gfx1100 -> provisions an isolated venv
 #   with the pinned AMD ROCm wheels -> clones ComfyUI at the pinned commit
 #   -> verifies weights (exact size + authoritative LFS sha256 when
@@ -37,7 +37,7 @@ param(
     [int]$HealthTimeoutS = 900
 )
 
-# NOTE: no $ErrorActionPreference = "Stop" — under Windows PowerShell 5.1
+# NOTE: no $ErrorActionPreference = "Stop" - under Windows PowerShell 5.1
 # that turns native stderr progress output (uv/pip/git) into terminating
 # errors. Every native call below checks $LASTEXITCODE explicitly instead.
 $repo = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -94,9 +94,11 @@ if (-not $uv) {
 Write-Host "[ok] uv: $uv"
 
 # --- 4. mode config (single source of truth: bench/quickstart_config.py) -----
-$cfgJson = & $uv run --python 3.12 --with requests python -I (Join-Path $repo "bench\quickstart_config.py") config --mode $Mode 2>$null
+$cfgJson = & $uv run --python 3.12 --with requests --with jsonschema python -I (Join-Path $repo "bench\quickstart_config.py") config --mode $Mode 2>$null
 if ($LASTEXITCODE -ne 0) { Fail "invalid mode/config" "quickstart_config.py rejected mode '$Mode'" "use -Mode Fast or -Mode Quality" }
-$cfg = $cfgJson | ConvertFrom-Json
+# join stdout lines before parsing: PS 5.1 pipes a string ARRAY line-by-line
+# into ConvertFrom-Json, silently producing broken objects otherwise
+$cfg = ($cfgJson -join "`n") | ConvertFrom-Json
 if ($cfg.resolutions -notcontains $Resolution) {
     if ($Mode -eq "Quality" -and $Resolution -eq 2048) {
         Fail "Quality mode does not support 2048" "bf16 VAE decode allocates a 20.25 GB tensor and OOMs on 24 GB cards (docs/issues/evidence/sdpa-7140-2048-vae-oom.log)" "use -Mode Fast -Resolution 2048 (turbo int8 route, measured)"
@@ -123,7 +125,7 @@ if (-not $SkipSetup) {
         if ($LASTEXITCODE -ne 0) { Fail "venv creation failed" "uv venv exited $LASTEXITCODE" "see output above" }
         Write-Host "[2/6] installing pinned AMD ROCm torch ($TorchPin) from repo.amd.com..."
         & $py -m pip install --index-url https://repo.amd.com/rocm/whl-multi-arch/ "torch[device-gfx1100]==$TorchPin" "torchvision[device-gfx1100]==0.27.0+rocm7.14.1" "torchaudio==2.11.0+rocm7.14.1"
-        if ($LASTEXITCODE -ne 0) { Fail "AMD wheel install failed" "pip exited $LASTEXITCODE (network or index issue?)" "retry — the command is resumable; see docs/weights.md network notes for mainland mirrors" }
+        if ($LASTEXITCODE -ne 0) { Fail "AMD wheel install failed" "pip exited $LASTEXITCODE (network or index issue?)" "retry - the command is resumable; see docs/weights.md network notes for mainland mirrors" }
     } else {
         Write-Host "[1-2/6] reusing existing venv (torch imports)"
     }
@@ -141,7 +143,7 @@ if (-not $SkipSetup) {
     } else {
         $head = git -C $comfyDir rev-parse HEAD 2>$null
         if ("$head" -ne $ComfyCommit) {
-            Write-Warning "ComfyUI checkout is at $head, pinned commit is $ComfyCommit — keeping yours (delete phase2-comfyui/ComfyUI to re-pin)"
+            Write-Warning "ComfyUI checkout is at $head, pinned commit is $ComfyCommit - keeping yours (delete phase2-comfyui/ComfyUI to re-pin)"
         }
     }
     & $py -m pip install -r (Join-Path $comfyDir "requirements.txt")
@@ -166,22 +168,23 @@ $hfBase = if ($env:HF_ENDPOINT) { "$($env:HF_ENDPOINT.TrimEnd('/'))/Comfy-Org/Qw
 Write-Host "[4/6] weights (source: Comfy-Org/Qwen-Image-2.1 via $hfBase)..."
 $wsJson = & $py -I (Join-Path $repo "bench\quickstart_config.py") weights-state --mode $Mode 2>$null
 if ($LASTEXITCODE -ne 0) { Fail "weights-state failed" "python exited $LASTEXITCODE" "see output above" }
-$need = @($wsJson | ConvertFrom-Json)
+$need = @((($wsJson -join "`n") | ConvertFrom-Json))
+if (-not $need -or -not $need[0].rel) { Fail "weights-state parse failed" "could not parse quickstart_config.py output" "run: python -I bench\quickstart_config.py weights-state --mode $Mode" }
 foreach ($w in $need) {
     if ($w.state -eq "present") { Write-Host "[ok] $($w.rel) ($([math]::Round($w.expected_bytes/1GB,2)) GB)"; continue }
     if ($SkipSetup) { Fail "-SkipSetup but weights incomplete" "$($w.rel) is $($w.state)" "rerun without -SkipSetup to download (resumable), or place the file at weights\comfyui-split\$($w.rel)" }
-    Write-Host "[download] $($w.rel) ($([math]::Round($w.expected_bytes/1GB,2)) GB) — resumable, safe to Ctrl+C and rerun"
+    Write-Host "[download] $($w.rel) ($([math]::Round($w.expected_bytes/1GB,2)) GB) - resumable, safe to Ctrl+C and rerun"
     $dest = Join-Path $repo (Join-Path "weights\comfyui-split" $w.rel)
     New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null
     & $py -I (Join-Path $repo "tools\download_parallel.py") "$hfBase/resolve/main/$($w.rel)" $dest 16
-    if ($LASTEXITCODE -ne 0) { Fail "download failed" "tools/download_parallel.py exited $LASTEXITCODE for $($w.rel)" "rerun the same command — chunks resume byte-exact" }
+    if ($LASTEXITCODE -ne 0) { Fail "download failed" "tools/download_parallel.py exited $LASTEXITCODE for $($w.rel)" "rerun the same command - chunks resume byte-exact" }
     $vJson = & $py -I (Join-Path $repo "bench\quickstart_config.py") verify-weight --rel $w.rel --url-base $hfBase
     if ($LASTEXITCODE -ne 0) { Fail "integrity check crashed" "verify-weight exited $LASTEXITCODE" "network reachability of $hfBase/raw endpoints; then rerun" }
-    $v = $vJson | ConvertFrom-Json
+    $v = ($vJson -join "`n") | ConvertFrom-Json
     if (-not $v.ok) {
         & $py -I (Join-Path $repo "tools\download_parallel.py") "$hfBase/resolve/main/$($w.rel)" $dest 16
         $vJson = & $py -I (Join-Path $repo "bench\quickstart_config.py") verify-weight --rel $w.rel --url-base $hfBase
-        $v = $vJson | ConvertFrom-Json
+        $v = ($vJson -join "`n") | ConvertFrom-Json
     }
     if (-not $v.ok) { Fail "weight integrity mismatch" "$($w.rel): sha256/size does not match the host's LFS pointer" "delete the file and rerun to re-download" }
     Write-Host "[ok] $($w.rel) verified (sha256 matches $hfBase LFS pointer)"
@@ -205,7 +208,7 @@ function Kill-OwnOrphans([int]$p) {
 Kill-OwnOrphans $Port
 $origPort = $Port
 while (Test-PortBusy $Port) {
-    Write-Warning "port $Port busy (not ours) — trying next"
+    Write-Warning "port $Port busy (not ours) - trying next"
     $Port++
     if ($Port -gt ($origPort + 20)) { Fail "no free port" "ports $origPort..$($origPort+20) all busy" "free a port or pass -Port <n>" }
 }
@@ -240,10 +243,10 @@ if (-not $healthy) {
         $p = Join-Path $resultsDir $f
         if (Test-Path $p) { $tail += Get-Content $p -Tail 25 }
     }
-    Fail "server health gate failed" "no Radeon device reported by /system_stats within ${HealthTimeoutS}s (server may have crashed — tail below)`n$($tail -join "`n")" "read the log tail above; common causes: driver/ROCm install, weights path (weights\comfyui-split), port conflict"
+    Fail "server health gate failed" "no Radeon device reported by /system_stats within ${HealthTimeoutS}s (server may have crashed - tail below)`n$($tail -join "`n")" "read the log tail above; common causes: driver/ROCm install, weights path (weights\comfyui-split), port conflict"
 }
 $bootS = [math]::Round(($tHealthy - $tServerStart).TotalSeconds, 1)
-Write-Host "[ok] server healthy in ${bootS}s — GPU: $($dev.name) (VRAM $([math]::Round($dev.vram_total/1GB,1)) GB)"
+Write-Host "[ok] server healthy in ${bootS}s - GPU: $($dev.name) (VRAM $([math]::Round($dev.vram_total/1GB,1)) GB)"
 
 # --- 10. smoke generation through the benchmark driver ------------------------
 Write-Host "[6/6] generating (cold + warm) via the benchmark driver..."
