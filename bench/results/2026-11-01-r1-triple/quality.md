@@ -2,7 +2,7 @@
 
 - Baseline: `results/raw/2026-11-01-e8-turbo-int8-ck` (p3-turbo-int8-ck-1024x1024: int8-convrot, 8 steps, qwen_image_2.1_turbo_int8_convrot, TE bf16)
 - Experiment: `results/raw/2026-11-01-r1-triple`
-- LPIPS semantics: FIDELITY — same model, same seed, only the numerics path changed (quantization / attention backend). Lower = closer to the bf16 reference; compare against the noise floor before reading anything into small values.
+- LPIPS semantics: FIDELITY — same model, same seed, only the numerics path changed (quantization / attention backend). Lower LPIPS means closer perceptual similarity to the specified baseline image. LPIPS is not an absolute image-quality score; compare against the noise floor before reading anything into small values.
 
 | Prompt | median LPIPS | max LPIPS | n pairs |
 |---|---|---|---|

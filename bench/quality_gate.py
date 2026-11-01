@@ -1,7 +1,9 @@
 r"""Quality-gate tooling (design doc 画质门槛协议): paired grids + LPIPS.
 
-Each speed experiment pairs against the bf16-40-step baseline at the same
-prompt+seed. Deliberately TWO separate outputs:
+Each speed experiment pairs against a DECLARED baseline at the same
+prompt+seed (any frozen config — e.g. the bf16-40 control, or another
+already-judged experiment like E8 — see --baseline-desc). Deliberately TWO
+separate outputs:
 
 1. quality_grid.png — side-by-side [baseline | experiment] tiles per prompt
    and seed (256 px) for the overall look.
@@ -150,9 +152,10 @@ def lpips_table(
 SEMANTICS_NOTE = {
     "fidelity": (
         "LPIPS semantics: FIDELITY — same model, same seed, only the numerics "
-        "path changed (quantization / attention backend). Lower = closer to the "
-        "bf16 reference; compare against the noise floor before reading "
-        "anything into small values."
+        "path changed (quantization / attention backend). Lower LPIPS means "
+        "closer perceptual similarity to the specified baseline image. LPIPS "
+        "is not an absolute image-quality score; compare against the noise "
+        "floor before reading anything into small values."
     ),
     "distance": (
         "LPIPS semantics: DISTANCE, NOT QUALITY — a different model/schedule "
@@ -237,7 +240,9 @@ def write_quality_md(
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--baseline", required=True, help="raw dir of the bf16 baseline runs")
+    ap.add_argument("--baseline", required=True,
+                    help="raw dir of the baseline runs (any frozen config;"
+                         " label comes from its records or --baseline-desc)")
     ap.add_argument("--experiment", required=True, help="raw dir of the experiment runs")
     ap.add_argument("--experiment-name", required=True)
     ap.add_argument("--semantics", choices=["fidelity", "distance"], required=True)

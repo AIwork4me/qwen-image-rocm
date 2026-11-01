@@ -1,5 +1,29 @@
 # Final release audit (independent pass) — 2026-11-01
 
+## Current Final Release Assessment (closure round 3 — supersedes everything below)
+
+- **Engineering gates: PASS.** CPU CI green on the PR HEAD (check the PR's
+  latest run); 101/101 tests, ruff clean; every public median recomputed
+  from committed records by `tests/test_evidence_numbers.py`.
+- **Fidelity semantics:** the last hardcoded assumption ("closer to the
+  bf16 reference") is gone from the generator and from the r1 report —
+  LPIPS fidelity now reads "closer perceptual similarity to the specified
+  baseline image; not an absolute image-quality score", pinned by
+  `tests/test_quality_gate_semantics.py` (cases 1–6).
+- **Evidence tiers (current):** 1024² Fast triple = MEASURED (n=9 + fresh
+  arms); 2048² Fast = **MEASURED — BOUNDED MATRIX** (3 prompts × 3 seeds,
+  `2026-11-01-r3-2048matrix/`, issue #4 CLOSED). Soak / OOM-recovery /
+  multi-hour stability: **NOT claimed**.
+- **Owner-decision state:** issue #5 (formal quality verdict on the triple
+  grid) is **OPEN by design** — owner materials at
+  [OWNER_QUALITY_REVIEW.md](OWNER_QUALITY_REVIEW.md). AI observations there
+  are non-binding and clearly labeled.
+- **Release state:** PR #7 not merged; no tag; no GitHub release.
+- **Verdict: MERGE GATE READY · STABLE RELEASE GATE BLOCKED (owner quality
+  verdict pending).**
+
+The sections below this line are retained as audit history:
+
 > **Revision round 2** (same day, owner-requested independent review):
 > every finding from the review was fixed and re-verified; a round-2
 > section follows the original 15-point checklist. The live port-safety
@@ -11,7 +35,12 @@ Auditor role separated from author role; nothing below passes "because I
 wrote it" — each verdict cites its check. Gate vocabulary: PASS / FAIL /
 BLOCKED / NOT APPLICABLE (no "basically done").
 
-## The 15-point checklist
+## The 15-point checklist — Historical Round-1 Snapshot (Superseded)
+
+*State as of round 1 (pre-revision). Issue #4 was then open, 2048² was
+probe-tier, CI references point at the round-1 run. Kept verbatim for audit
+trail; see the Current Final Release Assessment above and the round-2 table
+below for what changed.*
 
 | # | Question | Verdict | Check performed |
 |---|---|---|---|
@@ -31,7 +60,7 @@ BLOCKED / NOT APPLICABLE (no "basically done").
 | 14 | License / sensitive-info problems? | **PASS** | secret-pattern scan clean on all newly committed logs (command in LEGAL doc); maintainer's local paths inside committed logs documented as accepted evidence residue; no weights committed (`.gitignore` + tree check); LEGAL_AND_ATTRIBUTION covers model licenses & non-affiliation |
 | 15 | Dangerous process-kill / file deletion? | **PASS** | `run_variant.ps1` + quickstart rewritten: kill only own orphans (command-line-matched to this repo), spare-port fallback, no recursive deletes outside the venv it created; audit diff-read both scripts |
 
-## Independent clone acceptance
+## Independent clone acceptance — Historical Round-1 Snapshot (Superseded by round-2 re-runs)
 
 Fresh clone of the PR branch into `%TEMP%\qir-acceptance\repo` (different
 directory name than any dev checkout — also proves checkout-path
@@ -51,7 +80,7 @@ LFS-verified weight files (junction). The from-zero 18 GB download path
 but was not re-downloaded from scratch in this acceptance to bound network
 cost — recorded as NOT TESTED (this session).
 
-## Verdict
+## Verdict — Historical Round-1 Snapshot (Superseded; #4 has since been executed and closed)
 
 **READY FOR OWNER REVIEW.** Blockers before a v0.1.0 stable tag (tracked):
 #5 owner verdict on the triple grid (required), #4 2048 bounded matrix

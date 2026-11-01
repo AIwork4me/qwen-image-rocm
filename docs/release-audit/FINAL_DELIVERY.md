@@ -1,10 +1,16 @@
 # Final delivery report — release-ready v0.1.0-rc1 (2026-11-01)
 
-> **Revision round 2 appended at the bottom** — all independent-review
-> findings fixed, re-verified on the real GPU, and the 2048² bounded
-> matrix (#4) executed. Status: **READY FOR FINAL OWNER REVIEW**.
+> **Current state (closure round 3):** sections A–H below are a
+> **Historical Round-1 Snapshot — Superseded** (issue #4 open at the time,
+> round-1 HEAD/CI references; kept verbatim, failures included). The
+> revision-round-2 addendum at the bottom fixed all review findings, and
+> the closure round fixed the last fidelity-semantics hardcode with
+> regression pinning. Current gates:
+> **MERGE READY · STABLE RELEASE BLOCKED (owner quality verdict #5
+> pending)** — see [FINAL_AUDIT.md](FINAL_AUDIT.md) §Current Final Release
+> Assessment and [OWNER_QUALITY_REVIEW.md](OWNER_QUALITY_REVIEW.md).
 
-## A. What was actually done
+## A. What was actually done — Historical Round-1 Snapshot
 
 **P0 (all closed)**
 

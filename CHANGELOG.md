@@ -1,5 +1,29 @@
 # Changelog
 
+## 2026-11-01 — Final release closure (PR #7, round 3)
+
+Last fidelity-semantics hardcode removed from the quality-gate generator:
+the FIDELITY note said "closer to the bf16 reference" regardless of the
+actual baseline — wrong for the r1-triple gate whose baseline is E8. Now:
+"closer perceptual similarity to the specified baseline image; LPIPS is
+not an absolute image-quality score" (docstring, CLI help, and generated
+markdown all baseline-agnostic; fidelity/distance distinction preserved).
+r1-triple quality.md regenerated with byte-identical numbers (p1
+0.0583/0.0748 · p2 0.0115/0.0150 · p3 0.0137/0.0154 — deterministic
+rerun). Anti-regression: 6-case semantics suite (true-bf16 / E8 / future
+non-bf16 / missing-metadata fail-closed / committed-artifact agreement /
+not-a-quality-score) + evidence pinning suite that RECOMPUTES all quoted
+r1/r3 medians from the committed JSON records (8.30/9.06/8.09 s @1024²;
+40.268/40.324/40.362 s, range 40.236–40.445 @2048²; warm records verified
+as cache-hit runs, never fresh-prompt). Audit docs layered: historical
+round-1 sections marked "Historical Round-1 Snapshot — Superseded" with a
+Current Final Release Assessment on top; no future SHAs committed.
+OWNER_QUALITY_REVIEW.md added — the human-decision pack for issue #5
+(configs, sample matrix, LPIPS table, direct image links, per-prompt
+visual dimensions, verdict scale, non-binding AI observations clearly
+labeled). 101/101 tests, ruff clean; no inference-path changes (round-2
+GPU evidence stands); no history rewrites; links + zh/en audits pass.
+
 ## 2026-11-01 — Independent-review revision (PR #7, round 2)
 
 P0: r1-triple quality.md baseline relabeled from a hardcoded "bf16, 40
