@@ -1,0 +1,47 @@
+﻿server.err.log:28: [32m[INFO][0m Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention
+server.err.log:50: [32m[INFO][0m Disabling intermediate node cache.
+server.err.log:57: [32m[INFO][0m Using split attention in VAE
+server.err.log:58: [32m[INFO][0m Using split attention in VAE
+server.err.log:124: [32m[INFO][0m Using split attention in VAE
+server.err.log:125: [32m[INFO][0m Using split attention in VAE
+server.err.log:191: [32m[INFO][0m Using split attention in VAE
+server.err.log:192: [32m[INFO][0m Using split attention in VAE
+server.err.log:258: [32m[INFO][0m Using split attention in VAE
+server.err.log:259: [32m[INFO][0m Using split attention in VAE
+server.err.log:325: [32m[INFO][0m Using split attention in VAE
+server.err.log:326: [32m[INFO][0m Using split attention in VAE
+server.err.log:392: [32m[INFO][0m Using split attention in VAE
+server.err.log:393: [32m[INFO][0m Using split attention in VAE
+server.err.log:459: [32m[INFO][0m Using split attention in VAE
+server.err.log:460: [32m[INFO][0m Using split attention in VAE
+server.err.log:526: [32m[INFO][0m Using split attention in VAE
+server.err.log:527: [32m[INFO][0m Using split attention in VAE
+server.err.log:593: [32m[INFO][0m Using split attention in VAE
+server.err.log:594: [32m[INFO][0m Using split attention in VAE
+server.err.log:660: [32m[INFO][0m Using split attention in VAE
+server.err.log:661: [32m[INFO][0m Using split attention in VAE
+server.err.log:727: [32m[INFO][0m Using split attention in VAE
+server.err.log:728: [32m[INFO][0m Using split attention in VAE
+server.err.log:794: [32m[INFO][0m Using split attention in VAE
+server.err.log:795: [32m[INFO][0m Using split attention in VAE
+server.err.log:861: [32m[INFO][0m Using split attention in VAE
+server.err.log:862: [32m[INFO][0m Using split attention in VAE
+server.err.log:928: [32m[INFO][0m Using split attention in VAE
+server.err.log:929: [32m[INFO][0m Using split attention in VAE
+server.err.log:995: [32m[INFO][0m Using split attention in VAE
+server.err.log:996: [32m[INFO][0m Using split attention in VAE
+server.err.log:1062: [32m[INFO][0m Using split attention in VAE
+server.err.log:1063: [32m[INFO][0m Using split attention in VAE
+server.err.log:1129: [32m[INFO][0m Using split attention in VAE
+server.err.log:1130: [32m[INFO][0m Using split attention in VAE
+server.err.log:1196: [32m[INFO][0m Using split attention in VAE
+server.err.log:1197: [32m[INFO][0m Using split attention in VAE
+server.err.log:1263: [32m[INFO][0m Using split attention in VAE
+server.err.log:1264: [32m[INFO][0m Using split attention in VAE
+server.err.log:1330: [32m[INFO][0m Using split attention in VAE
+server.err.log:1331: [32m[INFO][0m Using split attention in VAE
+server.err.log:1397: [32m[INFO][0m Using split attention in VAE
+server.err.log:1398: [32m[INFO][0m Using split attention in VAE
+server.err.log:1464: [32m[INFO][0m Using split attention in VAE
+server.err.log:1465: [32m[INFO][0m Using split attention in VAE
+server.err.log:1529: [32m[INFO][0m Disabling intermediate node cache.
