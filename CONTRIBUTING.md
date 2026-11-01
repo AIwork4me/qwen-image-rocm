@@ -13,7 +13,7 @@ Windows-native ROCm.
 ## Running the tests
 
 ```
-uv run --with pytest --with jsonschema --with matplotlib --with ruff pytest tests/ -v
+uv run --with pytest --with jsonschema --with matplotlib --with ruff --with requests pytest tests/ -v
 ```
 
 No GPU is required for the test suite; GPU-dependent scripts under
