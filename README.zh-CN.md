@@ -11,8 +11,10 @@ ROCm Windows 生态的公开证据。
 2. 用这个真实工作负载发现 ROCm Windows 生态的问题：每个问题都做
    根因分析、最小复现、修复，并向上游提 PR（见 `docs/issues/`）。
 
-**状态：Phase 1 进行中**（diffusers 基线）。完整计划见
-[设计文档](docs/specs/2026-10-30-qwen-image-2.1-rocm-7900xtx-design.md)。
+**状态：Phase 3 完成**（优化循环：1024² 提速 5.2–5.5×，2048² 解锁；
+下一步 Phase 4 RCA）。见
+[设计文档](docs/specs/2026-10-30-qwen-image-2.1-rocm-7900xtx-design.md)与
+[Phase 3 计划](docs/superpowers/plans/2026-10-31-phase3-optimization-loop.md)。
 
 ## 环境搭建
 
@@ -92,6 +94,46 @@ cpu_offload 权重搬运（31GB 过 PCIe）+ 3.66s/step 去噪；ComfyUI 让 DiT
 常驻显存、每换 prompt 一次性换模型（~350s warmup，其后缓存）。该框架
 差异数据即 Phase 3 的基线。注：ComfyUI API 不暴露逐步耗时，总耗时取
 服务器执行时间。
+
+**更正（Phase 3，2026-11-01）**：45–51s 稳态数字**不含文本编码**——正式
+测量与 warmup 只差 seed，ComfyUI 节点缓存直接跳过 `CLIPTextEncode`
+（v1.3 websocket 计时揭示；真实 TE 计算 bf16 3–7s / int8 1.1–2.6s）。
+
+## Phase 3 结果（优化循环，2026-11-01，协议 v1.3）
+
+同会话、同重启机制；所有提速均为对**同会话 bf16 影子对照**
+（48.2 / 50.2 / 48.4s）的配对比值。节点级计时（文本编码/去噪/VAE）与
+真实显存峰值来自新增 websocket 监视器。总表：
+[summary](bench/results/2026-11-01-phase3-summary/report.md) · 各实验
+`quality.md` + 对比网格 · [目检包](bench/results/REVIEW_PACK.md)。
+
+| 手段（1024²，warm） | 总耗时 (s) | 提速 | 画质（对 bf16-40 的 LPIPS） |
+|---|---|---|---|
+| bf16 影子对照 | 48.2–50.2 | 1.00× | —（噪声底 0.0000） |
+| **Turbo 8 步 + int8 DiT + ck 注意力** | **9.1（全 prompt 一致）** | **5.2–5.5×** | distance 0.21–0.36（待目检） |
+| Turbo 8 步 + int8 DiT | 9.1–9.2 | 5.3× | distance 0.19–0.35 |
+| Turbo 8 步（bf16） | 11.1–13.1 | 3.7–4.5× | distance 0.19–0.28 |
+| 仅 ck 注意力（40 步 bf16） | 35.2–37.5 | 1.30–1.37× | 数值路径不同（网格判定） |
+| int8 DiT / TE（40 步） | 44.5–50.5 | ~1.0× | 保真 0.004–0.031（近无损） |
+| --disable-smart-memory | 42.4–46.4 | 1.06–1.14× | 逐字节一致 |
+| --highvram / --fast fp16_accumulation | p3 163 / 224 | 0.22–0.30×（p3） | 一致但严重变慢 |
+| torch.compile（diffusers 侧） | 阻断 | — | `TritonMissing`（inductor 建后端即失败） |
+
+要点：
+
+1. **2048² 解锁**（原"所有后端均不可能"，发现 2）：原生 int8 权重
+   （DiT 7.26GB + TE 9.35GB）+ sub-quadratic 注意力跑通 2048×2048——
+   40 步 328s，**Turbo-int8 仅 42.2s**。
+2. **原生 int8 量化近无损且零成本**：普通 `UNETLoader` 自动识别
+   `.comfy_quant`；1024² 速度持平、权重减半。此模型**无 fp8**；w4a8 TE
+   条件漂移大（LPIPS 最高 0.41），int8 是甜点。
+3. **ck 注意力（`--use-ck-attention`）是 gfx1100 上唯一更快的后端**
+   （1.30–1.37×）；split 略慢、quad=默认、`--use-pytorch-cross-attention`
+   即使 math-hard 包装也被发现 1 阻断（TE 路径仍触发坏 kernel）。
+4. **文本编码便宜、模型换入换出贵**：新 prompt 只付 1.1–2.6s TE 计算
+   （int8），但内存压力下模型对换要 ~60–470s——24GB 卡跑 31.8GB 权重的
+   真实"新 prompt"成本。
+5. **节点缓存价值 ~30%**：`--cache-none` 只有 0.68–0.71×。
 
 ## ROCm Windows 生态发现（Phase 1 + 2）
 

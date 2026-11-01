@@ -13,9 +13,10 @@ ecosystem.
    gets root-cause analysis, a minimal reproducer, a fix, and an upstream
    PR (see `docs/issues/`).
 
-**Status: Phase 1 in progress** (diffusers baseline). See the
-[design document](docs/specs/2026-10-30-qwen-image-2.1-rocm-7900xtx-design.md)
-for the full plan.
+**Status: Phase 3 complete** (optimization loop: 5.2–5.5× at 1024², 2048²
+unlocked; Phase 4 RCA next). See the
+[design doc](docs/specs/2026-10-30-qwen-image-2.1-rocm-7900xtx-design.md) and
+the [Phase 3 plan](docs/superpowers/plans/2026-10-31-phase3-optimization-loop.md).
 
 ## Setup
 
@@ -100,6 +101,50 @@ s/step denoise loop, while ComfyUI keeps the DiT resident and swaps models
 once per prompt (~350 s warmup per prompt switch, cached thereafter).
 Framework-gap data is now the Phase 3 baseline. Note: per-step times are
 not exposed by the ComfyUI API; totals are server execution times.
+
+**Correction (Phase 3, 2026-11-01):** the 45–51 s steady-state excludes text
+encode — measured runs differ from warmup only by seed, so ComfyUI's node
+cache skips `CLIPTextEncode` (protocol v1.3 websocket timing made this
+visible; real TE compute is 3–7 s bf16 / 1.1–2.6 s int8, see Phase 3).
+
+## Phase 3 results (optimization loop, 2026-11-01, protocol v1.3)
+
+Same session, same restart regime; every speedup is a paired ratio vs the
+same-session bf16 shadow control (48.2 / 50.2 / 48.4 s per prompt).
+Node-level timing (text-encode / denoise / VAE) and a true VRAM peak come
+from the new websocket monitor. Full table:
+[summary](bench/results/2026-11-01-phase3-summary/report.md) · per-experiment
+`quality.md` + grids · [review pack](bench/results/REVIEW_PACK.md).
+
+| Lever (1024², warm) | total (s) | speedup | quality (LPIPS vs bf16-40) |
+|---|---|---|---|
+| bf16 control (shadow) | 48.2–50.2 | 1.00× | — (noise floor 0.0000) |
+| **Turbo 8-step + int8 DiT + ck-attention** | **9.1 uniform** | **5.2–5.5×** | distance 0.21–0.36 (user verdict) |
+| Turbo 8-step + int8 DiT | 9.1–9.2 | 5.3× | distance 0.19–0.35 |
+| Turbo 8-step (bf16) | 11.1–13.1 | 3.7–4.5× | distance 0.19–0.28 |
+| ck attention alone (40-step bf16) | 35.2–37.5 | 1.30–1.37× | different numerics path (grid verdict) |
+| int8 DiT and/or TE (40-step) | 44.5–50.5 | ~1.0× | fidelity 0.004–0.031 (near-lossless) |
+| --disable-smart-memory | 42.4–46.4 | 1.06–1.14× | bit-identical |
+| --highvram / --fast fp16_accumulation | p3 163 / 224 s | 0.22–0.30× (p3) | bit-identical (but slow) |
+| torch.compile (diffusers side) | blocked | — | `TritonMissing` at inductor backend |
+
+Highlights:
+
+1. **2048² unlocked** (was "impossible on every backend", finding 2): native
+   int8 checkpoints (DiT 7.26 GB + TE 9.35 GB) + sub-quadratic attention
+   complete 2048×2048 — 328 s at 40 steps, **42.2 s with Turbo-int8**.
+2. **Native int8 quantization is near-lossless and free**: plain
+   `UNETLoader` auto-detects `.comfy_quant` checkpoints; speed parity at
+   1024², half the weights. No fp8 exists for this model; w4a8 TE degrades
+   conditioning (LPIPS up to 0.41) — int8 is the sweet spot.
+3. **ck-attention (`--use-ck-attention`) is the only faster attention
+   backend** on gfx1100 (1.30–1.37×); split is slightly slower, quad ==
+   default, `--use-pytorch-cross-attention` is blocked by finding 1 even
+   with a math-hard wrapper (the TE path re-arms broken kernels).
+4. **Text-encode is cheap, model swaps are not**: fresh prompts pay 1.1–2.6 s
+   TE compute (int8) but ~60–470 s of model swapping under RAM pressure —
+   the real fresh-prompt cost on a 24 GB card with 31.8 GB of weights.
+5. **Node cache is worth ~30%**: `--cache-none` runs at 0.68–0.71×.
 
 ## ROCm-on-Windows findings (Phase 1 + 2)
 
