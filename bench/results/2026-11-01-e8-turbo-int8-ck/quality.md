@@ -19,3 +19,15 @@
 Notes: user 2026-11-01: A1 几乎无感（A3/A4 相对更优）；推荐极速配置
 
 Grids: `quality_grid.png` (256px pairs), `quality_crops_poster.png` (native-res text crops, poster prompt).
+
+## AI 复审 (GLM-5.3-Flash, 2026-11-01)
+
+- AI verdict: **无感**（9 对 worst-case，confidence 0.85）
+- 与人工终审一致: 是（人工 无感 / AI 无感，差 0 档）
+- Key evidence:
+  - 9 对均无伪影/结构崩坏/细节涂抹（256px 网格全检）
+  - 文字 3 种子全部正确；grid 缩略图 p3-r1 疑似『30H』经 raw 原生分辨率排除为缩略伪影
+  - p1-r2 基线太阳过曝，实验反而更柔——存在优于基线的局部
+- LPIPS 一致性: 与 LPIPS 0.36/0.27/0.21 一致：跨模型大差异为预期（类型A），LPIPS 测差异不测质量，质量级判定为同级。与人工终审『无感』一致，差 0 档。
+- 文字验证: seed42 依据 `quality_crops_poster.png`；seed1337/20261030 依据 `results/raw` 原生分辨率副标题核验（缩略图『30H』为 256px 伪影，原生分辨率下全部为正确『日』，无错字/缺画/乱码）
+- 逐对明细 (9 pairs JSON): `../AI_JUDGE_RESULTS.json` → experiments[A1]

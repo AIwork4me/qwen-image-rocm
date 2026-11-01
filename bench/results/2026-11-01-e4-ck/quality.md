@@ -19,3 +19,15 @@
 Notes: user 2026-11-01: A4 几乎无感，与 A3 并列最佳 → 最高质量推荐
 
 Grids: `quality_grid.png` (256px pairs), `quality_crops_poster.png` (native-res text crops, poster prompt).
+
+## AI 复审 (GLM-5.3-Flash, 2026-11-01)
+
+- AI verdict: **无感**（9 对 worst-case，confidence 0.85）
+- 与人工终审一致: 是（人工 无感（更优） / AI 无感，差 0 档）
+- Key evidence:
+  - 9 对无伪影；p2-r0 hiker 主体、p3-r0 飞船细节优于基线
+  - 文字 3 种子全部正确
+  - p3-r2 实验飞船几乎融入星云——内容差异（类型B预期）不计缺陷
+- LPIPS 一致性: 与 LPIPS 0.34/0.22/0.07 一致。与人工终审『无感（更优）』一致，差 0 档。
+- 文字验证: seed42 依据 `quality_crops_poster.png`；seed1337/20261030 依据 `results/raw` 原生分辨率副标题核验（缩略图『30H』为 256px 伪影，原生分辨率下全部为正确『日』，无错字/缺画/乱码）
+- 逐对明细 (9 pairs JSON): `../AI_JUDGE_RESULTS.json` → experiments[A4]

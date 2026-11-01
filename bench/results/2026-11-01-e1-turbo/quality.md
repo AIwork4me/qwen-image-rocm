@@ -20,3 +20,15 @@
 Notes: user 2026-11-01: A3 几乎无感，用户评价优于 A1/A2 → 均衡推荐
 
 Grids: `quality_grid.png` (256px pairs), `quality_crops_poster.png` (native-res text crops, poster prompt).
+
+## AI 复审 (GLM-5.3-Flash, 2026-11-01)
+
+- AI verdict: **无感**（9 对 worst-case，confidence 0.9）
+- 与人工终审一致: 是（人工 无感（更优） / AI 无感，差 0 档）
+- Key evidence:
+  - 9 对无伪影；p2-r1 hiker 主体呈现、p1-r2 桥拱过曝处理优于基线
+  - 文字 3 种子全部正确
+  - 支持人工档『无感（更优）』：多个 pair 存在可见更优局部，无任何 pair 劣于基线
+- LPIPS 一致性: 与 LPIPS 0.28/0.19/0.26 一致。与人工终审『无感（更优）』一致，差 0 档。
+- 文字验证: seed42 依据 `quality_crops_poster.png`；seed1337/20261030 依据 `results/raw` 原生分辨率副标题核验（缩略图『30H』为 256px 伪影，原生分辨率下全部为正确『日』，无错字/缺画/乱码）
+- 逐对明细 (9 pairs JSON): `../AI_JUDGE_RESULTS.json` → experiments[A3]

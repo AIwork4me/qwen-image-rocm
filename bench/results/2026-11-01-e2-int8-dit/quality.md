@@ -19,3 +19,14 @@
 Notes: 
 
 Grids: `quality_grid.png` (256px pairs), `quality_crops_poster.png` (native-res text crops, poster prompt).
+
+## AI 复审 (GLM-5.3-Flash, 2026-11-01)
+
+- AI verdict: **无感**（9 对 worst-case，confidence 0.9）
+- 与人工终审一致: 未终审（AI 首判，建议归档）
+- Key evidence:
+  - 9 对近逐像素一致，无任何可察觉退化
+  - 文字 3 种子正确（裁剪图+raw）
+- LPIPS 一致性: 与 LPIPS 0.01/0.01/0.005（近噪声底）一致。人工未终审，AI 首判无感，建议直接归档。
+- 文字验证: seed42 依据 `quality_crops_poster.png`；seed1337/20261030 依据 `results/raw` 原生分辨率副标题核验（缩略图『30H』为 256px 伪影，原生分辨率下全部为正确『日』，无错字/缺画/乱码）
+- 逐对明细 (9 pairs JSON): `../AI_JUDGE_RESULTS.json` → experiments[B1]
