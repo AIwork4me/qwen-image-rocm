@@ -2,10 +2,16 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
 
 jobs:
-  test:
+  cpu-test-gate:
+    # CPU-only gate: lint, unit tests, experiment-manifest and result-schema
+    # validation on a GitHub-hosted runner WITHOUT any GPU. Passing this gate
+    # is NOT a GPU inference verification — hardware validation is a separate
+    # manual gate: .github/workflows/gpu-validation.yml (self-hosted, RX 7900 XTX).
+    name: CPU test gate (lint + unit + schema, no GPU claims)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,6 +20,11 @@ jobs:
           python-version: "3.12"
       - name: Install uv
         uses: astral-sh/setup-uv@v5
+      - name: Gate scope notice
+        run: |
+          echo "CPU-only test gate: pytest + ruff + manifest/schema validation."
+          echo "No GPU is present on this runner; no GPU inference is run or claimed here."
+          echo "GPU hardware validation: .github/workflows/gpu-validation.yml (manual, self-hosted Radeon)."
       - name: Run tests
         run: uv run --python 3.12 --with pytest --with jsonschema --with matplotlib --with pillow --with numpy --with requests pytest tests/ -v
       - name: Lint

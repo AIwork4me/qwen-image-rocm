@@ -1,3 +1,9 @@
+[project]
+name = "qwen-image-rocm"
+version = "0.1.0"
+description = "Run and benchmark Qwen-Image 2.1 on AMD Radeon GPUs with native Windows ROCm (RX 7900 XTX / gfx1100)."
+requires-python = ">=3.12"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
