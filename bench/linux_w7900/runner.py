@@ -76,27 +76,34 @@ class LinuxRunMonitor(comfyui_client.RunMonitor):
     def _rocm_loop(self) -> None:
         import subprocess
 
+        def csv_cols(args: list[str]) -> list[list[str]]:
+            r = subprocess.run(args, capture_output=True, text=True, timeout=5)
+            lines = [l for l in r.stdout.splitlines() if l.strip()]
+            if len(lines) < 2:
+                return []
+            header = [h.strip() for h in lines[0].split(",")]
+            row = [c.strip() for c in lines[1].split(",")]
+            return [header, row]
+
         while not self._stop.is_set():
             try:
-                r = subprocess.run(["rocm-smi", "-u", "--csv", "--loglevel", "error"],
-                                   capture_output=True, text=True, timeout=5)
-                # device,GPU use (%)\ncard0,37
-                for line in r.stdout.splitlines()[1:]:
-                    parts = line.split(",")
-                    if len(parts) >= 2:
-                        try:
-                            self.gpu_util_samples.append(float(parts[1]))
-                        except ValueError:
-                            pass
-                r = subprocess.run(
-                    ["rocm-smi", "--showmeminfo", "vram", "--csv", "--loglevel", "error"],
-                    capture_output=True, text=True, timeout=5)
-                # device,...,VRAM Total Memory (B),VRAM Total Used Memory (B)
-                for line in r.stdout.splitlines()[1:]:
-                    parts = line.split(",")
-                    if len(parts) >= 4 and parts[3].isdigit():
-                        self.device_vram_peak_mb = max(
-                            self.device_vram_peak_mb, int(parts[3]) / 2**20)
+                parsed = csv_cols(["rocm-smi", "-u", "--csv", "--loglevel", "error"])
+                if parsed:
+                    header, row = parsed
+                    for i, h in enumerate(header):
+                        if "GPU use" in h and i < len(row):
+                            try:
+                                self.gpu_util_samples.append(float(row[i]))
+                            except ValueError:
+                                pass
+                parsed = csv_cols(["rocm-smi", "--showmeminfo", "vram", "--csv",
+                                   "--loglevel", "error"])
+                if parsed:
+                    header, row = parsed
+                    for i, h in enumerate(header):
+                        if "Used" in h and i < len(row) and row[i].isdigit():
+                            self.device_vram_peak_mb = max(
+                                self.device_vram_peak_mb, int(row[i]) / 2**20)
             except Exception:  # noqa: BLE001
                 pass
             self._stop.wait(1.0)
