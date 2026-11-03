@@ -1,0 +1,2 @@
+128
+model name	: AMD EPYC 9334 32-Core Processor
