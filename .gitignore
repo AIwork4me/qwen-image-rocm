@@ -13,3 +13,4 @@ uv.lock
 phase3-quality/.venv/
 .zcode/
 bench/results/quickstart/
+.venv-linux-lab/
