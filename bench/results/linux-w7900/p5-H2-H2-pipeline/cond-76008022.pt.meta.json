@@ -1,0 +1,12 @@
+{
+ "load_s": 3.85,
+ "tokenize_s": 0.0033,
+ "encode_s": 177.438,
+ "shape": [
+  1,
+  52,
+  4096
+ ],
+ "dtype": "torch.float32",
+ "file_bytes": 853651
+}

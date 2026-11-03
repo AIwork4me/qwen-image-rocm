@@ -38,6 +38,10 @@ def cmd_profile(args) -> int:
 
 def cmd_run(args) -> int:
     from . import runner
+    if args.experiment == "H1":
+        from . import pipeline
+        pipeline.run_h1(date=args.date)
+        return 0
     if args.experiment == "H2":
         from . import pipeline
         pipeline.run_h2(date=args.date, port=args.port)

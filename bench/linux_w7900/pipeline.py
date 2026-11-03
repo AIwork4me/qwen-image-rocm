@@ -81,7 +81,8 @@ t0 = time.perf_counter()
 tokens = clip.tokenize(text)
 tok_s = time.perf_counter() - t0
 t0 = time.perf_counter()
-cond = clip.encode_from_tokens_scheduled(tokens)
+cond_out = clip.encode_from_tokens_scheduled(tokens)
+cond = cond_out[0][0] if isinstance(cond_out, list) else cond_out
 enc_s = time.perf_counter() - t0
 
 torch.save({"cond": cond.cpu(), "device": "cuda"}, out_path)
@@ -139,7 +140,8 @@ for device in ("cuda", "cpu"):
             tokens = clip.tokenize(text)
             tok_s = time.perf_counter() - t0
             t0 = time.perf_counter()
-            cond = clip.encode_from_tokens_scheduled(tokens)
+            cond_out = clip.encode_from_tokens_scheduled(tokens)
+            cond = cond_out[0][0] if isinstance(cond_out, list) else cond_out
             if device == "cuda":
                 torch.cuda.synchronize()
             enc_s = time.perf_counter() - t0

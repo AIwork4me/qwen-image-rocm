@@ -43,7 +43,7 @@ OPTIONAL_DEFAULTS = {
 
 _ID_RE = re.compile(r"[A-Z]\d*[a-z0-9-]*")  # B0, L1, F1, LF1, LF3, H1, H2, BEST, ...
 
-KNOWN_IDS = ("B0", "L1", "F1", "F2", "LF1", "LF2", "LF3", "H1", "H2", "BEST")
+KNOWN_IDS = ("B0", "L1", "L1O", "F1", "F2", "LF1", "LF2", "LF3", "H1", "H2", "BEST")
 
 
 def validate_manifest(m: dict) -> None:

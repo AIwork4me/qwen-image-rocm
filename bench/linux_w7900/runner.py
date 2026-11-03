@@ -109,6 +109,21 @@ class LinuxRunMonitor(comfyui_client.RunMonitor):
             self._stop.wait(1.0)
 
 
+    def summarize(self, workflow: dict) -> dict:
+        """Extend the shared summarizer: SamplerCustomAdvanced (official
+        ManualSigmas protocol) counts as the denoise node, like KSampler."""
+        summary = super().summarize(workflow)
+        extra = 0.0
+        classes = {nid: node["class_type"] for nid, node in workflow.items()}
+        for name, dur in summary.get("node_timings_s", {}).items():
+            # node_timings keys are f"{class}#{id}"
+            if name.startswith("SamplerCustomAdvanced#"):
+                extra += dur
+        if extra:
+            summary["ksampler_s"] = round(summary.get("ksampler_s", 0.0) + extra, 3)
+        return summary
+
+
 def _host_mem() -> dict:
     out = {}
     try:
@@ -263,6 +278,14 @@ def run_experiment(experiment_id: str, *, date: str | None = None, port: int = 8
             text, negative = prompt_text[prompt_id]
             if text_override is not None:
                 text = text_override
+            if manifest.get("scheduler") == "manual_sigmas":
+                from .workflows import build_workflow_manual_sigmas
+
+                return build_workflow_manual_sigmas(
+                    unet=manifest["unet"], clip=manifest["clip"], vae=manifest["vae"],
+                    prompt=text, negative=negative, width=res, height=res,
+                    seed=seed, sigmas=manifest["sigmas"],
+                    sampler=manifest["sampler"], cfg=manifest["cfg"])
             return comfyui_client.build_workflow(
                 unet=manifest["unet"], clip=manifest["clip"], vae=manifest["vae"],
                 prompt=text, negative=negative, width=res, height=res,

@@ -102,11 +102,9 @@
     ],
     "Using .* attention": [
       "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
-      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
       "/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)"
     ],
     "attention": [
-      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
       "/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)",
       "  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)"
     ],

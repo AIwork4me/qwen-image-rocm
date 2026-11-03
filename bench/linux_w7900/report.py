@@ -24,12 +24,15 @@ def _load_records() -> list[dict]:
         if not run_dir.is_dir() or run_dir.name in ("raw", "env"):
             continue
         for f in sorted(run_dir.glob("*.json")):
-            if f.name.startswith("server"):
+            if f.name.startswith(("server", "H1_", "H2_", "STATUS", "client")):
                 continue
             try:
-                records.append(json.loads(f.read_text(encoding="utf-8")))
+                rec = json.loads(f.read_text(encoding="utf-8"))
             except (OSError, ValueError):
                 continue
+            if isinstance(rec, dict) and "experiment" in rec and "runs" in rec \
+                    and rec.get("lab") == "linux-w7900":
+                records.append(rec)
     return records
 
 
@@ -87,6 +90,69 @@ def _quality_status(exp: str) -> str:
     return "RECORDED"
 
 
+def _charts(summary: dict) -> list[str]:
+    """Bar chart (warm median per experiment) + staged waterfall, generated
+    ONLY from the aggregated SUMMARY numbers (never hand-edited)."""
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+    except ImportError:
+        return []
+    exps = [e for e in summary["per_experiment"] if e["warm_total_median_s"]]
+    if not exps:
+        return []
+    written = []
+    out_dir = lab_env.RESULTS_ROOT
+
+    order = {"B0": 0, "L1": 1, "L1O": 2, "F1": 3, "F2": 4,
+             "LF1": 5, "LF2": 6, "LF3": 7, "BEST": 8}
+    exps.sort(key=lambda e: order.get(e["experiment"], 99))
+    names = [e["experiment"] for e in exps]
+    vals = [e["warm_total_median_s"] for e in exps]
+    ns = [e["n_measure"] for e in exps]
+
+    fig, ax = plt.subplots(figsize=(9, 4.2))
+    bars = ax.bar(names, vals, color="#7b2cbf")
+    for b, v, n in zip(bars, vals, ns):
+        ax.text(b.get_x() + b.get_width() / 2, v + 0.6, f"{v:.2f}s\n(n={n})",
+                ha="center", fontsize=8)
+    ax.set_ylabel("warm generation, median (s)")
+    ax.set_title("Linux W7900 lab — 1024² warm latency per experiment "
+                 "(generated from SUMMARY.json)")
+    ax.spines[["top", "right"]].set_visible(False)
+    p = out_dir / "chart_warm_latency.png"
+    fig.tight_layout()
+    fig.savefig(p, dpi=130)
+    plt.close(fig)
+    written.append(str(p))
+
+    # staged waterfall: B0 -> L1 -> LF2/BEST (measured stages only)
+    by = {e["experiment"]: e for e in exps}
+    stages = [(lab, by[lab]["warm_total_median_s"])
+              for lab in ("B0", "L1", "LF1", "LF2") if lab in by]
+    if len(stages) >= 3:
+        fig, ax = plt.subplots(figsize=(7.5, 4.2))
+        labels = [s[0] for s in stages]
+        values = [s[1] for s in stages]
+        ax.step(range(len(stages)), values, where="mid", color="#7b2cbf", lw=2)
+        ax.plot(range(len(stages)), values, "o", color="#7b2cbf")
+        for i, v in enumerate(values):
+            ax.annotate(f"{v:.2f}s", (i, v), textcoords="offset points",
+                        xytext=(0, 8), ha="center", fontsize=9)
+        ax.set_xticks(range(len(stages)), labels)
+        ax.set_ylabel("warm generation (s)")
+        ax.set_title("Staged optimization (each stage measured end-to-end)")
+        ax.spines[["top", "right"]].set_visible(False)
+        p = out_dir / "chart_waterfall.png"
+        fig.tight_layout()
+        fig.savefig(p, dpi=130)
+        plt.close(fig)
+        written.append(str(p))
+    return written
+
+
 def build(write: bool = False) -> dict:
     records = _load_records()
     by_exp: dict[str, list[dict]] = {}
@@ -102,6 +168,7 @@ def build(write: bool = False) -> dict:
         out.mkdir(parents=True, exist_ok=True)
         (out / "SUMMARY.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
         (out / "SUMMARY.md").write_text(_markdown(summary), encoding="utf-8")
+        summary["charts"] = _charts(summary)
     return summary
 
 

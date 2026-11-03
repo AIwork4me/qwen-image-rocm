@@ -23,6 +23,8 @@ VENV_PY = REPO / ".venv-linux-lab" / "bin" / "python"
 
 DEFAULT_ATTENTION_PATTERNS = [
     r"Using pytorch attention",
+    r"Using Comfy Kitchen attention",
+    r"Comfy Kitchen attention is unavailable",
     r"Using .* attention",
     r"attention",
     r"quadratic",
