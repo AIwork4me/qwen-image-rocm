@@ -17,3 +17,4 @@ bench/results/quickstart/
 
 # linux lab raw generation outputs stay on disk (hashes recorded in run records)
 bench/results/linux-w7900/raw/
+bench/results/linux-w7900/p2-profile-profile/**/*_trace.csv
