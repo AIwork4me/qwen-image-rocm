@@ -56,3 +56,11 @@ final engineering report, open issues).
 2. Push the branch + open/merge this PR (blocked from the lab network).
 3. Optional owner decisions: 2048² exploration (gated on the verdict),
   committing full raw image sets (~150 MB) vs the current curated samples.
+
+## Companion teaching repository
+
+All of this work is additionally packaged as a standalone classroom course:
+**qwen-image-inference-tuning-course** (separate repo) — syllabus + 8 teaching
+modules + the same runnable lab (`python -m lab …`) + the same evidence set,
+licensed MIT (code) / CC-BY-4.0 (texts & data), with attribution to this
+project. Ideal for the 2026-11-19 lecture and student challenges.
