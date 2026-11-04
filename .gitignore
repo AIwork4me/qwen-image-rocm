@@ -14,3 +14,6 @@ phase3-quality/.venv/
 .zcode/
 bench/results/quickstart/
 .venv-linux-lab/
+
+# linux lab raw generation outputs stay on disk (hashes recorded in run records)
+bench/results/linux-w7900/raw/
