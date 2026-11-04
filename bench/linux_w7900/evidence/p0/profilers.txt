@@ -1,0 +1,12 @@
+rocprof
+rocprof-compute
+rocprof-sys-avail
+rocprof-sys-causal
+rocprof-sys-instrument
+rocprof-sys-python
+rocprof-sys-run
+rocprof-sys-sample
+rocprofv2
+rocprofv3
+rocprofv3-attach
+rocprofv3-avail

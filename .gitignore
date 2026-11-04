@@ -13,3 +13,8 @@ uv.lock
 phase3-quality/.venv/
 .zcode/
 bench/results/quickstart/
+.venv-linux-lab/
+
+# linux lab raw generation outputs stay on disk (hashes recorded in run records)
+bench/results/linux-w7900/raw/
+bench/results/linux-w7900/p2-profile-profile/**/*_trace.csv
